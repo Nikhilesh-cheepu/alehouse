@@ -17,7 +17,7 @@ export default function KingdomCard({
   onActivate, 
   index 
 }: KingdomCardProps) {
-  const [imageSrc, setImageSrc] = useState('')
+  const [imageSrc, setImageSrc] = useState<string | undefined>(undefined)
   const [isMobile, setIsMobile] = useState(false)
 
   // Responsive image selection
@@ -68,19 +68,36 @@ export default function KingdomCard({
     >
       {/* Background Image */}
       <div className="relative w-full h-full min-h-[300px] md:min-h-[400px]">
-        <img
-          src={imageSrc}
-          alt={`${kingdom.fullName} - ${kingdom.description}`}
-          className="w-full h-full object-cover transition-transform duration-500"
-          style={{
-            transform: isActive ? 'scale(1.05)' : 'scale(1)'
-          }}
-          onError={(e) => {
-            console.error(`Failed to load image for ${kingdom.name}:`, imageSrc)
-            // Fallback to a placeholder or default image
-            e.currentTarget.src = '/placeholder-kingdom.jpg'
-          }}
-        />
+        {imageSrc && (
+          <img
+            src={imageSrc}
+            alt={`${kingdom.fullName} - ${kingdom.description}`}
+            className="w-full h-full object-cover transition-transform duration-500"
+            style={{
+              transform: isActive ? 'scale(1.05)' : 'scale(1)'
+            }}
+            onError={(e) => {
+              console.error(`Failed to load image for ${kingdom.name}:`, imageSrc)
+              // Fallback to a placeholder or default image
+              e.currentTarget.src = '/placeholder-kingdom.jpg'
+            }}
+          />
+        )}
+        
+        {/* Fallback background if image not loaded */}
+        {!imageSrc && (
+          <div 
+            className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center"
+            style={{
+              background: `linear-gradient(135deg, ${kingdom.color}40, ${kingdom.accentColor}40)`
+            }}
+          >
+            <div className="text-center text-white">
+              <div className="text-4xl mb-2">🏰</div>
+              <div className="text-sm opacity-70">Loading...</div>
+            </div>
+          </div>
+        )}
         
         {/* Overlay Gradient */}
         <div 
