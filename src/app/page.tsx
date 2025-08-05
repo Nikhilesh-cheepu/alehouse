@@ -5,7 +5,6 @@ import Hero from '@/components/Hero';
 import IntroModal from '@/components/IntroModal';
 import AudioController from '@/components/AudioController';
 import Navigation from '@/components/Navigation';
-import KingdomsSection from '@/components/KingdomsSection';
 
 export default function Home() {
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -47,8 +46,6 @@ export default function Home() {
         onVoiceStart={handleVoiceStart}
         onVoiceEnd={handleVoiceEnd}
       />
-
-      <KingdomsSection />
 
       <AudioController
         audioEnabled={audioEnabled}
