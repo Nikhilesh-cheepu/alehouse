@@ -1,0 +1,240 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface HeroProps {
+  audioEnabled: boolean;
+  hasUserChosen: boolean;
+  isMuted: boolean;
+  onVoiceStart: () => void;
+  onVoiceEnd: () => void;
+}
+
+const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }: HeroProps) => {
+  const [audioPlayed, setAudioPlayed] = useState(false);
+  const [textAnimationStarted, setTextAnimationStarted] = useState(false);
+  const [voiceStarted, setVoiceStarted] = useState(false);
+  const [voiceCompleted, setVoiceCompleted] = useState(false);
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const desktopVideoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Only start observing after user has made a choice
+    if (!hasUserChosen) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !textAnimationStarted) {
+            // Start voice immediately if audio is enabled, not muted, and hasn't completed
+            if (audioRef.current && !audioPlayed && audioEnabled && !isMuted && !voiceCompleted) {
+              audioRef.current.volume = 0.5;
+              audioRef.current.muted = false;
+              
+              audioRef.current.play().then(() => {
+                setAudioPlayed(true);
+                setVoiceStarted(true);
+                onVoiceStart(); // Notify parent that voice has started
+                
+                // Start text animations after voice starts
+                setTextAnimationStarted(true);
+              }).catch((error) => {
+                // If voice fails, still start animations
+                setTextAnimationStarted(true);
+              });
+            } else {
+              // If no audio, muted, or voice completed, start animations immediately
+              setTextAnimationStarted(true);
+            }
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [audioPlayed, textAnimationStarted, audioEnabled, hasUserChosen, isMuted, voiceCompleted, onVoiceStart]);
+
+  // Handle text animation sequence
+  useEffect(() => {
+    if (!hasUserChosen || !textAnimationStarted) return;
+
+    const textTimeline = [
+      { index: 0, start: 0, end: 2.5 },    // "Legends weren't forged in palaces…"
+      { index: 1, start: 2.5, end: 5.0 },  // "They began in places like this."
+      { index: 2, start: 5.0, end: 7.0 }   // "Welcome to ALEHOUSE"
+    ];
+
+    // Start the text sequence
+    textTimeline.forEach(({ index, start, end }) => {
+      // Show text at start time
+      setTimeout(() => {
+        setCurrentTextIndex(index);
+      }, start * 1000);
+
+      // Hide text at end time (no fade out, just disappear)
+      setTimeout(() => {
+        setCurrentTextIndex(-1); // Hide all text
+      }, end * 1000);
+    });
+
+  }, [hasUserChosen, textAnimationStarted]);
+
+  // Handle tab visibility changes
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (audioRef.current) {
+        if (document.hidden) {
+          // Pause voice when tab is hidden (only if it's playing and not completed)
+          if (!audioRef.current.paused && !voiceCompleted) {
+            audioRef.current.pause();
+          }
+        } else {
+          // Resume voice when tab becomes visible (only if it was playing, not completed, not muted)
+          if (audioPlayed && voiceStarted && !voiceCompleted && !isMuted && audioEnabled) {
+            audioRef.current.play().catch((error) => {
+              console.log('Hero voice resume failed:', error);
+            });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [audioPlayed, voiceStarted, voiceCompleted, isMuted, audioEnabled]);
+
+  // Handle mute state changes
+  useEffect(() => {
+    if (audioRef.current && voiceStarted && !voiceCompleted) {
+      if (isMuted) {
+        // Pause voice when muted
+        if (!audioRef.current.paused) {
+          audioRef.current.pause();
+        }
+      } else {
+        // Resume voice when unmuted (only if tab is visible and not completed)
+        if (!document.hidden && audioEnabled) {
+          audioRef.current.play().catch((error) => {
+            console.log('Hero voice resume after unmute failed:', error);
+          });
+        }
+      }
+    }
+  }, [isMuted, voiceStarted, voiceCompleted, audioEnabled]);
+
+  // Handle voice end
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      setVoiceCompleted(true);
+      onVoiceEnd();
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    return () => audio.removeEventListener('ended', handleEnded);
+  }, [onVoiceEnd]);
+
+  const textLines = [
+    "Legends weren't forged in palaces…",
+    "They began in places like this.",
+    "Welcome to ALEHOUSE"
+  ];
+
+  return (
+    <section 
+      ref={heroRef}
+      className="relative min-h-screen w-full overflow-hidden"
+    >
+      {/* Responsive Background Videos */}
+      <div className="absolute inset-0">
+        {/* Mobile Background (Portrait) - Video */}
+        <div className="block md:hidden">
+          <video
+            ref={mobileVideoRef}
+            src="/hero-assets/hero-mobile-video.mp4"
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            onError={(e) => {
+              // Fallback to gradient background if video fails to load
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.parentElement!.className = 'block md:hidden w-full h-full bg-gradient-to-b from-aleblack via-gray-900 to-black';
+            }}
+          />
+        </div>
+        
+        {/* Desktop Background (Landscape) - Video */}
+        <div className="hidden md:block">
+          <video
+            ref={desktopVideoRef}
+            src="/hero-assets/hero-desktop-video.mp4"
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            onError={(e) => {
+              // Fallback to gradient background if video fails to load
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.parentElement!.className = 'hidden md:block w-full h-full bg-gradient-to-b from-aleblack via-gray-900 to-black';
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/10" />
+
+      {/* Voice-over Audio Element */}
+      <audio
+        ref={audioRef}
+        src="/hero-assets/hero-voice.mp3"
+        preload="auto"
+        className="hidden"
+      />
+
+      {/* Cinematic Text Content */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <div className="text-center max-w-4xl mx-auto">
+          {/* Text Lines with AnimatePresence */}
+          <AnimatePresence mode="wait">
+            {hasUserChosen && textAnimationStarted && currentTextIndex >= 0 && (
+              <motion.h1
+                key={currentTextIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.2,
+                  ease: "easeOut"
+                }}
+                className="text-xs md:text-2xl font-bold text-[#e6c87a] leading-relaxed tracking-wider"
+                style={{
+                  textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))',
+                  fontFamily: 'GameOfThrones, serif'
+                }}
+              >
+                {textLines[currentTextIndex]}
+              </motion.h1>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero; 

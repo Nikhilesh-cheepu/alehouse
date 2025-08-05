@@ -13,6 +13,8 @@ const config: Config = {
         aleblack: '#0f0f0f',
       },
       fontFamily: {
+        got: ['GameOfThrones', 'serif'],
+        cinzel: ['Cinzel', 'Georgia', 'serif'],
         serif: ['Cinzel', 'Georgia', 'serif'],
       },
     },

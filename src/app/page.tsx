@@ -1,19 +1,62 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import Hero from '@/components/Hero';
+import IntroModal from '@/components/IntroModal';
+import AudioController from '@/components/AudioController';
+import Navigation from '@/components/Navigation';
+import KingdomsSection from '@/components/KingdomsSection';
 
 export default function Home() {
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [showModal, setShowModal] = useState(true);
+  const [hasUserChosen, setHasUserChosen] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [voiceActive, setVoiceActive] = useState(false);
+
+  const handleAudioChoice = (withAudio: boolean) => {
+    setAudioEnabled(withAudio);
+    setHasUserChosen(true);
+    setShowModal(false);
+  };
+
+  const handleMuteToggle = () => {
+    setIsMuted(!isMuted);
+  };
+
+  const handleVoiceStart = () => {
+    setVoiceActive(true);
+  };
+
+  const handleVoiceEnd = () => {
+    setVoiceActive(false);
+  };
+
   return (
-    <main className="min-h-screen bg-aleblack text-gold flex items-center justify-center px-4 py-8">
-      <div className="text-center max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight">
-          The banners are raised…
-        </h1>
-        <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-medium leading-tight mt-8">
-          The ale is brewing…
-        </h2>
-        <h3 className="text-2xl md:text-4xl lg:text-5xl font-serif font-medium leading-tight mt-8">
-          The Realm of Alehouse is being forged.
-        </h3>
-      </div>
+    <main className="bg-aleblack">
+      <Navigation />
+      
+      {showModal && (
+        <IntroModal onAudioChoice={handleAudioChoice} />
+      )}
+
+      <Hero
+        audioEnabled={audioEnabled}
+        hasUserChosen={hasUserChosen}
+        isMuted={isMuted}
+        onVoiceStart={handleVoiceStart}
+        onVoiceEnd={handleVoiceEnd}
+      />
+
+      <KingdomsSection />
+
+      <AudioController
+        audioEnabled={audioEnabled}
+        isMuted={isMuted}
+        onMuteToggle={handleMuteToggle}
+        onVoiceStart={handleVoiceStart}
+        onVoiceEnd={handleVoiceEnd}
+      />
     </main>
   );
 }
