@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'GameOfThrones';
+  font-family: 'Game of Thrones';
   src: url('/fonts/Game of Thrones.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
@@ -11,8 +12,18 @@
 }
 
 :root {
-  --background: #0f0f0f;
-  --foreground: #d4af37;
+  /* Minimal Goth Luxe Color Palette */
+  --color-base: #0E0F11;
+  --color-crimson-glow: #B80F1B;
+  --color-glossy-crimson: #8A0E14;
+  --color-soft-ember: #D43C35;
+  --color-ash-gray: #3E3E3E;
+  --color-warm-amber: #F4A259;
+  --color-dragon-green: #114B33;
+  
+  /* Legacy variables for compatibility */
+  --background: var(--color-base);
+  --foreground: var(--color-warm-amber);
 }
 
 @theme inline {
@@ -25,5 +36,111 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Cinzel', Georgia, serif;
+  font-family: 'Manrope', 'Inter', 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
+
+html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+main {
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure hero section has exact viewport height with no additional space */
+.hero-section {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+.hero-video {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  object-fit: cover !important;
+  width: 100% !important;
+}
+
+/* Ensure navigation is visible */
+nav {
+  z-index: 50 !important;
+}
+
+/* Ensure modal is visible */
+.modal-overlay {
+  z-index: 999 !important;
+}
+
+
+
+.font-modern {
+  font-family: 'Manrope', 'Inter', 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* 3D Performance optimizations */
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Custom gradient utilities */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Cinematic mesh gradients */
+.bg-mesh-gradient {
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(209, 169, 84, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(107, 31, 31, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(17, 24, 39, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 50%, #121212 100%);
+}
+
+.bg-section-overlay {
+  background: 
+    radial-gradient(circle at 30% 40%, rgba(209, 169, 84, 0.05) 0%, transparent 60%),
+    radial-gradient(circle at 70% 60%, rgba(107, 31, 31, 0.05) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(26, 26, 26, 0.8) 0%, rgba(18, 18, 18, 0.9) 100%);
+}
+
+/* Text shadows and glows */
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(209, 169, 84, 0.5), 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 10px rgba(209, 169, 84, 0.3));
+}
+
+.drop-shadow-gold {
+  filter: drop-shadow(0 0 15px rgba(209, 169, 84, 0.6));
+}
+
+/* Performance optimizations for sections */
+.section-container {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+

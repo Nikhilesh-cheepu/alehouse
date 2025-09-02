@@ -128,8 +128,8 @@ const AudioController = ({
     }
   }, [isMuted, audioEnabled, wasPlayingBeforeHidden]);
 
-  // Temporary debug - always show mute button for testing
-  // if (!audioEnabled) return null;
+  // Show mute button when audio is enabled
+  if (!audioEnabled) return null;
 
   return (
     <>

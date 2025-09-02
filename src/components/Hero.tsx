@@ -22,6 +22,25 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Start videos when user makes choice
+  useEffect(() => {
+    if (hasUserChosen) {
+      // Start mobile video if it exists
+      if (mobileVideoRef.current) {
+        mobileVideoRef.current.play().catch((error) => {
+          console.log('Mobile video play failed:', error);
+        });
+      }
+      
+      // Start desktop video if it exists
+      if (desktopVideoRef.current) {
+        desktopVideoRef.current.play().catch((error) => {
+          console.log('Desktop video play failed:', error);
+        });
+      }
+    }
+  }, [hasUserChosen]);
+
   useEffect(() => {
     // Only start observing after user has made a choice
     if (!hasUserChosen) return;
@@ -153,18 +172,25 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
 
   return (
     <section 
+      id="home"
       ref={heroRef}
-      className="relative min-h-screen w-full overflow-hidden"
+      className="hero-section relative w-full overflow-hidden m-0 p-0"
+      style={{ zIndex: 20 }}
     >
       {/* Responsive Background Videos */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
+        {/* Fallback black background when videos aren't playing */}
+        {!hasUserChosen && (
+          <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
+        )}
+        
         {/* Mobile Background (Portrait) - Video */}
-        <div className="block md:hidden">
+        <div className="block md:hidden" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
           <video
             ref={mobileVideoRef}
             src="/hero-assets/hero-mobile-video.mp4"
-            className="w-full h-full object-cover"
-            autoPlay
+            className="hero-video w-full"
+            autoPlay={hasUserChosen}
             muted
             loop
             playsInline
@@ -172,17 +198,20 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
               // Fallback to gradient background if video fails to load
               e.currentTarget.style.display = 'none';
               e.currentTarget.parentElement!.className = 'block md:hidden w-full h-full bg-gradient-to-b from-aleblack via-gray-900 to-black';
+              e.currentTarget.parentElement!.style.height = '100vh';
+              e.currentTarget.parentElement!.style.minHeight = '100vh';
+              e.currentTarget.parentElement!.style.maxHeight = '100vh';
             }}
           />
         </div>
         
         {/* Desktop Background (Landscape) - Video */}
-        <div className="hidden md:block">
+        <div className="hidden md:block" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
           <video
             ref={desktopVideoRef}
             src="/hero-assets/hero-desktop-video.mp4"
-            className="w-full h-full object-cover"
-            autoPlay
+            className="hero-video w-full"
+            autoPlay={hasUserChosen}
             muted
             loop
             playsInline
@@ -190,13 +219,16 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
               // Fallback to gradient background if video fails to load
               e.currentTarget.style.display = 'none';
               e.currentTarget.parentElement!.className = 'hidden md:block w-full h-full bg-gradient-to-b from-aleblack via-gray-900 to-black';
+              e.currentTarget.parentElement!.style.height = '100vh';
+              e.currentTarget.parentElement!.style.minHeight = '100vh';
+              e.currentTarget.parentElement!.style.maxHeight = '100vh';
             }}
           />
         </div>
       </div>
 
       {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/10" />
+      <div className="absolute inset-0 bg-black/10 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
 
       {/* Voice-over Audio Element */}
       <audio
@@ -207,7 +239,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       />
 
       {/* Cinematic Text Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+      <div className="relative z-20 flex items-center justify-center px-4" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
         <div className="text-center max-w-4xl mx-auto">
           {/* Text Lines with AnimatePresence */}
           <AnimatePresence mode="wait">

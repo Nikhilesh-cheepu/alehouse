@@ -5,13 +5,16 @@ import Hero from '@/components/Hero';
 import IntroModal from '@/components/IntroModal';
 import AudioController from '@/components/AudioController';
 import Navigation from '@/components/Navigation';
+import AboutSection from '@/components/AboutSection';
+import MenuSection from '@/components/MenuSection';
+import ConditionalDragon from '@/components/ConditionalDragon';
 
 export default function Home() {
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [showModal, setShowModal] = useState(true);
   const [hasUserChosen, setHasUserChosen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [voiceActive, setVoiceActive] = useState(false);
+
 
   const handleAudioChoice = (withAudio: boolean) => {
     setAudioEnabled(withAudio);
@@ -24,15 +27,15 @@ export default function Home() {
   };
 
   const handleVoiceStart = () => {
-    setVoiceActive(true);
+    // Voice started
   };
 
   const handleVoiceEnd = () => {
-    setVoiceActive(false);
+    // Voice ended
   };
 
   return (
-    <main className="bg-aleblack">
+    <main className="bg-charcoal-900 m-0 p-0">
       <Navigation />
       
       {showModal && (
@@ -47,6 +50,9 @@ export default function Home() {
         onVoiceEnd={handleVoiceEnd}
       />
 
+      <AboutSection />
+      <MenuSection />
+
       <AudioController
         audioEnabled={audioEnabled}
         isMuted={isMuted}
@@ -54,6 +60,9 @@ export default function Home() {
         onVoiceStart={handleVoiceStart}
         onVoiceEnd={handleVoiceEnd}
       />
+
+      {/* Conditional Dragon - follows cursor only on Hero and About sections */}
+      <ConditionalDragon />
     </main>
   );
 }

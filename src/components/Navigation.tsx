@@ -6,17 +6,9 @@ import { Menu, X } from 'lucide-react';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  // Removed isScrolled state as it's not used in the new design
 
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Scroll effect removed as it's not used in the new design
 
   // Handle menu open/close
   const toggleMenu = () => {
@@ -43,7 +35,7 @@ const Navigation = () => {
     }
 
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isMenuOpen]);
+  }, [isMenuOpen, toggleMenu]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -54,60 +46,66 @@ const Navigation = () => {
 
   const navLinks = [
     { name: 'Home', href: '#home' },
-    { name: 'Realms', href: '#realms' },
+    { name: 'About', href: '#about' },
     { name: 'Menu', href: '#menu' },
-    { name: 'Events', href: '#events' },
-    { name: 'Book Table', href: '#book' },
   ];
 
   return (
     <>
       {/* Navigation Bar */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-aleblack/95 backdrop-blur-sm' 
-            : 'bg-aleblack/80 backdrop-blur-sm'
-        }`}
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="fixed top-4 left-4 right-4 z-50 bg-[rgba(0,0,0,0.4)] backdrop-blur-md rounded-xl shadow-lg"
+        style={{
+          boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1)'
+        }}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 md:py-4">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            {/* Left Side - Alehouse Logo */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative group"
             >
               <img
                 src="/logo/alehouse-logo.png"
                 alt="Alehouse Logo"
-                className="w-24 md:w-32 h-auto"
-                style={{
-                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))'
-                }}
+                className="w-20 md:w-24 h-auto transition-all duration-500 group-hover:scale-110"
               />
             </motion.div>
 
-            {/* Desktop Navigation Links */}
-            <div className="hidden md:flex items-center space-x-8">
+            {/* Right Side - Navigation Links */}
+            <div className="hidden md:flex items-center space-x-2">
               {navLinks.map((link, index) => (
-                <motion.a
+                <motion.div
                   key={link.name}
-                  href={link.href}
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="text-[#d4af37] font-bold text-lg hover:text-gold/80 transition-colors duration-200 relative group"
-                  style={{
-                    fontFamily: 'Cormorant Garamond, serif',
-                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)'
-                  }}
+                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                  className="relative group"
                 >
-                  {link.name}
-                  {/* Hover underline effect */}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#d4af37] transition-all duration-300 group-hover:w-full"></span>
-                </motion.a>
+                  <a
+                    href={link.href}
+                    className="text-[#f4f4f4] font-medium text-base px-4 py-2 transition-all duration-300 relative group-hover:text-[#FFD700]"
+                    style={{
+                      fontFamily: 'Manrope, sans-serif',
+                      textTransform: 'none'
+                    }}
+                  >
+                    {/* Text */}
+                    <span className="relative z-10">{link.name}</span>
+                    
+                    {/* Hover underline effect */}
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-[#FFD700] transition-all duration-300 group-hover:w-3/4 rounded-full"></div>
+                  </a>
+                  
+                  {/* Subtle glow on hover */}
+                  <div className="absolute inset-0 bg-[#FFD700]/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                </motion.div>
               ))}
             </div>
 
@@ -115,18 +113,20 @@ const Navigation = () => {
             <motion.button
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
               onClick={toggleMenu}
-              className="md:hidden p-2 text-[#d4af37] hover:text-gold/80 transition-colors duration-200"
+              className="md:hidden p-3 text-[#f4f4f4] hover:text-[#FFD700] transition-all duration-300 rounded-lg relative group"
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
               aria-label="Toggle navigation menu"
             >
               <Menu size={24} />
+              {/* Hover glow effect */}
+              <div className="absolute inset-0 bg-[#FFD700]/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
             </motion.button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -136,17 +136,23 @@ const Navigation = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-md md:hidden"
             onClick={toggleMenu}
           >
+            {/* Dramatic gold glow overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#d1a954]/5 via-transparent to-[#6b1f1f]/5 pointer-events-none"></div>
+            
             {/* Mobile Menu Content */}
             <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
               className="relative h-full flex flex-col"
               onClick={(e) => e.stopPropagation()}
+              style={{
+                fontFamily: 'Game of Thrones, serif'
+              }}
             >
               {/* Close Button */}
               <div className="flex justify-end p-6">
@@ -154,32 +160,45 @@ const Navigation = () => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={toggleMenu}
-                  className="p-2 text-[#d4af37] hover:text-gold/80 transition-colors duration-200"
+                  className="p-3 text-[#f4f4f4] hover:text-[#FFD700] transition-all duration-300 rounded-lg relative group"
                   aria-label="Close menu"
                 >
                   <X size={28} />
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 bg-[#FFD700]/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
                 </motion.button>
               </div>
 
               {/* Mobile Menu Links */}
               <div className="flex-1 flex flex-col items-center justify-center space-y-8 px-6">
                 {navLinks.map((link, index) => (
-                  <motion.a
+                  <motion.div
                     key={link.name}
-                    href={link.href}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-                    onClick={toggleMenu}
-                    className="text-[#d4af37] font-bold text-2xl hover:text-gold/80 transition-colors duration-200 text-center"
-                    style={{
-                      fontFamily: 'Cormorant Garamond, serif',
-                      textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
-                    }}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
+                    className="w-full"
                   >
-                    {link.name}
-                  </motion.a>
+                    <a
+                      href={link.href}
+                      onClick={toggleMenu}
+                      className="flex items-center justify-center w-full py-6 px-8 text-[#f4f4f4] font-medium text-2xl hover:text-[#FFD700] transition-all duration-300 text-center rounded-2xl hover:bg-[#FFD700]/10 relative group"
+                      style={{
+                        fontFamily: 'Manrope, sans-serif',
+                        textTransform: 'none'
+                      }}
+                    >
+                      {/* Background glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700]/0 via-[#FFD700]/10 to-[#FFD700]/0 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-2xl"></div>
+                      
+                      {/* Text */}
+                      <span className="relative z-10">{link.name}</span>
+                      
+                      {/* Hover underline effect */}
+                      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-0 h-1 bg-[#FFD700] transition-all duration-300 group-hover:w-3/4 rounded-full"></div>
+                    </a>
+                  </motion.div>
                 ))}
               </div>
 
