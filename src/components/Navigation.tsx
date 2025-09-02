@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
@@ -11,7 +11,7 @@ const Navigation = () => {
   // Scroll effect removed as it's not used in the new design
 
   // Handle menu open/close
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
     
     // Disable/enable body scroll
@@ -20,7 +20,7 @@ const Navigation = () => {
     } else {
       document.body.style.overflow = 'unset';
     }
-  };
+  }, [isMenuOpen]);
 
   // Close menu on escape key
   useEffect(() => {

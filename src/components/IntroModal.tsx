@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 interface IntroModalProps {
   onAudioChoice: (withAudio: boolean) => void;
@@ -32,10 +33,13 @@ const IntroModal = ({ onAudioChoice }: IntroModalProps) => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mb-16"
           >
-            <img
+            <Image
               src="/logo/alehouse-logo.png"
               alt="Alehouse Logo"
+              width={160}
+              height={160}
               className="w-32 md:w-40 h-auto mx-auto"
+              priority
             />
           </motion.div>
 
