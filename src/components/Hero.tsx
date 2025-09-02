@@ -174,7 +174,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     <section 
       id="home"
       ref={heroRef}
-      className="hero-section relative w-full overflow-hidden m-0 p-0"
+      className="hero-section relative w-full m-0 p-0"
       style={{ zIndex: 20 }}
     >
       {/* Responsive Background Videos */}

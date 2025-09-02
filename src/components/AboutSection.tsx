@@ -49,7 +49,7 @@ const AboutSection = () => {
   return (
     <section 
       id="about" 
-      className="relative w-full min-h-screen overflow-hidden m-0 p-0 py-16"
+      className="relative w-full min-h-screen m-0 p-0 py-16"
     >
       {/* Background Image */}
       <div 
