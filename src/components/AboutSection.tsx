@@ -193,7 +193,7 @@ const AboutSection = () => {
             {/* Dimmed overlay behind perks */}
             <div className="absolute inset-0 bg-black/20 rounded-3xl -m-4" />
             
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="relative z-10 flex flex-wrap justify-center gap-x-6 gap-y-6">
             {perks.map((perk, index) => (
               <motion.div
                 key={index}
@@ -206,25 +206,31 @@ const AboutSection = () => {
                   rotateY: 5,
                   boxShadow: '0 20px 40px rgba(255, 215, 0, 0.2)'
                 }}
-                className="group relative bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 text-center hover:border-yellow-400/50 transition-all duration-300 cursor-pointer"
+                className="group relative bg-black/40 backdrop-blur-sm border border-gray-700/50 rounded-lg p-6 text-center hover:border-yellow-400/50 transition-all duration-300 cursor-pointer
+                  w-full max-w-xs
+                  sm:w-[calc(50%-12px)] sm:max-w-none
+                  md:w-[calc(33.333%-16px)] md:max-w-none
+                  lg:w-[calc(25%-18px)] lg:max-w-none
+                  xl:w-[calc(25%-18px)] xl:max-w-none
+                  min-h-[200px] flex flex-col justify-center"
               >
                 {/* Glow effect on hover */}
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
-                <div className="relative z-10">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="relative z-10 flex flex-col justify-center h-full">
+                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                     {perk.icon}
                   </div>
                   
                   <h3 
-                    className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors duration-300"
+                    className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors duration-300 flex-shrink-0"
                     style={{ fontFamily: 'Bebas Neue, sans-serif' }}
                   >
                     {perk.title}
                   </h3>
                   
                   <p 
-                    className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                    className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300 flex-shrink-0"
                     style={{ fontFamily: 'Manrope, sans-serif' }}
                   >
                     {perk.caption}
