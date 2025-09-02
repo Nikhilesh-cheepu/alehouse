@@ -74,75 +74,111 @@ const AboutSection = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500"
-              style={{ 
-                fontFamily: 'Bebas Neue, sans-serif',
-                textShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
-                filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))'
-              }}
-            >
-              OPENING HOURS
-            </h2>
+            {/* Dimmed overlay behind the content */}
+            <div className="absolute inset-0 bg-black/30 rounded-3xl -m-8" />
             
-            <p 
-              className="text-lg text-gray-300 mb-8"
-              style={{ fontFamily: 'Manrope, sans-serif' }}
-            >
-              Plan your visit to the realm
-            </p>
-            
-            <div className="max-w-md mx-auto space-y-6">
+            <div className="relative z-10">
+              {/* Header with clock icon */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="text-center"
+                className="flex items-center justify-center mb-6"
               >
-                <p 
-                  className="text-2xl md:text-3xl font-bold text-white mb-2"
-                  style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 flex items-center justify-center mr-4 shadow-lg shadow-yellow-400/30">
+                  <span className="text-2xl">🕐</span>
+                </div>
+                <h2 
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500"
+                  style={{ 
+                    fontFamily: 'Bebas Neue, sans-serif',
+                    textShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
+                    filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))'
+                  }}
                 >
-                  Sunday to Thursday
-                </p>
-                <p 
-                  className="text-xl text-gray-300"
-                  style={{ fontFamily: 'Manrope, sans-serif' }}
-                >
-                  12:00 PM – 11:30 PM
-                </p>
+                  OPENING HOURS
+                </h2>
               </motion.div>
               
-              {/* Animated Divider */}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                viewport={{ once: true }}
-                className="h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent"
-              />
-              
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                viewport={{ once: true }}
-                className="text-center"
+              <p 
+                className="text-lg text-gray-300 mb-12"
+                style={{ fontFamily: 'Manrope, sans-serif' }}
               >
-                <p 
-                  className="text-2xl md:text-3xl font-bold text-white mb-2"
-                  style={{ fontFamily: 'Bebas Neue, sans-serif' }}
-                >
-                  Friday & Saturday
-                </p>
-                <p 
-                  className="text-xl text-gray-300"
-                  style={{ fontFamily: 'Manrope, sans-serif' }}
-                >
-                  12:00 PM – 12:30 AM
-                </p>
-              </motion.div>
+                Plan your visit to the realm
+              </p>
+              
+              {/* Glassmorphism card container */}
+              <div className="max-w-2xl mx-auto">
+                <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl shadow-black/50">
+                  <div className="space-y-8">
+                    {/* Weekday Hours */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                      viewport={{ once: true }}
+                      className="text-center"
+                    >
+                      <div className="flex items-center justify-center mb-4">
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 mr-3 shadow-lg shadow-blue-400/50"></div>
+                        <p 
+                          className="text-3xl md:text-4xl font-bold text-white"
+                          style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+                        >
+                          Sunday to Thursday
+                        </p>
+                      </div>
+                      <p 
+                        className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-400"
+                        style={{ fontFamily: 'Manrope, sans-serif' }}
+                      >
+                        12:00 PM – 11:30 PM
+                      </p>
+                    </motion.div>
+                    
+                    {/* Animated Divider with flame icon */}
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: 0.6 }}
+                      viewport={{ once: true }}
+                      className="flex items-center justify-center"
+                    >
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent"></div>
+                      <div className="mx-4 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-400/50">
+                        <span className="text-sm">🔥</span>
+                      </div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent"></div>
+                    </motion.div>
+                    
+                    {/* Weekend Hours */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.6, delay: 0.8 }}
+                      viewport={{ once: true }}
+                      className="text-center"
+                    >
+                      <div className="flex items-center justify-center mb-4">
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-r from-red-400 to-red-600 mr-3 shadow-lg shadow-red-400/50"></div>
+                        <p 
+                          className="text-3xl md:text-4xl font-bold text-white"
+                          style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+                        >
+                          Friday & Saturday
+                        </p>
+                      </div>
+                      <p 
+                        className="text-2xl md:text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-red-400"
+                        style={{ fontFamily: 'Manrope, sans-serif' }}
+                      >
+                        12:00 PM – 12:30 AM
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -152,8 +188,12 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="relative"
           >
+            {/* Dimmed overlay behind perks */}
+            <div className="absolute inset-0 bg-black/20 rounded-3xl -m-4" />
+            
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {perks.map((perk, index) => (
               <motion.div
                 key={index}
@@ -192,6 +232,7 @@ const AboutSection = () => {
                 </div>
               </motion.div>
             ))}
+            </div>
           </motion.div>
         </div>
       </div>
