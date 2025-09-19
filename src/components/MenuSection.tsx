@@ -176,7 +176,7 @@ const MenuSection = () => {
       viewport={{ once: true }}
       style={{
         padding: '4rem 0 2rem 0',
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(255, 0, 60, 0.05) 50%, rgba(0, 0, 0, 0.95) 100%)',
+        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(184, 134, 11, 0.05) 50%, rgba(0, 0, 0, 0.95) 100%)',
         minHeight: 'auto',
         position: 'relative'
       }}
@@ -225,22 +225,22 @@ const MenuSection = () => {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: 'clamp(1rem, 3vw, 2rem)',
+            gap: 'clamp(0.5rem, 2vw, 1.5rem)',
             marginBottom: '3rem',
-            flexWrap: 'nowrap'
+            flexWrap: 'wrap'
           }}
         >
           {/* Food Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/FoodMenu.jpeg');
+              setSelectedMenuImage('/menu/Ale House Food Menu.pdf');
               setSelectedMenuTitle('Food Menu');
               setIsMenuImageModalOpen(true);
             }}
             style={{
               position: 'relative',
-              width: 'clamp(200px, 35vw, 280px)',
-              height: 'clamp(130px, 25vw, 180px)',
+              width: 'clamp(180px, 28vw, 240px)',
+              height: 'clamp(120px, 20vw, 160px)',
               borderRadius: '20px',
               border: '2px solid rgba(255, 255, 255, 0.2)',
               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
@@ -258,18 +258,15 @@ const MenuSection = () => {
             }}
             whileTap={{ scale: 0.98 }}
           >
-            {/* Background Image */}
+            {/* Background Gradient */}
             <div style={{
               position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: 'url(/menu/FoodMenu.jpeg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'brightness(0.7)',
-              transition: 'filter 0.3s ease'
+              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(0, 0, 0, 0.8))',
+              transition: 'opacity 0.3s ease'
             }} />
             
             {/* Overlay */}
@@ -279,7 +276,7 @@ const MenuSection = () => {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'linear-gradient(135deg, rgba(255, 0, 60, 0.3), rgba(0, 0, 0, 0.6))',
+              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(0, 0, 0, 0.6))',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -305,14 +302,14 @@ const MenuSection = () => {
           {/* Liquor Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/LIquorMenu.jpeg');
-              setSelectedMenuTitle('Liquor Menu');
+              setSelectedMenuImage('/menu/Alehouse Beverage Menu_V4.pdf');
+              setSelectedMenuTitle('Beverages Menu');
               setIsMenuImageModalOpen(true);
             }}
             style={{
               position: 'relative',
-              width: 'clamp(200px, 35vw, 280px)',
-              height: 'clamp(130px, 25vw, 180px)',
+              width: 'clamp(180px, 28vw, 240px)',
+              height: 'clamp(120px, 20vw, 160px)',
               borderRadius: '20px',
               border: '2px solid rgba(255, 255, 255, 0.2)',
               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
@@ -330,18 +327,15 @@ const MenuSection = () => {
             }}
             whileTap={{ scale: 0.98 }}
           >
-            {/* Background Image */}
+            {/* Background Gradient */}
             <div style={{
               position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundImage: 'url(/menu/LIquorMenu.jpeg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'brightness(0.7)',
-              transition: 'filter 0.3s ease'
+              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(0, 0, 0, 0.8))',
+              transition: 'opacity 0.3s ease'
             }} />
             
             {/* Overlay */}
@@ -351,7 +345,76 @@ const MenuSection = () => {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'linear-gradient(135deg, rgba(255, 0, 60, 0.3), rgba(0, 0, 0, 0.6))',
+              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(0, 0, 0, 0.6))',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              textAlign: 'center',
+              padding: 'clamp(0.5rem, 2vw, 1rem)'
+            }}>
+              <span style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>🍸</span>
+              <h3 style={{
+                fontFamily: 'Bebas Neue, Arial Black, sans-serif',
+                fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+                fontWeight: '400',
+                margin: '0',
+                letterSpacing: '0.02em',
+                textTransform: 'uppercase'
+              }}>
+                View Beverages Menu
+              </h3>
+            </div>
+          </motion.button>
+
+          {/* Happy Hour Menu Button */}
+          <motion.button
+            onClick={() => {
+              setSelectedMenuImage('/menu/Ale House Happy Hour Menu.pdf');
+              setSelectedMenuTitle('Happy Hour Menu');
+              setIsMenuImageModalOpen(true);
+            }}
+            style={{
+              position: 'relative',
+              width: 'clamp(180px, 28vw, 240px)',
+              height: 'clamp(120px, 20vw, 160px)',
+              borderRadius: '20px',
+              border: '2px solid rgba(255, 255, 255, 0.2)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+              backdropFilter: 'blur(15px)',
+              cursor: 'pointer',
+              overflow: 'hidden',
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+            }}
+            whileHover={{
+              scale: 1.05,
+              border: '2px solid rgba(255, 255, 255, 0.4)',
+              boxShadow: '0 12px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+              transform: 'translateY(-5px)'
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            {/* Background Gradient */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(0, 0, 0, 0.8))',
+              transition: 'opacity 0.3s ease'
+            }} />
+            
+            {/* Overlay */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(0, 0, 0, 0.6))',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -369,7 +432,7 @@ const MenuSection = () => {
                 letterSpacing: '0.02em',
                 textTransform: 'uppercase'
               }}>
-                View Liquor Menu
+                View Happy Hour Menu
               </h3>
             </div>
           </motion.button>
@@ -479,24 +542,63 @@ const MenuSection = () => {
                 transition={{ duration: 0.3, delay: 0.1 }}
                 style={{
                   position: 'relative',
-                  maxWidth: '90vw',
-                  maxHeight: '90vh',
+                  width: '95vw',
+                  height: '95vh',
+                  maxWidth: '1200px',
+                  maxHeight: '900px',
                   borderRadius: '20px',
                   overflow: 'hidden',
                   boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <img
-                  src={selectedMenuImage}
-                  alt={selectedMenuTitle}
-                  style={{
+                {selectedMenuImage ? (
+                  <iframe
+                    src={selectedMenuImage}
+                    title={selectedMenuTitle}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                      display: 'block'
+                    }}
+                  />
+                ) : (
+                  <div style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain',
-                    display: 'block'
-                  }}
-                />
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(184, 134, 11, 0.1))',
+                    color: 'white',
+                    textAlign: 'center',
+                    padding: '2rem'
+                  }}>
+                    <div style={{ fontSize: '4rem', marginBottom: '2rem' }}>🍸</div>
+                    <h2 style={{
+                      fontSize: '2rem',
+                      marginBottom: '1rem',
+                      fontFamily: 'Game of Thrones, serif'
+                    }}>
+                      {selectedMenuTitle}
+                    </h2>
+                    <p style={{
+                      fontSize: '1.2rem',
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      marginBottom: '1rem'
+                    }}>
+                      Coming Soon!
+                    </p>
+                    <p style={{
+                      fontSize: '1rem',
+                      color: 'rgba(255, 255, 255, 0.6)'
+                    }}>
+                      We're preparing an amazing menu for you. Stay tuned!
+                    </p>
+                  </div>
+                )}
                 <button
                   onClick={() => setIsMenuImageModalOpen(false)}
                   style={{
@@ -596,7 +698,7 @@ const MenuSection = () => {
                          position: 'absolute',
                          top: '-8px',
                          right: '-8px',
-                         background: '#ff003c',
+                         background: '#B8860B',
                          color: '#ffffff',
                          borderRadius: '50%',
                          width: '20px',
@@ -650,7 +752,8 @@ const MenuSection = () => {
                 }}>
                   {[
                     { id: 'food', label: 'Food Menu', icon: <FaUtensils /> },
-                    { id: 'liquor', label: 'Liquor Menu', icon: <FaWineGlassAlt /> }
+                    { id: 'beverages', label: 'Beverages Menu', icon: <FaWineGlassAlt /> },
+                    { id: 'happyhour', label: 'Happy Hour Menu', icon: <FaWineGlassAlt /> }
                   ].map((tab) => (
                     <motion.button
                       key={tab.id}
@@ -662,14 +765,14 @@ const MenuSection = () => {
                         padding: '0.75rem 1.5rem',
                         border: 'none',
                         borderRadius: '8px',
-                        background: activeTab === tab.id ? '#ff003c' : 'rgba(255, 255, 255, 0.1)',
-                        color: '#ffffff',
+                        background: activeTab === tab.id ? '#B8860B' : 'rgba(255, 255, 255, 0.1)',
+                        color: activeTab === tab.id ? '#ffffff' : '#ffffff',
                         cursor: 'pointer',
                         fontSize: '1rem',
                         fontWeight: '500',
                         transition: 'all 0.3s ease'
                       }}
-                      whileHover={{ background: activeTab === tab.id ? 'rgba(255, 0, 60, 0.8)' : 'rgba(255, 255, 255, 0.2)' }}
+                      whileHover={{ background: activeTab === tab.id ? 'rgba(184, 134, 11, 0.8)' : 'rgba(255, 255, 255, 0.2)' }}
                     >
                       {tab.icon}
                       {tab.label}
@@ -748,16 +851,16 @@ const MenuSection = () => {
                         onClick={clearFilters}
                         style={{
                           padding: '0.5rem 1rem',
-                          border: '1px solid #ff003c',
+                          border: '1px solid #B8860B',
                           borderRadius: '25px',
-                          background: 'rgba(255, 0, 60, 0.1)',
-                          color: '#ff003c',
+                          background: 'rgba(184, 134, 11, 0.1)',
+                          color: '#DAA520',
                           fontSize: '0.9rem',
                           cursor: 'pointer',
                           transition: 'all 0.3s ease'
                         }}
                         whileHover={{
-                          background: '#ff003c',
+                          background: '#B8860B',
                           color: '#ffffff'
                         }}
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -861,12 +964,12 @@ const MenuSection = () => {
                                      alignItems: 'center',
                                      gap: '0.25rem',
                                      padding: '0.25rem 0.5rem',
-                                     background: 'rgba(255, 0, 60, 0.2)',
+                                     background: 'rgba(184, 134, 11, 0.2)',
                                      borderRadius: '12px',
-                                     border: '1px solid rgba(255, 0, 60, 0.3)'
+                                     border: '1px solid rgba(184, 134, 11, 0.3)'
                                    }}>
                                      <span style={{
-                                       color: '#ff003c',
+                                       color: '#DAA520',
                                        fontSize: '0.8rem',
                                        fontWeight: '600'
                                      }}>
@@ -883,7 +986,7 @@ const MenuSection = () => {
                                      height: '32px',
                                      border: 'none',
                                      borderRadius: '50%',
-                                     background: '#ff003c',
+                                     background: '#B8860B',
                                      color: '#ffffff',
                                      cursor: 'pointer',
                                      display: 'flex',
@@ -1040,14 +1143,14 @@ const MenuSection = () => {
                              height: '28px',
                              border: 'none',
                              borderRadius: '4px',
-                             background: 'rgba(255, 0, 60, 0.2)',
+                             background: 'rgba(184, 134, 11, 0.2)',
                              color: '#ffffff',
                              cursor: 'pointer',
                              display: 'flex',
                              alignItems: 'center',
                              justifyContent: 'center'
                            }}
-                           whileHover={{ background: 'rgba(255, 0, 60, 0.3)' }}
+                           whileHover={{ background: 'rgba(184, 134, 11, 0.3)' }}
                          >
                            -
                          </motion.button>
@@ -1066,14 +1169,14 @@ const MenuSection = () => {
                              height: '28px',
                              border: 'none',
                              borderRadius: '4px',
-                             background: '#ff003c',
+                             background: '#B8860B',
                              color: '#ffffff',
                              cursor: 'pointer',
                              display: 'flex',
                              alignItems: 'center',
                              justifyContent: 'center'
                            }}
-                           whileHover={{ background: 'rgba(255, 0, 60, 0.8)' }}
+                           whileHover={{ background: 'rgba(184, 134, 11, 0.8)' }}
                          >
                            +
                          </motion.button>
@@ -1116,18 +1219,18 @@ const MenuSection = () => {
                        width: '100%',
                        padding: '0.75rem',
                        marginBottom: '1rem',
-                       border: '1px solid rgba(255, 0, 60, 0.3)',
+                       border: '1px solid rgba(184, 134, 11, 0.3)',
                        borderRadius: '8px',
-                       background: 'rgba(255, 0, 60, 0.1)',
-                       color: '#ff003c',
+                       background: 'rgba(184, 134, 11, 0.1)',
+                       color: '#DAA520',
                        cursor: 'pointer',
                        fontSize: '0.9rem',
                        fontWeight: '500',
                        transition: 'all 0.3s ease'
                      }}
                      whileHover={{
-                       background: 'rgba(255, 0, 60, 0.2)',
-                       border: '1px solid rgba(255, 0, 60, 0.5)'
+                       background: 'rgba(184, 134, 11, 0.2)',
+                       border: '1px solid rgba(184, 134, 11, 0.5)'
                      }}
                      whileTap={{ scale: 0.95 }}
                    >

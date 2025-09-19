@@ -7,7 +7,6 @@ import AudioController from '@/components/AudioController';
 import Navigation from '@/components/Navigation';
 import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
-import ConditionalDragon from '@/components/ConditionalDragon';
 
 export default function Home() {
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -61,8 +60,6 @@ export default function Home() {
         onVoiceEnd={handleVoiceEnd}
       />
 
-      {/* Conditional Dragon - follows cursor only on Hero and About sections */}
-      <ConditionalDragon />
     </main>
   );
 }
