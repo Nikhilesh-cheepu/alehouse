@@ -61,7 +61,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
                 
                 // Start text animations after voice starts
                 setTextAnimationStarted(true);
-              }).catch((error) => {
+              }).catch(() => {
                 // If voice fails, still start animations
                 setTextAnimationStarted(true);
               });
@@ -165,7 +165,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   }, [onVoiceEnd]);
 
   const textLines = [
-    "Legends weren't forged in palaces…",
+    "Legends weren&apos;t forged in palaces…",
     "They began in places like this.",
     "Welcome to ALEHOUSE"
   ];
@@ -179,7 +179,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     >
       {/* Responsive Background Videos */}
       <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
-        {/* Fallback black background when videos aren't playing */}
+        {/* Fallback black background when videos aren&apos;t playing */}
         {!hasUserChosen && (
           <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
         )}

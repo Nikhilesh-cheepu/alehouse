@@ -7,16 +7,12 @@ interface AudioControllerProps {
   audioEnabled: boolean;
   isMuted: boolean;
   onMuteToggle: () => void;
-  onVoiceStart?: () => void;
-  onVoiceEnd?: () => void;
 }
 
 const AudioController = ({ 
   audioEnabled, 
   isMuted, 
-  onMuteToggle, 
-  onVoiceStart, 
-  onVoiceEnd 
+  onMuteToggle
 }: AudioControllerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [wasPlayingBeforeHidden, setWasPlayingBeforeHidden] = useState(false);
@@ -36,7 +32,7 @@ const AudioController = ({
       if (audio.paused && !isMuted && !document.hidden) {
         audio.play().then(() => {
           setIsPlaying(true);
-        }).catch((error) => {
+        }).catch(() => {
           setIsPlaying(false);
         });
       }
@@ -122,7 +118,7 @@ const AudioController = ({
       if (wasPlayingBeforeHidden) {
         audio.play().then(() => {
           setIsPlaying(true);
-        }).catch((error) => {
+        }).catch(() => {
         });
       }
     }
@@ -139,7 +135,7 @@ const AudioController = ({
         src="/theme-song/Game of Thrones Edit - A Song of Ice and Fire.mp3"
         preload="auto"
         className="hidden"
-        onError={(e) => {
+        onError={() => {
           console.log('Audio file not found, continuing without theme music');
         }}
       />

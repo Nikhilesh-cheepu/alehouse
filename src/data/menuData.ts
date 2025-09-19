@@ -413,7 +413,7 @@ export const menuData: { [key: string]: MenuData } = {
       },
       {
         id: 'main-nonveg-9',
-        name: 'Lamb Shepherd\'s Pie',
+        name: 'Lamb Shepherd&apos;s Pie',
         description: 'Minced lamb with peas and mashed potatoes.',
         price: 599,
         category: 'Main Course - Non-Vegetarian'
@@ -941,7 +941,7 @@ export const menuData: { [key: string]: MenuData } = {
       },
       {
         id: 'whiskey-blended-8',
-        name: 'Ballentine\'s Finest',
+        name: 'Ballentine&apos;s Finest',
         description: 'Blended Whiskey (30ML)',
         price: 389,
         category: 'Whiskey - Blended'
@@ -1029,7 +1029,7 @@ export const menuData: { [key: string]: MenuData } = {
       },
       {
         id: 'whiskey-rye-3',
-        name: 'Jack Daniel\'s',
+        name: 'Jack Daniel&apos;s',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
         price: 529,
         category: 'Whiskey - Rye/American/Canadian/Irish'

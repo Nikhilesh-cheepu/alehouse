@@ -595,7 +595,7 @@ const MenuSection = () => {
                       fontSize: '1rem',
                       color: 'rgba(255, 255, 255, 0.6)'
                     }}>
-                      We're preparing an amazing menu for you. Stay tuned!
+                      We&apos;re preparing an amazing menu for you. Stay tuned!
                     </p>
                   </div>
                 )}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const Navigation = () => {
@@ -71,10 +72,13 @@ const Navigation = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative group"
             >
-              <img
+              <Image
                 src="/logo/alehouse-logo.png"
                 alt="Alehouse Logo"
+                width={96}
+                height={96}
                 className="w-20 md:w-24 h-auto transition-all duration-500 group-hover:scale-110"
+                priority
               />
             </motion.div>
 

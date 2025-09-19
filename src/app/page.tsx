@@ -56,8 +56,6 @@ export default function Home() {
         audioEnabled={audioEnabled}
         isMuted={isMuted}
         onMuteToggle={handleMuteToggle}
-        onVoiceStart={handleVoiceStart}
-        onVoiceEnd={handleVoiceEnd}
       />
 
     </main>
