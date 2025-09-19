@@ -38,7 +38,7 @@ const MenuSection = () => {
 
   // Load cart from localStorage on component mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('kiik69_cart');
+    const savedCart = localStorage.getItem('alehouse_cart');
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
@@ -46,7 +46,7 @@ const MenuSection = () => {
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('kiik69_cart', JSON.stringify(cart));
+    localStorage.setItem('alehouse_cart', JSON.stringify(cart));
   }, [cart]);
 
   // Get current menu data based on active tab
@@ -213,7 +213,7 @@ const MenuSection = () => {
             margin: '0 auto',
             lineHeight: '1.6'
           }}>
-            From sizzling starters and gourmet mains to signature cocktails and mocktails, discover why KIIK69 is Gachibowli&apos;s #1 choice for food, drinks, and vibes.
+            From sizzling starters and gourmet mains to signature cocktails and mocktails, discover why ALEHOUSE is the perfect destination for exceptional food, drinks, and unforgettable experiences.
           </p>
         </motion.div>
 
@@ -233,7 +233,7 @@ const MenuSection = () => {
           {/* Food Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/Ale House Food Menu.pdf');
+              setSelectedMenuImage('/menu/Ale House Food Menu copy.pdf');
               setSelectedMenuTitle('Food Menu');
               setIsMenuImageModalOpen(true);
             }}
@@ -302,7 +302,7 @@ const MenuSection = () => {
           {/* Liquor Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/Alehouse Beverage Menu_V4.pdf');
+              setSelectedMenuImage('/menu/Alehouse Beverage Menu.pdf');
               setSelectedMenuTitle('Beverages Menu');
               setIsMenuImageModalOpen(true);
             }}
@@ -371,7 +371,7 @@ const MenuSection = () => {
           {/* Happy Hour Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/Ale House Happy Hour Menu.pdf');
+              setSelectedMenuImage('/menu/Ale House Happy Hour Menu copy.pdf');
               setSelectedMenuTitle('Happy Hour Menu');
               setIsMenuImageModalOpen(true);
             }}
@@ -454,7 +454,7 @@ const MenuSection = () => {
             lineHeight: '1.6',
             fontWeight: '400'
           }}>
-            Use these quick links to directly place your food and drinks order. We&apos;ll handle the rest. 🍽️🍹
+            Use these quick links to explore our menu and place your order. We&apos;ll take care of everything else. 🍽️🍹
           </p>
         </motion.div>
 
@@ -1082,9 +1082,9 @@ const MenuSection = () => {
                     fontWeight: '500',
                     lineHeight: '1.4'
                   }}>
-                    🚫 Oops alert!<br />
-                    Refresh or close the website = Empty cart.<br />
-                    Gone. Like your ex. 💔
+                    ⚠️ Important Notice<br />
+                    Refreshing the page will clear your cart.<br />
+                    Please complete your order before leaving! 🛒
                   </div>
                 </div>
               )}
@@ -1245,7 +1245,7 @@ const MenuSection = () => {
                      lineHeight: '1.4',
                      marginBottom: '1rem'
                    }}>
-                     🧾 Show this cart to our staff. They&apos;ll take care of the rest 😉
+                     🧾 Show this cart to our staff and we&apos;ll prepare your order perfectly! 👨‍🍳
                    </div>
                    
                    <div style={{
@@ -1259,7 +1259,7 @@ const MenuSection = () => {
                      border: '1px solid rgba(255, 193, 7, 0.3)',
                      lineHeight: '1.3'
                    }}>
-                     🚫 Oops alert! Refresh = Empty cart. Poof! 💔
+                     ⚠️ Cart Notice: Refreshing will clear your selections! 🔄
                    </div>
                  </div>
                )}
