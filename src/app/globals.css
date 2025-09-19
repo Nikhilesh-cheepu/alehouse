@@ -151,4 +151,35 @@ nav {
   backface-visibility: hidden;
 }
 
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Modern PDF Modal Styles */
+@media (max-width: 768px) {
+  .pdf-modal-container {
+    width: 95vw !important;
+    height: 90vh !important;
+    border-radius: 12px !important;
+  }
+  
+  .pdf-modal-container h3 {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pdf-modal-container {
+    width: 98vw !important;
+    height: 95vh !important;
+    border-radius: 8px !important;
+  }
+  
+  .pdf-modal-container h3 {
+    font-size: 0.9rem !important;
+  }
+}
+
 

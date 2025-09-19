@@ -18,6 +18,7 @@ const MenuSection = () => {
   const [isMenuImageModalOpen, setIsMenuImageModalOpen] = useState(false);
   const [selectedMenuImage, setSelectedMenuImage] = useState('');
   const [selectedMenuTitle, setSelectedMenuTitle] = useState('');
+  const [pdfLoading, setPdfLoading] = useState(true);
 
   // Add section IDs for navigation
   useEffect(() => {
@@ -235,6 +236,7 @@ const MenuSection = () => {
             onClick={() => {
               setSelectedMenuImage('/menu/Ale House Food Menu copy.pdf');
               setSelectedMenuTitle('Food Menu');
+              setPdfLoading(true);
               setIsMenuImageModalOpen(true);
             }}
             style={{
@@ -304,6 +306,7 @@ const MenuSection = () => {
             onClick={() => {
               setSelectedMenuImage('/menu/Alehouse Beverage Menu.pdf');
               setSelectedMenuTitle('Beverages Menu');
+              setPdfLoading(true);
               setIsMenuImageModalOpen(true);
             }}
             style={{
@@ -373,6 +376,7 @@ const MenuSection = () => {
             onClick={() => {
               setSelectedMenuImage('/menu/Ale House Happy Hour Menu copy.pdf');
               setSelectedMenuTitle('Happy Hour Menu');
+              setPdfLoading(true);
               setIsMenuImageModalOpen(true);
             }}
             style={{
@@ -540,29 +544,127 @@ const MenuSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
+                className="pdf-modal-container"
                 style={{
                   position: 'relative',
-                  width: '95vw',
-                  height: '95vh',
-                  maxWidth: '1200px',
-                  maxHeight: '900px',
-                  borderRadius: '20px',
+                  width: 'min(90vw, 1000px)',
+                  height: 'min(85vh, 700px)',
+                  borderRadius: '16px',
                   overflow: 'hidden',
-                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 25px 50px rgba(0, 0, 0, 0.8)',
+                  background: 'rgba(0, 0, 0, 0.95)',
+                  border: '2px solid rgba(184, 134, 11, 0.3)'
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
+                {/* Modern PDF Viewer Header */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 10,
+                  background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.9), rgba(218, 165, 32, 0.8))',
+                  padding: '1rem 1.5rem',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem'
+                  }}>
+                    <div style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: '#ffffff'
+                    }}></div>
+                    <h3 style={{
+                      color: '#ffffff',
+                      fontSize: '1.1rem',
+                      fontWeight: '600',
+                      margin: 0,
+                      fontFamily: 'Bebas Neue, sans-serif',
+                      letterSpacing: '0.5px'
+                    }}>
+                      {selectedMenuTitle}
+                    </h3>
+                  </div>
+                  
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <span style={{
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      fontSize: '0.85rem',
+                      fontWeight: '500'
+                    }}>
+                      PDF Menu
+                    </span>
+                  </div>
+                </div>
+
                 {selectedMenuImage ? (
-                  <iframe
-                    src={selectedMenuImage}
-                    title={selectedMenuTitle}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      display: 'block'
-                    }}
-                  />
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    paddingTop: '60px', // Space for header
+                    background: '#f8f9fa',
+                    position: 'relative'
+                  }}>
+                    {/* Loading Spinner */}
+                    {pdfLoading && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '60px',
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'rgba(0, 0, 0, 0.9)',
+                        zIndex: 5
+                      }}>
+                        <div style={{
+                          width: '50px',
+                          height: '50px',
+                          border: '4px solid rgba(184, 134, 11, 0.3)',
+                          borderTop: '4px solid #B8860B',
+                          borderRadius: '50%',
+                          animation: 'spin 1s linear infinite',
+                          marginBottom: '1rem'
+                        }}></div>
+                        <p style={{
+                          color: '#DAA520',
+                          fontSize: '1rem',
+                          fontWeight: '500'
+                        }}>
+                          Loading Menu...
+                        </p>
+                      </div>
+                    )}
+                    
+                    <iframe
+                      src={selectedMenuImage}
+                      title={selectedMenuTitle}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        border: 'none',
+                        display: 'block',
+                        borderRadius: '0 0 16px 16px'
+                      }}
+                      onLoad={() => setPdfLoading(false)}
+                      onError={() => setPdfLoading(false)}
+                    />
+                  </div>
                 ) : (
                   <div style={{
                     width: '100%',
@@ -571,63 +673,98 @@ const MenuSection = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(184, 134, 11, 0.1))',
+                    background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(184, 134, 11, 0.1))',
                     color: 'white',
                     textAlign: 'center',
-                    padding: '2rem'
+                    padding: '3rem 2rem',
+                    paddingTop: '5rem' // Space for header
                   }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '2rem' }}>🍸</div>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #B8860B, #DAA520)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '2rem',
+                      boxShadow: '0 10px 30px rgba(184, 134, 11, 0.3)'
+                    }}>
+                      <span style={{ fontSize: '2.5rem' }}>🍸</span>
+                    </div>
+                    
                     <h2 style={{
-                      fontSize: '2rem',
+                      fontSize: '1.8rem',
                       marginBottom: '1rem',
-                      fontFamily: 'Game of Thrones, serif'
+                      fontFamily: 'Game of Thrones, serif',
+                      background: 'linear-gradient(135deg, #DAA520, #B8860B)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      color: 'transparent'
                     }}>
                       {selectedMenuTitle}
                     </h2>
-                    <p style={{
-                      fontSize: '1.2rem',
-                      color: 'rgba(255, 255, 255, 0.8)',
-                      marginBottom: '1rem'
+                    
+                    <div style={{
+                      padding: '1.5rem',
+                      borderRadius: '12px',
+                      background: 'rgba(184, 134, 11, 0.1)',
+                      border: '1px solid rgba(184, 134, 11, 0.3)',
+                      maxWidth: '400px'
                     }}>
-                      Coming Soon!
-                    </p>
-                    <p style={{
-                      fontSize: '1rem',
-                      color: 'rgba(255, 255, 255, 0.6)'
-                    }}>
-                      We&apos;re preparing an amazing menu for you. Stay tuned!
-                    </p>
+                      <p style={{
+                        fontSize: '1.1rem',
+                        color: '#DAA520',
+                        marginBottom: '0.5rem',
+                        fontWeight: '600'
+                      }}>
+                        Coming Soon!
+                      </p>
+                      <p style={{
+                        fontSize: '0.95rem',
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        lineHeight: '1.5',
+                        margin: 0
+                      }}>
+                        We&apos;re curating an exceptional selection for you. Stay tuned for something amazing!
+                      </p>
+                    </div>
                   </div>
                 )}
+                {/* Modern Close Button */}
                 <button
                   onClick={() => setIsMenuImageModalOpen(false)}
                   style={{
                     position: 'absolute',
                     top: '1rem',
                     right: '1rem',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '8px',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
                     color: 'white',
-                    fontSize: '1.2rem',
+                    fontSize: '1rem',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backdropFilter: 'blur(10px)',
-                    transition: 'all 0.3s ease'
+                    backdropFilter: 'blur(15px)',
+                    transition: 'all 0.3s ease',
+                    zIndex: 20,
+                    fontWeight: 'bold'
                   }}
                   onMouseEnter={(e) => {
                     const target = e.target as HTMLButtonElement;
-                    target.style.background = 'rgba(255, 255, 255, 0.3)';
-                    target.style.transform = 'scale(1.1)';
+                    target.style.background = 'rgba(184, 134, 11, 0.8)';
+                    target.style.transform = 'scale(1.05)';
+                    target.style.boxShadow = '0 5px 15px rgba(184, 134, 11, 0.4)';
                   }}
                   onMouseLeave={(e) => {
                     const target = e.target as HTMLButtonElement;
-                    target.style.background = 'rgba(255, 255, 255, 0.2)';
+                    target.style.background = 'rgba(0, 0, 0, 0.7)';
                     target.style.transform = 'scale(1)';
+                    target.style.boxShadow = 'none';
                   }}
                 >
                   ✕
