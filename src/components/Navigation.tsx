@@ -8,8 +8,43 @@ import { Menu, X } from 'lucide-react';
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Removed isScrolled state as it's not used in the new design
+  
+  // Easter egg state for secret redirect
+  const [logoClickCount, setLogoClickCount] = useState(0);
+  const [logoClickTimeout, setLogoClickTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Scroll effect removed as it's not used in the new design
+
+  // Secret Easter egg function for logo - triple click to open production site
+  const handleLogoSecretClick = () => {
+    setLogoClickCount(prev => prev + 1);
+    
+    // Clear existing timeout
+    if (logoClickTimeout) {
+      clearTimeout(logoClickTimeout);
+    }
+    
+    // Set new timeout to reset click count after 2 seconds
+    const newTimeout = setTimeout(() => {
+      setLogoClickCount(0);
+    }, 2000);
+    setLogoClickTimeout(newTimeout);
+    
+    // Check if user clicked 3 times within 2 seconds
+    if (logoClickCount + 1 === 3) {
+      // Reset click count
+      setLogoClickCount(0);
+      if (logoClickTimeout) {
+        clearTimeout(logoClickTimeout);
+      }
+      
+      // Open production Alehouse site in new tab
+      window.open('https://alehouse.thesmmhub.com/home/', '_blank');
+      
+      // Optional: Show a subtle notification
+      console.log('🏰 Logo Easter egg activated! Welcome to the real realm...');
+    }
+  };
 
   // Handle menu open/close
   const toggleMenu = useCallback(() => {
@@ -45,6 +80,15 @@ const Navigation = () => {
     };
   }, []);
 
+  // Cleanup logo timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (logoClickTimeout) {
+        clearTimeout(logoClickTimeout);
+      }
+    };
+  }, [logoClickTimeout]);
+
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
@@ -70,7 +114,9 @@ const Navigation = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative group"
+              className="relative group cursor-pointer"
+              onClick={handleLogoSecretClick}
+              title="The crown holds secrets... 👑"
             >
               <Image
                 src="/logo/alehouse-logo.png"

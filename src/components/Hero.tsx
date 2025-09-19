@@ -17,6 +17,11 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   const [voiceStarted, setVoiceStarted] = useState(false);
   const [voiceCompleted, setVoiceCompleted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  
+  // Easter egg state for secret redirect
+  const [clickCount, setClickCount] = useState(0);
+  const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
+  
   const audioRef = useRef<HTMLAudioElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
@@ -170,6 +175,46 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     "Welcome to ALEHOUSE"
   ];
 
+  // Secret Easter egg function - triple click to open production site
+  const handleSecretClick = () => {
+    setClickCount(prev => prev + 1);
+    
+    // Clear existing timeout
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+    }
+    
+    // Set new timeout to reset click count after 2 seconds
+    const newTimeout = setTimeout(() => {
+      setClickCount(0);
+    }, 2000);
+    setClickTimeout(newTimeout);
+    
+    // Check if user clicked 3 times within 2 seconds
+    if (clickCount + 1 === 3) {
+      // Reset click count
+      setClickCount(0);
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+      }
+      
+      // Open production Alehouse site in new tab
+      window.open('https://alehouse.thesmmhub.com/home/', '_blank');
+      
+      // Optional: Show a subtle notification
+      console.log('🎉 Easter egg activated! Opening the real Alehouse...');
+    }
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+      }
+    };
+  }, [clickTimeout]);
+
   return (
     <section 
       id="home"
@@ -252,12 +297,14 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
                   duration: 0.2,
                   ease: "easeOut"
                 }}
-                className="text-xs md:text-2xl font-bold text-[#e6c87a] leading-relaxed tracking-wider"
+                className="text-xs md:text-2xl font-bold text-[#e6c87a] leading-relaxed tracking-wider cursor-pointer"
                 style={{
                   textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
                   filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))',
                   fontFamily: 'GameOfThrones, serif'
                 }}
+                onClick={handleSecretClick}
+                title="Something magical happens with triple clicks... 🎭"
               >
                 {textLines[currentTextIndex]}
               </motion.h1>
