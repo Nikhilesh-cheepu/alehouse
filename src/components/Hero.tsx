@@ -165,7 +165,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   }, [onVoiceEnd]);
 
   const textLines = [
-    "Legends weren&apos;t forged in palaces…",
+    "Legends weren't forged in palaces…",
     "They began in places like this.",
     "Welcome to ALEHOUSE"
   ];
@@ -179,7 +179,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     >
       {/* Responsive Background Videos */}
       <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
-        {/* Fallback black background when videos aren&apos;t playing */}
+        {/* Fallback black background when videos are not playing */}
         {!hasUserChosen && (
           <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
         )}
