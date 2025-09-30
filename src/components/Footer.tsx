@@ -27,11 +27,11 @@ const Footer = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {/* Age & ID */}
+            {/* Legal Age & Identification */}
             <div className="bg-white/5 backdrop-blur-sm border border-yellow-500/20 rounded-lg p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-bold text-yellow-300 mb-3 flex items-center gap-2">
                 <span className="text-2xl">🆔</span>
-                <span>1. Age &amp; ID</span>
+                <span>1. Legal Age &amp; Identification</span>
               </h3>
               <ul className="space-y-2 text-gray-300 text-sm md:text-base">
                 <li className="flex items-start gap-2">
