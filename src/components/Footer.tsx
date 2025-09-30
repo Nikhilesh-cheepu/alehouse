@@ -121,7 +121,7 @@ const Footer = () => {
             </a>
             
             <a 
-              href="mailto:contact@alehouse.com" 
+              href="mailto:alehousesccm@gmail.com" 
               className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2"
             >
               <FaEnvelope className="text-yellow-500" />
@@ -129,7 +129,7 @@ const Footer = () => {
             </a>
             
             <a 
-              href="https://www.instagram.com/alehouse.hyd" 
+              href="https://www.instagram.com/alehouse.club?igsh=bW56NGR4YWRlZzNm&utm_source=qr" 
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2"
@@ -155,7 +155,7 @@ const Footer = () => {
           <div className="flex flex-col items-center gap-3 text-sm">
             <div className="flex items-center gap-4">
               <a 
-                href="https://www.instagram.com/alehouse.hyd" 
+                href="https://www.instagram.com/alehouse.club?igsh=bW56NGR4YWRlZzNm&utm_source=qr" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
@@ -171,7 +171,7 @@ const Footer = () => {
                 <FaMapMarkerAlt className="text-2xl" />
               </a>
               <a 
-                href="mailto:contact@alehouse.com" 
+                href="mailto:alehousesccm@gmail.com" 
                 className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
               >
                 <FaEnvelope className="text-2xl" />
