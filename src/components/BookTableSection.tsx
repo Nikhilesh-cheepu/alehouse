@@ -140,12 +140,12 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                      formData.time &&
                      Object.keys(errors).length === 0;
 
-  // Generate date options for next 30 days
+  // Generate date options for next 365 days (1 year from today)
   const generateDateOptions = () => {
     const dates = [];
     const today = new Date();
     
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 365; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       
@@ -153,10 +153,11 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       const dayName = date.toLocaleDateString('en-IN', { weekday: 'short' });
       const dayNumber = date.getDate();
       const monthName = date.toLocaleDateString('en-IN', { month: 'short' });
+      const year = date.getFullYear();
       
       dates.push({
         value: date.toISOString().split('T')[0],
-        label: `${dayName}, ${dayNumber} ${monthName}`,
+        label: `${dayName}, ${dayNumber} ${monthName} ${year}`,
         available: !isPast,
         isPast: isPast
       });
