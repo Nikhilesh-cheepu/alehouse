@@ -304,7 +304,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                     value={formData.mobile}
                     onChange={handleInputChange}
                     placeholder="Enter your 10-digit mobile number"
-                    maxLength="10"
+                    maxLength={10}
                     className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-gray-400 focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300 text-base"
                     style={{
                       textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
