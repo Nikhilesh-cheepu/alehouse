@@ -7,6 +7,8 @@ import AudioController from '@/components/AudioController';
 import Navigation from '@/components/Navigation';
 import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
+import BookTableSection from '@/components/BookTableSection';
+import CTASection from '@/components/CTASection';
 
 export default function Home() {
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -49,6 +51,8 @@ export default function Home() {
         onVoiceEnd={handleVoiceEnd}
       />
 
+      <CTASection />
+      <BookTableSection />
       <AboutSection />
       <MenuSection />
 

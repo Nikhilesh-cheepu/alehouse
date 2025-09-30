@@ -16,9 +16,49 @@ const MenuSection = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const [isMenuImageModalOpen, setIsMenuImageModalOpen] = useState(false);
-  const [selectedMenuImage, setSelectedMenuImage] = useState('');
+  const [selectedMenuImages, setSelectedMenuImages] = useState<string[]>([]);
   const [selectedMenuTitle, setSelectedMenuTitle] = useState('');
-  const [pdfLoading, setPdfLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  // Navigation functions for image gallery
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev < selectedMenuImages.length - 1 ? prev + 1 : 0
+    );
+    setImageLoading(true);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev > 0 ? prev - 1 : selectedMenuImages.length - 1
+    );
+    setImageLoading(true);
+  };
+
+  const closeImageModal = () => {
+    setIsMenuImageModalOpen(false);
+    setCurrentImageIndex(0);
+    setSelectedMenuImages([]);
+  };
+
+  // Keyboard navigation for image gallery
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (isMenuImageModalOpen) {
+        if (e.key === 'ArrowLeft') {
+          prevImage();
+        } else if (e.key === 'ArrowRight') {
+          nextImage();
+        } else if (e.key === 'Escape') {
+          closeImageModal();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [isMenuImageModalOpen]);
 
   // Add section IDs for navigation
   useEffect(() => {
@@ -175,10 +215,11 @@ const MenuSection = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       viewport={{ once: true }}
+      className="my-24 md:my-16"
       style={{
-        padding: '4rem 0 2rem 0',
+        padding: '6rem 0 4rem 0',
         background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(184, 134, 11, 0.05) 50%, rgba(0, 0, 0, 0.95) 100%)',
-        minHeight: 'auto',
+        minHeight: '100vh',
         position: 'relative'
       }}
     >
@@ -234,9 +275,23 @@ const MenuSection = () => {
           {/* Food Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/Ale House Food Menu copy.pdf');
+              const foodImages = [
+                '/menu/FOOD/Ale House Food Menu copy_page-0001.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0002.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0003.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0004.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0005.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0006.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0007.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0008.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0009.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0010.jpg',
+                '/menu/FOOD/Ale House Food Menu copy_page-0011.jpg'
+              ];
+              setSelectedMenuImages(foodImages);
               setSelectedMenuTitle('Food Menu');
-              setPdfLoading(true);
+              setCurrentImageIndex(0);
+              setImageLoading(true);
               setIsMenuImageModalOpen(true);
             }}
             style={{
@@ -304,9 +359,18 @@ const MenuSection = () => {
           {/* Liquor Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/Alehouse Beverage Menu.pdf');
+              const beverageImages = [
+                '/menu/BEVERAGE/Alehouse Beverage Menu_page-0001.jpg',
+                '/menu/BEVERAGE/Alehouse Beverage Menu_page-0002.jpg',
+                '/menu/BEVERAGE/Alehouse Beverage Menu_page-0003.jpg',
+                '/menu/BEVERAGE/Alehouse Beverage Menu_page-0004.jpg',
+                '/menu/BEVERAGE/Alehouse Beverage Menu_page-0005.jpg',
+                '/menu/BEVERAGE/Alehouse Beverage Menu_page-0006.jpg'
+              ];
+              setSelectedMenuImages(beverageImages);
               setSelectedMenuTitle('Beverages Menu');
-              setPdfLoading(true);
+              setCurrentImageIndex(0);
+              setImageLoading(true);
               setIsMenuImageModalOpen(true);
             }}
             style={{
@@ -374,9 +438,17 @@ const MenuSection = () => {
           {/* Happy Hour Menu Button */}
           <motion.button
             onClick={() => {
-              setSelectedMenuImage('/menu/Ale House Happy Hour Menu copy.pdf');
+              const happyHourImages = [
+                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0001.jpg',
+                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0002.jpg',
+                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0003.jpg',
+                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0004.jpg',
+                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0005.jpg'
+              ];
+              setSelectedMenuImages(happyHourImages);
               setSelectedMenuTitle('Happy Hour Menu');
-              setPdfLoading(true);
+              setCurrentImageIndex(0);
+              setImageLoading(true);
               setIsMenuImageModalOpen(true);
             }}
             style={{
@@ -544,7 +616,7 @@ const MenuSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
-                className="pdf-modal-container"
+                className="image-modal-container"
                 style={{
                   position: 'relative',
                   width: 'min(90vw, 1000px)',
@@ -604,12 +676,12 @@ const MenuSection = () => {
                       fontSize: '0.85rem',
                       fontWeight: '500'
                     }}>
-                      PDF Menu
+                      Menu Image
                     </span>
                   </div>
                 </div>
 
-                {selectedMenuImage ? (
+                {selectedMenuImages.length > 0 ? (
                   <div style={{
                     width: '100%',
                     height: '100%',
@@ -618,7 +690,7 @@ const MenuSection = () => {
                     position: 'relative'
                   }}>
                     {/* Loading Spinner */}
-                    {pdfLoading && (
+                    {imageLoading && (
                       <div style={{
                         position: 'absolute',
                         top: '60px',
@@ -651,18 +723,108 @@ const MenuSection = () => {
                       </div>
                     )}
                     
-                    <iframe
-                      src={selectedMenuImage}
-                      title={selectedMenuTitle}
+                    {/* Navigation Buttons */}
+                    {selectedMenuImages.length > 1 && (
+                      <>
+                        <button
+                          onClick={prevImage}
+                          style={{
+                            position: 'absolute',
+                            left: '20px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '50px',
+                            height: '50px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            zIndex: 10,
+                            fontSize: '20px',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
+                            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
+                            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                          }}
+                        >
+                          ‹
+                        </button>
+                        <button
+                          onClick={nextImage}
+                          style={{
+                            position: 'absolute',
+                            right: '20px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'rgba(0, 0, 0, 0.7)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '50px',
+                            height: '50px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            zIndex: 10,
+                            fontSize: '20px',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)';
+                            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)';
+                            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                          }}
+                        >
+                          ›
+                        </button>
+                      </>
+                    )}
+
+                    {/* Image Counter */}
+                    {selectedMenuImages.length > 1 && (
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        padding: '8px 16px',
+                        borderRadius: '20px',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        zIndex: 10
+                      }}>
+                        {currentImageIndex + 1} / {selectedMenuImages.length}
+                      </div>
+                    )}
+
+                    <img
+                      src={selectedMenuImages[currentImageIndex]}
+                      alt={`${selectedMenuTitle} - Page ${currentImageIndex + 1}`}
                       style={{
                         width: '100%',
                         height: '100%',
-                        border: 'none',
+                        objectFit: 'contain',
                         display: 'block',
-                        borderRadius: '0 0 16px 16px'
+                        borderRadius: '0 0 16px 16px',
+                        background: '#f8f9fa'
                       }}
-                      onLoad={() => setPdfLoading(false)}
-                      onError={() => setPdfLoading(false)}
+                      onLoad={() => setImageLoading(false)}
+                      onError={() => setImageLoading(false)}
                     />
                   </div>
                 ) : (
@@ -733,7 +895,7 @@ const MenuSection = () => {
                 )}
                 {/* Modern Close Button */}
                 <button
-                  onClick={() => setIsMenuImageModalOpen(false)}
+                  onClick={closeImageModal}
                   style={{
                     position: 'absolute',
                     top: '1rem',
