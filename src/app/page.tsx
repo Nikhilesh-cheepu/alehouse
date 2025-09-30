@@ -9,6 +9,7 @@ import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
 import BookTableSection from '@/components/BookTableSection';
 import CTASection from '@/components/CTASection';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -61,6 +62,8 @@ export default function Home() {
         isMuted={isMuted}
         onMuteToggle={handleMuteToggle}
       />
+
+      <Footer />
 
     </main>
   );
