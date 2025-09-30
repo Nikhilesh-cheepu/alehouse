@@ -16,7 +16,7 @@ const BookTableSection = () => {
     time: ''
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
 
@@ -37,7 +37,7 @@ const BookTableSection = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: { [key: string]: string } = {};
     
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';

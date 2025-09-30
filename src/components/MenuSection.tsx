@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
 import { menuData, MenuItem } from '@/data/menuData';
@@ -23,25 +23,25 @@ const MenuSection = () => {
   const [imageLoading, setImageLoading] = useState(true);
 
   // Navigation functions for image gallery
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => 
       prev < selectedMenuImages.length - 1 ? prev + 1 : 0
     );
     setImageLoading(true);
-  };
+  }, [selectedMenuImages.length]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     setCurrentImageIndex((prev) => 
       prev > 0 ? prev - 1 : selectedMenuImages.length - 1
     );
     setImageLoading(true);
-  };
+  }, [selectedMenuImages.length]);
 
-  const closeImageModal = () => {
+  const closeImageModal = useCallback(() => {
     setIsMenuImageModalOpen(false);
     setCurrentImageIndex(0);
     setSelectedMenuImages([]);
-  };
+  }, []);
 
   // Keyboard navigation for image gallery
   useEffect(() => {
