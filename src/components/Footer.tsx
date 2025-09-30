@@ -19,7 +19,6 @@ const Footer = () => {
           <h2 
             className="text-2xl md:text-3xl font-bold mb-6 text-yellow-400 text-center"
             style={{ 
-              fontFamily: 'Game of Thrones, serif',
               textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
             }}
           >
