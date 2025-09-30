@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
 import { menuData, MenuItem } from '@/data/menuData';
+import Image from 'next/image';
 
 interface CartItem extends MenuItem {
   quantity: number;
@@ -58,7 +59,7 @@ const MenuSection = () => {
 
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [isMenuImageModalOpen]);
+  }, [isMenuImageModalOpen, nextImage, prevImage, closeImageModal]);
 
   // Add section IDs for navigation
   useEffect(() => {
@@ -812,9 +813,11 @@ const MenuSection = () => {
                       </div>
                     )}
 
-                    <img
+                    <Image
                       src={selectedMenuImages[currentImageIndex]}
                       alt={`${selectedMenuTitle} - Page ${currentImageIndex + 1}`}
+                      width={800}
+                      height={1000}
                       style={{
                         width: '100%',
                         height: '100%',

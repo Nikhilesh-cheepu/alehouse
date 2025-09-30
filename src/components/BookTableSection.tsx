@@ -2,20 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaPhone, FaUsers, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
+import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
 
 const BookTableSection = () => {
-  // Get tomorrow's date as default
-  const getTomorrowDate = () => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
-  };
-
-  // Get default time (7:00 PM)
-  const getDefaultTime = () => {
-    return '19:00';
-  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -31,7 +20,7 @@ const BookTableSection = () => {
   const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
