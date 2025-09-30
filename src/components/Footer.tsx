@@ -22,7 +22,7 @@ const Footer = () => {
               textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
             }}
           >
-            Terms &amp; Conditions / Club Rules
+            Terms &amp; Conditions
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
