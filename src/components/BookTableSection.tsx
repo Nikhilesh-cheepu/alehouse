@@ -4,6 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
 
+interface DateOption {
+  value: string;
+  label: string;
+  available: boolean;
+  isPast: boolean;
+}
+
+interface TimeOption {
+  value: string;
+  label: string;
+  available: boolean;
+}
+
 const BookTableSection = () => {
 
   const [formData, setFormData] = useState({
@@ -173,21 +186,21 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   const dateOptions = generateDateOptions();
   const timeOptions = generateTimeOptions();
 
-  const handleDateSelect = (date) => {
+  const handleDateSelect = (date: DateOption) => {
     setFormData(prev => ({ ...prev, date: date.value }));
     setShowDateDropdown(false);
   };
 
-  const handleTimeSelect = (time) => {
+  const handleTimeSelect = (time: TimeOption) => {
     setFormData(prev => ({ ...prev, time: time.value }));
     setShowTimeDropdown(false);
   };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (showDateDropdown || showTimeDropdown) {
-        const target = event.target;
+        const target = event.target as HTMLElement;
         if (!target.closest('[data-dropdown]')) {
           setShowDateDropdown(false);
           setShowTimeDropdown(false);
