@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaInstagram, FaMapMarkerAlt, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
+import { FaInstagram, FaMapMarkerAlt, FaEnvelope } from 'react-icons/fa';
 
 const Footer = () => {
   return (

@@ -39,7 +39,7 @@ const CTASection = () => {
             }}
           >
             <div className="mb-2 text-base md:text-2xl">
-              EXPERIENCE THE WORLD'S BEST
+              EXPERIENCE THE WORLD&apos;S BEST
             </div>
             <div className="text-sm md:text-xl">
               <span 
