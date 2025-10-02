@@ -113,14 +113,6 @@ const Footer = () => {
           {/* Links */}
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm md:text-base">
             <a 
-              href="/privacy-policy" 
-              className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2"
-            >
-              <FaShieldAlt className="text-yellow-500" />
-              Privacy Policy
-            </a>
-            
-            <a 
               href="mailto:alehousesccm@gmail.com" 
               className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2"
             >
@@ -139,7 +131,7 @@ const Footer = () => {
             </a>
             
             <a 
-              href="https://maps.app.goo.gl/your-google-maps-link" 
+              href="https://maps.app.goo.gl/6KSJoKUwggs1zzoM8?g_st=ic" 
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-300 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2"
@@ -163,7 +155,7 @@ const Footer = () => {
                 <FaInstagram className="text-2xl" />
               </a>
               <a 
-                href="https://maps.app.goo.gl/your-google-maps-link" 
+                href="https://maps.app.goo.gl/6KSJoKUwggs1zzoM8?g_st=ic" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-yellow-400 transition-colors duration-300"
