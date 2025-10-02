@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
+import { track } from '@vercel/analytics';
 
 interface DateOption {
   value: string;
@@ -125,8 +126,43 @@ Please confirm my table reservation for this medieval dining experience. Thank y
     return encodeURIComponent(message);
   };
 
-  const handleBookTable = () => {
+  const handleBookTable = async () => {
     if (validateForm()) {
+      const totalPeople = ((parseInt(formData.men) || 0) + (parseInt(formData.women) || 0) + (parseInt(formData.couples) || 0) * 2);
+      
+      // Track booking attempt with Vercel Analytics
+      track('booking_attempt', {
+        name: formData.name,
+        mobile: formData.mobile,
+        total_people: totalPeople,
+        date: formData.date,
+        time: formData.time
+      });
+      
+      // Send booking data to your API (for Google Sheets integration)
+      try {
+        await fetch('/api/booking', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            name: formData.name,
+            mobile: formData.mobile,
+            men: parseInt(formData.men) || 0,
+            women: parseInt(formData.women) || 0,
+            couples: parseInt(formData.couples) || 0,
+            total_people: totalPeople,
+            date: formData.date,
+            time: formData.time,
+            source: 'website'
+          }),
+        });
+      } catch (error) {
+        console.error('Error sending booking data:', error);
+      }
+      
       const message = generateWhatsAppMessage();
       const whatsappUrl = `https://wa.me/918096060606?text=${message}`;
       window.open(whatsappUrl, '_blank');
