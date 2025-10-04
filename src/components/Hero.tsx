@@ -27,28 +27,25 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Start videos when user makes choice
+  // Start videos when component mounts
   useEffect(() => {
-    if (hasUserChosen) {
-      // Start mobile video if it exists
-      if (mobileVideoRef.current) {
-        mobileVideoRef.current.play().catch((error) => {
-          console.log('Mobile video play failed:', error);
-        });
-      }
-      
-      // Start desktop video if it exists
-      if (desktopVideoRef.current) {
-        desktopVideoRef.current.play().catch((error) => {
-          console.log('Desktop video play failed:', error);
-        });
-      }
+    // Start mobile video if it exists
+    if (mobileVideoRef.current) {
+      mobileVideoRef.current.play().catch((error) => {
+        console.log('Mobile video play failed:', error);
+      });
     }
-  }, [hasUserChosen]);
+    
+    // Start desktop video if it exists
+    if (desktopVideoRef.current) {
+      desktopVideoRef.current.play().catch((error) => {
+        console.log('Desktop video play failed:', error);
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    // Only start observing after user has made a choice
-    if (!hasUserChosen) return;
+    // Start the experience immediately
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -85,11 +82,11 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     }
 
     return () => observer.disconnect();
-  }, [audioPlayed, textAnimationStarted, audioEnabled, hasUserChosen, isMuted, voiceCompleted, onVoiceStart]);
+  }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted, onVoiceStart]);
 
   // Handle text animation sequence
   useEffect(() => {
-    if (!hasUserChosen || !textAnimationStarted) return;
+    if (!textAnimationStarted) return;
 
     const textTimeline = [
       { index: 0, start: 0, end: 2.5 },    // "Legends weren't forged in palaces…"
@@ -110,7 +107,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       }, end * 1000);
     });
 
-  }, [hasUserChosen, textAnimationStarted]);
+  }, [textAnimationStarted]);
 
   // Handle tab visibility changes
   useEffect(() => {

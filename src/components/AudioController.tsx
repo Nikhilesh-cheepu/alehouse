@@ -88,8 +88,8 @@ const AudioController = ({
     window.addEventListener('focus', handleWindowFocus);
     window.addEventListener('blur', handleWindowBlur);
 
-    // Start playing if not muted and tab is visible
-    if (!isMuted && !document.hidden) {
+    // Start playing if audio is enabled, not muted and tab is visible
+    if (audioEnabled && !isMuted && !document.hidden) {
       playAudio();
     }
 
@@ -124,8 +124,7 @@ const AudioController = ({
     }
   }, [isMuted, audioEnabled, wasPlayingBeforeHidden]);
 
-  // Show mute button when audio is enabled
-  if (!audioEnabled) return null;
+  // Always show the audio controller button
 
   return (
     <>
