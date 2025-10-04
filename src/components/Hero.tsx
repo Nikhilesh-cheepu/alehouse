@@ -53,7 +53,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
           if (entry.isIntersecting && !textAnimationStarted) {
             // Start voice immediately if audio is enabled, not muted, and hasn't completed
             if (audioRef.current && !audioPlayed && audioEnabled && !isMuted && !voiceCompleted) {
-              audioRef.current.volume = 0.5;
+              audioRef.current.volume = 0.3; // Lower volume for better autoplay success
               audioRef.current.muted = false;
               
               audioRef.current.play().then(() => {
@@ -63,9 +63,28 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
                 
                 // Start text animations after voice starts
                 setTextAnimationStarted(true);
-              }).catch(() => {
+              }).catch((error) => {
+                console.log('Hero voice autoplay failed:', error);
                 // If voice fails, still start animations
                 setTextAnimationStarted(true);
+                
+                // Try to start voice after user interaction
+                const handleUserInteraction = () => {
+                  if (audioRef.current && audioEnabled && !isMuted && !voiceStarted) {
+                    audioRef.current.play().then(() => {
+                      setAudioPlayed(true);
+                      setVoiceStarted(true);
+                      onVoiceStart();
+                    }).catch(() => {
+                      console.log('Hero voice still failed after user interaction');
+                    });
+                  }
+                  document.removeEventListener('click', handleUserInteraction);
+                  document.removeEventListener('touchstart', handleUserInteraction);
+                };
+                
+                document.addEventListener('click', handleUserInteraction);
+                document.addEventListener('touchstart', handleUserInteraction);
               });
             } else {
               // If no audio, muted, or voice completed, start animations immediately

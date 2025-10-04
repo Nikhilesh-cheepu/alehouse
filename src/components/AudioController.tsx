@@ -16,7 +16,25 @@ const AudioController = ({
 }: AudioControllerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [wasPlayingBeforeHidden, setWasPlayingBeforeHidden] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Handle user interaction to enable audio
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      setHasUserInteracted(true);
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -30,10 +48,27 @@ const AudioController = ({
     // Start playing when audio is enabled and not muted
     const playAudio = () => {
       if (audio.paused && !isMuted && !document.hidden) {
+        // Set audio properties for better compatibility
+        audio.volume = 0.3; // Lower volume for autoplay
+        audio.muted = false;
+        
         audio.play().then(() => {
           setIsPlaying(true);
-        }).catch(() => {
+          console.log('Audio started successfully');
+        }).catch((error) => {
+          console.log('Audio autoplay failed:', error);
           setIsPlaying(false);
+          // Try again after user interaction
+          document.addEventListener('click', () => {
+            if (audio.paused && audioEnabled && !isMuted) {
+              audio.play().then(() => {
+                setIsPlaying(true);
+                console.log('Audio started after user interaction');
+              }).catch(() => {
+                setIsPlaying(false);
+              });
+            }
+          }, { once: true });
         });
       }
     };
@@ -89,7 +124,16 @@ const AudioController = ({
     window.addEventListener('blur', handleWindowBlur);
 
     // Start playing if audio is enabled, not muted and tab is visible
+    // Also try to start after user interaction if autoplay fails
     if (audioEnabled && !isMuted && !document.hidden) {
+      // Add a small delay to ensure DOM is ready
+      setTimeout(() => {
+        playAudio();
+      }, 100);
+    }
+
+    // Try to start audio after user interaction if it failed initially
+    if (hasUserInteracted && audioEnabled && !isMuted && audio.paused) {
       playAudio();
     }
 
@@ -99,7 +143,7 @@ const AudioController = ({
       window.removeEventListener('focus', handleWindowFocus);
       window.removeEventListener('blur', handleWindowBlur);
     };
-  }, [audioEnabled, isMuted, isPlaying, wasPlayingBeforeHidden]);
+  }, [audioEnabled, isMuted, isPlaying, wasPlayingBeforeHidden, hasUserInteracted]);
 
   // Handle mute state changes
   useEffect(() => {
@@ -139,11 +183,23 @@ const AudioController = ({
         }}
       />
       
-      {/* Mute/Unmute Button - Always visible for debugging */}
+      {/* Mute/Unmute Button - Always visible */}
       <button
         onClick={onMuteToggle}
-        className="fixed bottom-4 right-4 z-[99999] p-3 bg-black/90 backdrop-blur-sm rounded-lg text-gold hover:bg-gold/20 transition-colors duration-200 border border-gold/30"
-        title={isMuted ? 'Unmute' : 'Mute'}
+        className={`fixed bottom-4 right-4 z-[99999] p-3 backdrop-blur-sm rounded-lg transition-colors duration-200 border ${
+          isMuted 
+            ? 'bg-black/90 text-gray-400 border-gray-600' 
+            : isPlaying 
+            ? 'bg-black/90 text-yellow-400 border-yellow-400/30 hover:bg-yellow-400/20' 
+            : 'bg-black/90 text-blue-400 border-blue-400/30 hover:bg-blue-400/20'
+        }`}
+        title={
+          isMuted 
+            ? 'Unmute' 
+            : isPlaying 
+            ? 'Mute' 
+            : 'Click to enable audio'
+        }
         style={{
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.8)',
           position: 'fixed',
@@ -152,6 +208,15 @@ const AudioController = ({
       >
         {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
       </button>
+      
+      {/* Audio prompt for first-time users */}
+      {!hasUserInteracted && !isPlaying && (
+        <div className="fixed bottom-16 right-4 z-[99998] p-3 bg-blue-600/90 backdrop-blur-sm rounded-lg text-white text-sm max-w-[200px] border border-blue-400/30">
+          <p className="text-xs">
+            🎵 Click anywhere to enable background music
+          </p>
+        </div>
+      )}
     </>
   );
 };
