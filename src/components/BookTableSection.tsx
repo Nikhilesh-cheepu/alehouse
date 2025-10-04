@@ -303,7 +303,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
           className="max-w-2xl mx-auto"
         >
           <div 
-            className="relative overflow-hidden rounded-2xl p-6 md:p-8"
+            className="relative rounded-2xl p-6 md:p-8"
             style={{
               background: 'rgba(255, 255, 255, 0.05)',
               backdropFilter: 'blur(20px)',
@@ -434,7 +434,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
               <div className="mb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Date Picker */}
-                  <div data-dropdown>
+                  <div data-dropdown className="relative">
                     <label className="block text-sm font-semibold text-white mb-2">
                       Select Date *
                     </label>
@@ -458,7 +458,14 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                       </div>
                       
                       {showCalendar && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-black/90 backdrop-blur-sm border border-white/20 rounded-xl z-50 p-4 shadow-2xl min-w-[280px]">
+                        <>
+                          {/* Backdrop */}
+                          <div 
+                            className="fixed inset-0 z-[9998]"
+                            onClick={() => setShowCalendar(false)}
+                          />
+                          {/* Calendar */}
+                          <div className="absolute top-full left-0 right-0 mt-2 bg-black/95 backdrop-blur-sm border border-white/20 rounded-xl z-[9999] p-4 shadow-2xl min-w-[320px] max-h-[400px] overflow-visible">
                           {/* Calendar Header */}
                           <div className="flex items-center justify-between mb-4">
                             <button
@@ -518,7 +525,8 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                               </button>
                             ))}
                           </div>
-                        </div>
+                          </div>
+                        </>
                       )}
                     </div>
                     {errors.date && (
