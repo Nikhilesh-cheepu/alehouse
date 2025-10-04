@@ -611,12 +611,12 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                 disabled={!isFormValid}
                 className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
                   isFormValid 
-                    ? 'bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 hover:border-white/40' 
+                    ? 'bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600' 
                     : 'bg-white/5 text-gray-400 cursor-not-allowed border border-white/10'
                 }`}
                 whileHover={isFormValid ? {
                   scale: 1.02,
-                  boxShadow: '0 10px 25px rgba(34, 197, 94, 0.3)'
+                  boxShadow: '0 10px 25px rgba(34, 197, 94, 0.4)'
                 } : {}}
                 whileTap={isFormValid ? { scale: 0.98 } : {}}
                 style={{
