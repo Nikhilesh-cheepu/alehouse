@@ -228,9 +228,8 @@ Please confirm my table reservation for this medieval dining experience. Thank y
     const month = currentMonth.getMonth();
     const today = new Date();
     
-    // Get first day of month and last day of month
+    // Get first day of month
     const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay()); // Start from Sunday
     
@@ -653,7 +652,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
               {isInstagramBrowser && (
                 <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
                   <p className="text-blue-300 text-sm text-center">
-                    📱 <strong>Instagram User:</strong> After clicking "Book Table", you may need to open WhatsApp manually if it doesn't open automatically.
+                    📱 <strong>Instagram User:</strong> After clicking &quot;Book Table&quot;, you may need to open WhatsApp manually if it doesn&apos;t open automatically.
                   </p>
                 </div>
               )}
