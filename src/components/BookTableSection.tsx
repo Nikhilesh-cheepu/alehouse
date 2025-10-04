@@ -459,73 +459,99 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                       
                       {showCalendar && (
                         <>
-                          {/* Backdrop */}
-                          <div 
-                            className="fixed inset-0 z-[9998]"
+                          {/* Full Screen Modal Backdrop */}
+                          <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm"
                             onClick={() => setShowCalendar(false)}
                           />
-                          {/* Calendar */}
-                          <div className="absolute top-full left-0 right-0 mt-2 bg-black/95 backdrop-blur-sm border border-white/20 rounded-xl z-[9999] p-4 shadow-2xl min-w-[320px] max-h-[400px] overflow-visible">
-                          {/* Calendar Header */}
-                          <div className="flex items-center justify-between mb-4">
-                            <button
-                              onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                            >
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                              </svg>
-                            </button>
-                            
-                            <h3 className="text-white font-semibold text-lg">
-                              {currentMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
-                            </h3>
-                            
-                            <button
-                              onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                            >
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
-                            </button>
-                          </div>
                           
-                          {/* Calendar Grid */}
-                          <div className="grid grid-cols-7 gap-1 mb-2">
-                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                              <div key={day} className="text-center text-xs text-gray-400 font-medium py-2">
-                                {day}
-                              </div>
-                            ))}
-                          </div>
-                          
-                          <div className="grid grid-cols-7 gap-1">
-                            {calendarDays.map((day, index) => (
+                          {/* Full Screen Calendar Modal */}
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="fixed inset-2 md:inset-4 z-[9999] bg-black/95 backdrop-blur-sm border border-white/20 rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh] md:max-h-[80vh]"
+                          >
+                            {/* Modal Header */}
+                            <div className="flex items-center justify-between p-4 border-b border-white/10">
+                              <h3 className="text-white text-lg font-semibold">Select Date</h3>
                               <button
-                                key={index}
-                                onClick={() => {
-                                  if (!day.isPast && day.isCurrentMonth) {
-                                    setFormData(prev => ({ ...prev, date: day.dateStr }));
-                                    setShowCalendar(false);
-                                  }
-                                }}
-                                disabled={day.isPast || !day.isCurrentMonth}
-                                className={`p-2 text-sm rounded-lg transition-all duration-200 ${
-                                  day.isSelected
-                                    ? 'bg-yellow-500 text-black font-semibold'
-                                    : day.isToday
-                                    ? 'bg-yellow-500/20 text-yellow-300 font-semibold'
-                                    : day.isCurrentMonth && !day.isPast
-                                    ? 'text-white hover:bg-white/10'
-                                    : 'text-gray-500 cursor-not-allowed'
-                                }`}
+                                onClick={() => setShowCalendar(false)}
+                                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                               >
-                                {day.day}
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                               </button>
-                            ))}
-                          </div>
-                          </div>
+                            </div>
+                            
+                            {/* Calendar Content */}
+                            <div className="flex-1 p-4 overflow-y-auto">
+                              {/* Calendar Header */}
+                              <div className="flex items-center justify-between mb-6">
+                                <button
+                                  onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+                                  className="p-3 hover:bg-white/10 rounded-lg transition-colors"
+                                >
+                                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                  </svg>
+                                </button>
+                                
+                                <h3 className="text-white font-semibold text-xl">
+                                  {currentMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                                </h3>
+                                
+                                <button
+                                  onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+                                  className="p-3 hover:bg-white/10 rounded-lg transition-colors"
+                                >
+                                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </button>
+                              </div>
+                              
+                              {/* Calendar Grid */}
+                              <div className="grid grid-cols-7 gap-2 mb-4">
+                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                                  <div key={day} className="text-center text-sm text-gray-400 font-medium py-3">
+                                    {day}
+                                  </div>
+                                ))}
+                              </div>
+                              
+                              <div className="grid grid-cols-7 gap-2">
+                                {calendarDays.map((day, index) => (
+                                  <button
+                                    key={index}
+                                    onClick={() => {
+                                      if (!day.isPast && day.isCurrentMonth) {
+                                        setFormData(prev => ({ ...prev, date: day.dateStr }));
+                                        setShowCalendar(false);
+                                      }
+                                    }}
+                                    disabled={day.isPast || !day.isCurrentMonth}
+                                    className={`p-3 text-base rounded-lg transition-all duration-200 min-h-[44px] flex items-center justify-center ${
+                                      day.isSelected
+                                        ? 'bg-yellow-500 text-black font-semibold'
+                                        : day.isToday
+                                        ? 'bg-yellow-500/20 text-yellow-300 font-semibold'
+                                        : day.isCurrentMonth && !day.isPast
+                                        ? 'text-white hover:bg-white/10'
+                                        : 'text-gray-500 cursor-not-allowed'
+                                    }`}
+                                  >
+                                    {day.day}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
                         </>
                       )}
                     </div>
