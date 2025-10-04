@@ -5,13 +5,6 @@ import { motion } from 'framer-motion';
 import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
 import { track } from '@vercel/analytics';
 
-interface DateOption {
-  value: string;
-  label: string;
-  available: boolean;
-  isPast: boolean;
-}
-
 interface TimeOption {
   value: string;
   label: string;
@@ -31,7 +24,6 @@ const BookTableSection = () => {
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,38 +161,61 @@ Please confirm my table reservation for this medieval dining experience. Thank y
     }
   };
 
-  const isFormValid = formData.name.trim() && 
-                     formData.mobile.trim() && 
-                     ((parseInt(formData.men) || 0) + (parseInt(formData.women) || 0) + (parseInt(formData.couples) || 0) * 2) > 0 &&
-                     formData.date &&
-                     formData.time &&
-                     Object.keys(errors).length === 0;
+  // Real-time form validation for button state
+  const isFormValid = React.useMemo(() => {
+    const hasName = formData.name.trim().length > 0;
+    const hasValidMobile = formData.mobile.trim().length > 0 && /^[6-9]\d{9}$/.test(formData.mobile.replace(/\s/g, ''));
+    const totalPeople = ((parseInt(formData.men) || 0) + (parseInt(formData.women) || 0) + (parseInt(formData.couples) || 0) * 2);
+    const hasValidPeople = totalPeople > 0;
+    const hasDate = formData.date.length > 0;
+    const hasTime = formData.time.length > 0;
+    
+    return hasName && hasValidMobile && hasValidPeople && hasDate && hasTime;
+  }, [formData]);
 
-  // Generate date options for next 365 days (1 year from today)
-  const generateDateOptions = () => {
-    const dates = [];
+  // Apple-style calendar component state
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  // Generate calendar days for current month
+  const generateCalendarDays = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
     const today = new Date();
     
-    for (let i = 0; i < 365; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+    // Get first day of month and last day of month
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - firstDay.getDay()); // Start from Sunday
+    
+    const days = [];
+    const currentDate = new Date(startDate);
+    
+    // Generate 6 weeks (42 days) to fill the calendar
+    for (let i = 0; i < 42; i++) {
+      const dateStr = currentDate.toISOString().split('T')[0];
+      const isCurrentMonth = currentDate.getMonth() === month;
+      const isPast = currentDate < today || (currentDate.toDateString() === today.toDateString() && new Date().getHours() >= 18);
+      const isSelected = formData.date === dateStr;
       
-      const isPast = i === 0 && new Date().getHours() >= 18;
-      const dayName = date.toLocaleDateString('en-IN', { weekday: 'short' });
-      const dayNumber = date.getDate();
-      const monthName = date.toLocaleDateString('en-IN', { month: 'short' });
-      const year = date.getFullYear();
-      
-      dates.push({
-        value: date.toISOString().split('T')[0],
-        label: `${dayName}, ${dayNumber} ${monthName} ${year}`,
-        available: !isPast,
-        isPast: isPast
+      days.push({
+        date: new Date(currentDate),
+        dateStr,
+        day: currentDate.getDate(),
+        isCurrentMonth,
+        isPast,
+        isSelected,
+        isToday: currentDate.toDateString() === today.toDateString()
       });
+      
+      currentDate.setDate(currentDate.getDate() + 1);
     }
     
-    return dates;
+    return days;
   };
+
+  const calendarDays = generateCalendarDays();
 
   // Generate time options (12 PM to 11 PM)
   const generateTimeOptions = () => {
@@ -220,13 +235,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
     return times;
   };
 
-  const dateOptions = generateDateOptions();
   const timeOptions = generateTimeOptions();
-
-  const handleDateSelect = (date: DateOption) => {
-    setFormData(prev => ({ ...prev, date: date.value }));
-    setShowDateDropdown(false);
-  };
 
   const handleTimeSelect = (time: TimeOption) => {
     setFormData(prev => ({ ...prev, time: time.value }));
@@ -236,10 +245,10 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (showDateDropdown || showTimeDropdown) {
+      if (showCalendar || showTimeDropdown) {
         const target = event.target as HTMLElement;
         if (!target.closest('[data-dropdown]')) {
-          setShowDateDropdown(false);
+          setShowCalendar(false);
           setShowTimeDropdown(false);
         }
       }
@@ -249,7 +258,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showDateDropdown, showTimeDropdown]);
+  }, [showCalendar, showTimeDropdown]);
 
   return (
     <section 
@@ -431,33 +440,84 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                     </label>
                     <div className="relative">
                       <div
-                        onClick={() => setShowDateDropdown(!showDateDropdown)}
+                        onClick={() => setShowCalendar(!showCalendar)}
                         className="w-full p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white cursor-pointer transition-all duration-300 flex items-center justify-between hover:border-white/40 hover:bg-white/10 text-base"
                       >
                         <span className={formData.date ? 'text-white' : 'text-gray-400'}>
                           {formData.date 
-                            ? dateOptions.find(d => d.value === formData.date)?.label || formData.date
+                            ? new Date(formData.date).toLocaleDateString('en-IN', { 
+                                weekday: 'short', 
+                                day: 'numeric', 
+                                month: 'short', 
+                                year: 'numeric' 
+                              })
                             : 'Select Date'
                           }
                         </span>
                         <FaCalendarAlt className="text-yellow-400 text-sm" />
                       </div>
                       
-                      {showDateDropdown && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-black/80 backdrop-blur-sm border border-white/20 rounded-xl z-50 max-h-48 overflow-y-auto shadow-2xl">
-                          {dateOptions.map((date) => (
-                            <div
-                              key={date.value}
-                              onClick={() => handleDateSelect(date)}
-                              className={`p-3 cursor-pointer transition-all duration-200 ${
-                                formData.date === date.value 
-                                  ? 'bg-yellow-500/20 text-yellow-300' 
-                                  : 'text-white hover:bg-yellow-500/10'
-                              } ${!date.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      {showCalendar && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-black/90 backdrop-blur-sm border border-white/20 rounded-xl z-50 p-4 shadow-2xl min-w-[280px]">
+                          {/* Calendar Header */}
+                          <div className="flex items-center justify-between mb-4">
+                            <button
+                              onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+                              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                             >
-                              {date.label}
-                            </div>
-                          ))}
+                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                              </svg>
+                            </button>
+                            
+                            <h3 className="text-white font-semibold text-lg">
+                              {currentMonth.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                            </h3>
+                            
+                            <button
+                              onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+                              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                            >
+                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </button>
+                          </div>
+                          
+                          {/* Calendar Grid */}
+                          <div className="grid grid-cols-7 gap-1 mb-2">
+                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                              <div key={day} className="text-center text-xs text-gray-400 font-medium py-2">
+                                {day}
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <div className="grid grid-cols-7 gap-1">
+                            {calendarDays.map((day, index) => (
+                              <button
+                                key={index}
+                                onClick={() => {
+                                  if (!day.isPast && day.isCurrentMonth) {
+                                    setFormData(prev => ({ ...prev, date: day.dateStr }));
+                                    setShowCalendar(false);
+                                  }
+                                }}
+                                disabled={day.isPast || !day.isCurrentMonth}
+                                className={`p-2 text-sm rounded-lg transition-all duration-200 ${
+                                  day.isSelected
+                                    ? 'bg-yellow-500 text-black font-semibold'
+                                    : day.isToday
+                                    ? 'bg-yellow-500/20 text-yellow-300 font-semibold'
+                                    : day.isCurrentMonth && !day.isPast
+                                    ? 'text-white hover:bg-white/10'
+                                    : 'text-gray-500 cursor-not-allowed'
+                                }`}
+                              >
+                                {day.day}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
