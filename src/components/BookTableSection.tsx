@@ -157,7 +157,49 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       
       const message = generateWhatsAppMessage();
       const whatsappUrl = `https://wa.me/918096060606?text=${message}`;
-      window.open(whatsappUrl, '_blank');
+      
+      // Detect Instagram browser
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isInstagramBrowser = userAgent.includes('instagram');
+      
+      // Try multiple methods to open WhatsApp (Instagram browser compatibility)
+      if (isInstagramBrowser) {
+        // For Instagram browser, try direct navigation first
+        try {
+          window.location.href = whatsappUrl;
+        } catch (error) {
+          console.log('Instagram browser navigation failed, trying clipboard method:', error);
+          // Copy message to clipboard for Instagram users
+          navigator.clipboard.writeText(message).then(() => {
+            alert('Your booking message has been copied! Please open WhatsApp and paste it to complete your booking.');
+          }).catch(() => {
+            alert(`Please copy this message and send it to WhatsApp: ${message}`);
+          });
+        }
+      } else {
+        // For regular browsers, try window.open first
+        try {
+          const newWindow = window.open(whatsappUrl, '_blank');
+          
+          // Check if popup was blocked
+          if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+            // Fallback to direct navigation
+            window.location.href = whatsappUrl;
+          }
+        } catch (error) {
+          console.log('window.open failed, trying direct navigation:', error);
+          try {
+            window.location.href = whatsappUrl;
+          } catch (navError) {
+            console.error('All methods failed:', navError);
+            navigator.clipboard.writeText(message).then(() => {
+              alert('WhatsApp link copied to clipboard! Please paste it in WhatsApp to complete your booking.');
+            }).catch(() => {
+              alert(`Please copy this message and send it to WhatsApp: ${message}`);
+            });
+          }
+        }
+      }
     }
   };
 
@@ -176,6 +218,9 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   // Apple-style calendar component state
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
+  
+  // Detect Instagram browser for UI adjustments
+  const isInstagramBrowser = typeof window !== 'undefined' && navigator.userAgent.toLowerCase().includes('instagram');
 
   // Generate calendar days for current month
   const generateCalendarDays = () => {
@@ -603,6 +648,15 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                   </div>
                 </div>
               </div>
+
+              {/* Instagram Browser Notice */}
+              {isInstagramBrowser && (
+                <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <p className="text-blue-300 text-sm text-center">
+                    📱 <strong>Instagram User:</strong> After clicking "Book Table", you may need to open WhatsApp manually if it doesn't open automatically.
+                  </p>
+                </div>
+              )}
 
               {/* Book Table Button */}
               <motion.button
