@@ -16,25 +16,10 @@ const AudioController = ({
 }: AudioControllerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [wasPlayingBeforeHidden, setWasPlayingBeforeHidden] = useState(false);
-  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Handle user interaction to enable audio
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      setHasUserInteracted(true);
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-    };
-
-    document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction);
-
-    return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
-    };
-  }, []);
+  // Audio enabled by default - no user interaction required
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -48,27 +33,14 @@ const AudioController = ({
     // Start playing when audio is enabled and not muted
     const playAudio = () => {
       if (audio.paused && !isMuted && !document.hidden) {
-        // Set audio properties for better compatibility
-        audio.volume = 0.3; // Lower volume for autoplay
+        audio.volume = 0.3;
         audio.muted = false;
         
         audio.play().then(() => {
           setIsPlaying(true);
-          console.log('Audio started successfully');
         }).catch((error) => {
           console.log('Audio autoplay failed:', error);
           setIsPlaying(false);
-          // Try again after user interaction
-          document.addEventListener('click', () => {
-            if (audio.paused && audioEnabled && !isMuted) {
-              audio.play().then(() => {
-                setIsPlaying(true);
-                console.log('Audio started after user interaction');
-              }).catch(() => {
-                setIsPlaying(false);
-              });
-            }
-          }, { once: true });
         });
       }
     };
@@ -81,69 +53,33 @@ const AudioController = ({
       }
     };
 
-    // Handle visibility change (tab switching)
+    // Simplified visibility handling
     const handleVisibilityChange = () => {
-      
       if (document.hidden) {
-        // Tab is hidden - pause and remember state
         if (!audio.paused) {
           setWasPlayingBeforeHidden(true);
           pauseAudio();
-        } else {
-          setWasPlayingBeforeHidden(false);
         }
-      } else {
-        // Tab is visible - resume if conditions are met
-        if (wasPlayingBeforeHidden && !isMuted && audioEnabled) {
-          playAudio();
-        }
-      }
-    };
-
-    // Handle window focus/blur (switching windows)
-    const handleWindowFocus = () => {
-      // Resume if it was playing before and not muted
-      if (wasPlayingBeforeHidden && !isMuted && audioEnabled) {
+      } else if (wasPlayingBeforeHidden && !isMuted && audioEnabled) {
         playAudio();
       }
     };
 
-    const handleWindowBlur = () => {
-      // Remember state and pause
-      if (!audio.paused) {
-        setWasPlayingBeforeHidden(true);
-        pauseAudio();
-      } else {
-        setWasPlayingBeforeHidden(false);
-      }
-    };
-
-    // Add event listeners
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('focus', handleWindowFocus);
-    window.addEventListener('blur', handleWindowBlur);
 
     // Start playing if audio is enabled, not muted and tab is visible
-    // Also try to start after user interaction if autoplay fails
     if (audioEnabled && !isMuted && !document.hidden) {
       // Add a small delay to ensure DOM is ready
       setTimeout(() => {
         playAudio();
-      }, 100);
-    }
-
-    // Try to start audio after user interaction if it failed initially
-    if (hasUserInteracted && audioEnabled && !isMuted && audio.paused) {
-      playAudio();
+      }, 500);
     }
 
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('focus', handleWindowFocus);
-      window.removeEventListener('blur', handleWindowBlur);
     };
-  }, [audioEnabled, isMuted, isPlaying, wasPlayingBeforeHidden, hasUserInteracted]);
+  }, [audioEnabled, isMuted, wasPlayingBeforeHidden]);
 
   // Handle mute state changes
   useEffect(() => {
@@ -193,13 +129,7 @@ const AudioController = ({
             ? 'bg-black/90 text-yellow-400 border-yellow-400/30 hover:bg-yellow-400/20' 
             : 'bg-black/90 text-blue-400 border-blue-400/30 hover:bg-blue-400/20'
         }`}
-        title={
-          isMuted 
-            ? 'Unmute' 
-            : isPlaying 
-            ? 'Mute' 
-            : 'Click to enable audio'
-        }
+        title={isMuted ? 'Unmute' : 'Mute'}
         style={{
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.8)',
           position: 'fixed',
@@ -209,14 +139,6 @@ const AudioController = ({
         {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
       </button>
       
-      {/* Audio prompt for first-time users */}
-      {!hasUserInteracted && !isPlaying && (
-        <div className="fixed bottom-16 right-4 z-[99998] p-3 bg-blue-600/90 backdrop-blur-sm rounded-lg text-white text-sm max-w-[200px] border border-blue-400/30">
-          <p className="text-xs">
-            🎵 Click anywhere to enable background music
-          </p>
-        </div>
-      )}
     </>
   );
 };

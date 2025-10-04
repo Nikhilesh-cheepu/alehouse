@@ -67,24 +67,6 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
                 console.log('Hero voice autoplay failed:', error);
                 // If voice fails, still start animations
                 setTextAnimationStarted(true);
-                
-                // Try to start voice after user interaction
-                const handleUserInteraction = () => {
-                  if (audioRef.current && audioEnabled && !isMuted && !voiceStarted) {
-                    audioRef.current.play().then(() => {
-                      setAudioPlayed(true);
-                      setVoiceStarted(true);
-                      onVoiceStart();
-                    }).catch(() => {
-                      console.log('Hero voice still failed after user interaction');
-                    });
-                  }
-                  document.removeEventListener('click', handleUserInteraction);
-                  document.removeEventListener('touchstart', handleUserInteraction);
-                };
-                
-                document.addEventListener('click', handleUserInteraction);
-                document.addEventListener('touchstart', handleUserInteraction);
               });
             } else {
               // If no audio, muted, or voice completed, start animations immediately
@@ -101,7 +83,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     }
 
     return () => observer.disconnect();
-  }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted, onVoiceStart]);
+  }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted]);
 
   // Handle text animation sequence
   useEffect(() => {
@@ -150,7 +132,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [audioPlayed, voiceStarted, voiceCompleted, isMuted, audioEnabled]);
+  }, [audioPlayed, voiceStarted, voiceCompleted, isMuted]);
 
   // Handle mute state changes
   useEffect(() => {
