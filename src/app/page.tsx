@@ -74,7 +74,7 @@ export default function Home() {
               .then(() => {
                 setIsMuted(false);
               })
-              .catch((error) => {
+              .catch(() => {
                 strategyIndex++;
                 setTimeout(tryNextStrategy, 100);
               });
@@ -106,8 +106,12 @@ export default function Home() {
           }
           
           if (eventType.includes('touch')) {
-            const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
-            target.dispatchEvent(touchEvent);
+            try {
+              const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
+              target.dispatchEvent(touchEvent);
+            } catch {
+              // TouchEvent not supported, skip
+            }
           }
         });
       });
@@ -174,32 +178,6 @@ export default function Home() {
 
       <Footer />
 
-      {/* Hidden Auto-Trigger Button */}
-      <button
-        ref={(el) => {
-          if (el) {
-            // Auto-click this button to trigger audio
-            setTimeout(() => {
-              el.click();
-            }, 200);
-            setTimeout(() => {
-              el.click();
-            }, 1000);
-          }
-        }}
-        onClick={() => {
-          if (themeSongRef.current) themeSongRef.current.play().catch(() => {});
-          if (heroVoiceRef.current) heroVoiceRef.current.play().catch(() => {});
-        }}
-        style={{ 
-          position: 'absolute', 
-          left: '-9999px', 
-          opacity: 0, 
-          pointerEvents: 'none' 
-        }}
-      >
-        Auto Trigger
-      </button>
 
       {/* Theme Song Audio */}
       <audio

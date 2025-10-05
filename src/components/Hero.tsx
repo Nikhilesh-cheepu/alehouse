@@ -104,7 +104,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
             playStrategies[strategyIndex]()
               .then(() => {
               })
-              .catch((error) => {
+              .catch(() => {
                 strategyIndex++;
                 setTimeout(tryNextStrategy, 100);
               });
@@ -136,8 +136,12 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
           }
           
           if (eventType.includes('touch')) {
-            const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
-            target.dispatchEvent(touchEvent);
+            try {
+              const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
+              target.dispatchEvent(touchEvent);
+            } catch {
+              // TouchEvent not supported, skip
+            }
           }
         });
       });
