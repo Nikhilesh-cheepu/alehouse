@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface HeroProps {
   hasUserChosen: boolean;
   heroVoiceRef: React.RefObject<HTMLAudioElement | null>;
+  onExploreClick?: () => void;
 }
 
-const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
+const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   
@@ -347,6 +348,48 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
               </motion.h1>
             )}
           </AnimatePresence>
+
+          {/* Explore Button - Alehouse Style */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+            className="mt-8"
+          >
+            <button
+              onClick={onExploreClick}
+              className="group relative px-8 py-4 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
+              style={{
+                fontFamily: 'GameOfThrones, serif',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                boxShadow: '0 8px 25px rgba(230, 200, 122, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                border: '2px solid rgba(230, 200, 122, 0.3)',
+                background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
+              }}
+            >
+              <span className="relative z-10">EXPLORE ALEHOUSE</span>
+              
+              {/* Glow effect */}
+              <div 
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
+                  filter: 'blur(10px)',
+                  transform: 'scale(1.2)'
+                }}
+              />
+              
+              {/* Shine effect */}
+              <div 
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
+                  transform: 'translateX(-100%)',
+                  animation: 'shine 2s infinite'
+                }}
+              />
+            </button>
+          </motion.div>
         </div>
       </div>
 

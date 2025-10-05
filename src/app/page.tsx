@@ -12,7 +12,6 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   const [isMuted, setIsMuted] = useState(false);
-  const [showAudioPrompt, setShowAudioPrompt] = useState(true);
   const themeSongRef = useRef<HTMLAudioElement>(null);
   const heroVoiceRef = useRef<HTMLAudioElement>(null);
 
@@ -141,81 +140,7 @@ export default function Home() {
 
   }, []);
 
-  // AUTOMATIC AUDIO ENABLER - Triggers audio without user interaction
-  useEffect(() => {
-    const enableAudioAutomatically = () => {
-      // Force both audios to play
-      if (themeSongRef.current && themeSongRef.current.paused) {
-        themeSongRef.current.play().then(() => {
-          setShowAudioPrompt(false);
-        }).catch(console.log);
-      }
-      
-      if (heroVoiceRef.current && heroVoiceRef.current.paused) {
-        heroVoiceRef.current.play().then(() => {
-          setShowAudioPrompt(false);
-        }).catch(console.log);
-      }
-    };
 
-    // Try to enable audio immediately
-    enableAudioAutomatically();
-    
-    // Simulate a click event to trigger audio
-    setTimeout(() => {
-      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
-      document.dispatchEvent(clickEvent);
-    }, 100);
-    
-    // If that fails, show the prompt and try again
-    setTimeout(() => {
-      if (showAudioPrompt) {
-        enableAudioAutomatically();
-        // Try another simulated click
-        const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
-        document.dispatchEvent(clickEvent);
-      }
-    }, 1000);
-
-    // Auto-hide prompt after 3 seconds and force audio
-    setTimeout(() => {
-      setShowAudioPrompt(false);
-      // Final attempt to force audio
-      if (themeSongRef.current) themeSongRef.current.play().catch(() => {});
-      if (heroVoiceRef.current) heroVoiceRef.current.play().catch(() => {});
-    }, 3000);
-
-  }, [showAudioPrompt]);
-
-  // GLOBAL USER INTERACTION LISTENER - Enable audio on ANY user action
-  useEffect(() => {
-    const enableAudioOnInteraction = () => {
-      setShowAudioPrompt(false);
-      
-      // Force both audios to play
-      if (themeSongRef.current && themeSongRef.current.paused) {
-        themeSongRef.current.play().then(() => {
-        }).catch(console.log);
-      }
-      
-      if (heroVoiceRef.current && heroVoiceRef.current.paused) {
-        heroVoiceRef.current.play().then(() => {
-        }).catch(console.log);
-      }
-    };
-
-    // Listen for ANY user interaction
-    const events = ['click', 'touchstart', 'keydown', 'mousedown', 'scroll', 'wheel'];
-    events.forEach(eventType => {
-      document.addEventListener(eventType, enableAudioOnInteraction, { once: true, passive: true });
-    });
-
-    return () => {
-      events.forEach(eventType => {
-        document.removeEventListener(eventType, enableAudioOnInteraction);
-      });
-    };
-  }, []);
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
@@ -224,6 +149,15 @@ export default function Home() {
       <Hero
         hasUserChosen={true}
         heroVoiceRef={heroVoiceRef}
+        onExploreClick={() => {
+          // Enable audio when explore button is clicked
+          if (themeSongRef.current) {
+            themeSongRef.current.play().catch(() => {});
+          }
+          if (heroVoiceRef.current) {
+            heroVoiceRef.current.play().catch(() => {});
+          }
+        }}
       />
 
       <CTASection />
@@ -236,29 +170,6 @@ export default function Home() {
         onMuteToggle={handleMuteToggle}
       />
 
-      {/* Automatic Audio Prompt - Triggers audio without user interaction */}
-      {showAudioPrompt && (
-        <div 
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          onClick={() => {
-            setShowAudioPrompt(false);
-            // Force audio to play
-            if (themeSongRef.current) themeSongRef.current.play();
-            if (heroVoiceRef.current) heroVoiceRef.current.play();
-          }}
-        >
-          <div className="text-center p-8 bg-black/90 rounded-lg border border-yellow-400/30 max-w-md mx-4">
-            <div className="text-yellow-400 text-4xl mb-4">🎵</div>
-            <h2 className="text-yellow-400 text-xl font-bold mb-2">Enable Audio</h2>
-            <p className="text-white text-sm mb-4">
-              Click anywhere to start the immersive experience with theme music and hero voice.
-            </p>
-            <div className="text-xs text-gray-400">
-              This will start automatically in a few seconds...
-            </div>
-          </div>
-        </div>
-      )}
 
 
       <Footer />
@@ -279,7 +190,6 @@ export default function Home() {
         onClick={() => {
           if (themeSongRef.current) themeSongRef.current.play().catch(() => {});
           if (heroVoiceRef.current) heroVoiceRef.current.play().catch(() => {});
-          setShowAudioPrompt(false);
         }}
         style={{ 
           position: 'absolute', 

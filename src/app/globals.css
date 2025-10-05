@@ -55,6 +55,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Shine animation for Explore button */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 main {
   margin: 0;
   padding: 0;
