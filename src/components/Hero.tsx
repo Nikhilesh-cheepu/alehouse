@@ -61,7 +61,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
   useEffect(() => {
     const forcePlayHeroVoice = () => {
       if (heroVoiceRef.current) {
-        console.log('🎤 NUCLEAR: Forcing hero voice to play...');
         
         // Set properties
         heroVoiceRef.current.volume = 0.3;
@@ -79,7 +78,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
             return heroVoiceRef.current!.play().then(() => {
               setTimeout(() => {
                 heroVoiceRef.current!.muted = false;
-                console.log('🎤 FORCED: Hero voice unmuted!');
               }, 50);
             });
           },
@@ -91,7 +89,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
             newAudio.loop = false;
             newAudio.muted = false;
             return newAudio.play().then(() => {
-              console.log('🎤 FORCED: New hero voice element playing!');
               // Replace the ref
               heroVoiceRef.current = newAudio;
             });
@@ -104,15 +101,12 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
           if (strategyIndex < playStrategies.length) {
             playStrategies[strategyIndex]()
               .then(() => {
-                console.log('🎤 FORCED: Hero voice playing with strategy', strategyIndex + 1);
               })
               .catch((error) => {
-                console.log('🎤 FORCED: Strategy', strategyIndex + 1, 'failed:', error);
                 strategyIndex++;
                 setTimeout(tryNextStrategy, 100);
               });
           } else {
-            console.log('🎤 FORCED: All strategies failed, trying again in 500ms');
             setTimeout(forcePlayHeroVoice, 500);
           }
         };
@@ -146,7 +140,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
         });
       });
       
-      console.log('🎤 NUCLEAR: Simulated massive user interaction for hero voice');
     };
 
     // IMMEDIATE EXECUTION
@@ -165,7 +158,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
     // CONTINUOUS RETRY EVERY 3 SECONDS (less frequent for hero voice)
     const continuousRetry = setInterval(() => {
       if (heroVoiceRef.current && heroVoiceRef.current.paused && heroVoiceRef.current.currentTime < 1) {
-        console.log('🎤 NUCLEAR: Hero voice paused early, forcing restart...');
         forcePlayHeroVoice();
       }
     }, 3000);

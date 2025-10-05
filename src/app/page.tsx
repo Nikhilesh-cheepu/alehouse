@@ -32,7 +32,6 @@ export default function Home() {
   useEffect(() => {
     const forcePlayThemeSong = () => {
       if (themeSongRef.current) {
-        console.log('🎵 NUCLEAR: Forcing theme song to play...');
         
         // Set properties
         themeSongRef.current.volume = 0.4;
@@ -50,7 +49,6 @@ export default function Home() {
             return themeSongRef.current!.play().then(() => {
               setTimeout(() => {
                 themeSongRef.current!.muted = false;
-                console.log('🎵 FORCED: Theme song unmuted!');
               }, 50);
             });
           },
@@ -62,7 +60,6 @@ export default function Home() {
             newAudio.loop = true;
             newAudio.muted = false;
             return newAudio.play().then(() => {
-              console.log('🎵 FORCED: New audio element playing!');
               // Replace the ref
               themeSongRef.current = newAudio;
             });
@@ -75,16 +72,13 @@ export default function Home() {
           if (strategyIndex < playStrategies.length) {
             playStrategies[strategyIndex]()
               .then(() => {
-                console.log('🎵 FORCED: Theme song playing with strategy', strategyIndex + 1);
                 setIsMuted(false);
               })
               .catch((error) => {
-                console.log('🎵 FORCED: Strategy', strategyIndex + 1, 'failed:', error);
                 strategyIndex++;
                 setTimeout(tryNextStrategy, 100);
               });
           } else {
-            console.log('🎵 FORCED: All strategies failed, trying again in 500ms');
             setTimeout(forcePlayThemeSong, 500);
           }
         };
@@ -118,7 +112,6 @@ export default function Home() {
         });
       });
       
-      console.log('🎵 NUCLEAR: Simulated massive user interaction');
     };
 
     // IMMEDIATE EXECUTION
@@ -137,7 +130,6 @@ export default function Home() {
     // CONTINUOUS RETRY EVERY 2 SECONDS
     const continuousRetry = setInterval(() => {
       if (themeSongRef.current && themeSongRef.current.paused) {
-        console.log('🎵 NUCLEAR: Audio paused, forcing restart...');
         forcePlayThemeSong();
       }
     }, 2000);
@@ -151,18 +143,15 @@ export default function Home() {
   // GLOBAL USER INTERACTION LISTENER - Enable audio on ANY user action
   useEffect(() => {
     const enableAudioOnInteraction = () => {
-      console.log('🔊 GLOBAL: User interaction detected, enabling audio...');
       
       // Force both audios to play
       if (themeSongRef.current && themeSongRef.current.paused) {
         themeSongRef.current.play().then(() => {
-          console.log('🔊 GLOBAL: Theme song enabled by user interaction');
         }).catch(console.log);
       }
       
       if (heroVoiceRef.current && heroVoiceRef.current.paused) {
         heroVoiceRef.current.play().then(() => {
-          console.log('🔊 GLOBAL: Hero voice enabled by user interaction');
         }).catch(console.log);
       }
     };
@@ -199,30 +188,6 @@ export default function Home() {
         onMuteToggle={handleMuteToggle}
       />
 
-      {/* Debug Audio Test Button */}
-      <button
-        onClick={() => {
-          console.log('🔊 Testing audio files manually...');
-          if (themeSongRef.current) {
-            themeSongRef.current.play().then(() => {
-              console.log('🎵 Theme song manual test successful!');
-            }).catch((err) => {
-              console.log('🎵 Theme song manual test failed:', err);
-            });
-          }
-          if (heroVoiceRef.current) {
-            heroVoiceRef.current.play().then(() => {
-              console.log('🎤 Hero voice manual test successful!');
-            }).catch((err) => {
-              console.log('🎤 Hero voice manual test failed:', err);
-            });
-          }
-        }}
-        className="fixed bottom-20 right-4 z-[99999] p-2 bg-red-500 text-white text-xs rounded"
-        style={{ position: 'fixed', zIndex: 99999 }}
-      >
-        Test Audio
-      </button>
 
       <Footer />
 
