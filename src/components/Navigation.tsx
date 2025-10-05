@@ -6,11 +6,10 @@ import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 interface NavigationProps {
-  showOverlay?: boolean;
   onNavClick?: () => void;
 }
 
-const Navigation = ({ showOverlay = false, onNavClick }: NavigationProps) => {
+const Navigation = ({ onNavClick }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Removed isScrolled state as it's not used in the new design
   
@@ -98,8 +97,8 @@ const Navigation = ({ showOverlay = false, onNavClick }: NavigationProps) => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
-    // If overlay is shown, dismiss it and start audio first
-    if (showOverlay && onNavClick) {
+    // Start audio when navigation is clicked
+    if (onNavClick) {
       onNavClick();
     }
     
@@ -147,8 +146,8 @@ const Navigation = ({ showOverlay = false, onNavClick }: NavigationProps) => {
 
   // New Book Table button handler
   const handleBookTableClick = () => {
-    // If overlay is shown, dismiss it and start audio first
-    if (showOverlay && onNavClick) {
+    // Start audio when navigation is clicked
+    if (onNavClick) {
       onNavClick();
     }
     

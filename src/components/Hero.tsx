@@ -8,14 +8,12 @@ interface HeroProps {
   heroVoiceRef: React.RefObject<HTMLAudioElement | null>;
   onExploreClick?: () => void;
   onNavClick?: () => void; // New prop for navigation clicks
-  showOverlay?: boolean; // Overlay state from parent
 }
 
-const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOverlay = true }: HeroProps) => {
+const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [exploreClicked, setExploreClicked] = useState(false);
-  // Use showOverlay prop from parent instead of local state
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -185,16 +183,14 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
     };
   }, [exploreClicked]);
 
-  // Start text animations only when Explore button is clicked
+  // Start text animations automatically
   useEffect(() => {
-    if (exploreClicked) {
-      setTextAnimationStarted(true);
-    }
-  }, [exploreClicked]);
+    setTextAnimationStarted(true);
+  }, []);
 
-  // Handle text animation sequence - START ONLY WHEN EXPLORE IS CLICKED
+  // Handle text animation sequence - START AUTOMATICALLY
   useEffect(() => {
-    if (!textAnimationStarted || !exploreClicked) {
+    if (!textAnimationStarted) {
       return;
     }
 
@@ -217,7 +213,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
       }, end * 1000);
     });
 
-  }, [textAnimationStarted, exploreClicked]);
+  }, [textAnimationStarted]);
 
 
   const textLines = [
@@ -273,120 +269,10 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
       className="hero-section relative w-full m-0 p-0"
       style={{ zIndex: 20 }}
     >
-      {/* Full-Screen Explore Overlay - Blocks all interaction until clicked */}
-      {showOverlay && (
-        <div 
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-sm"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 99999,
-            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-            backdropFilter: 'blur(10px)'
-          }}
-          onClick={() => {
-            // ANY click on overlay background dismisses it and starts audio/text
-            setExploreClicked(true);
-            if (onExploreClick) {
-              onExploreClick();
-            }
-          }}
-        >
-          <div className="text-center max-w-4xl mx-auto px-4">
-            {/* Alehouse Logo/Title */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="mb-8"
-            >
-              <h1 
-                className="text-2xl md:text-3xl font-bold text-[#e6c87a] mb-8"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
-                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))'
-                }}
-              >
-                A Game of Thrones–inspired nightclub and bar.
-              </h1>
-            </motion.div>
-
-            {/* Explore Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent triggering overlay background click
-                  setExploreClicked(true);
-                  if (onExploreClick) {
-                    onExploreClick();
-                  }
-                }}
-                className="group relative px-16 py-8 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-2xl rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(230,200,122,0.8)] active:scale-95"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                  boxShadow: '0 12px 35px rgba(230, 200, 122, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                  border: '3px solid rgba(230, 200, 122, 0.5)',
-                  background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
-                }}
-              >
-                <span className="relative z-10">EXPLORE ALEHOUSE</span>
-                
-                {/* Glow effect */}
-                <div 
-                  className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
-                    filter: 'blur(10px)',
-                    transform: 'scale(1.2)'
-                  }}
-                />
-                
-                {/* Shine effect */}
-                <div 
-                  className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
-                    transform: 'translateX(-100%)',
-                    animation: 'shine 2s infinite'
-                  }}
-                />
-              </button>
-            </motion.div>
-
-            {/* Subtitle */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 0.8 }}
-              className="mt-6"
-            >
-              <p className="text-sm text-gray-400">
-                Click to begin your journey into the realm
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      )}
       {/* Responsive Background Videos */}
       <div 
         className="absolute inset-0 m-0 p-0" 
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
-        onClick={(e) => {
-          // Block all clicks when overlay is shown
-          if (showOverlay) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }}
       >
         {/* Fallback black background when videos are not playing */}
         {!hasUserChosen && (
@@ -455,18 +341,11 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
       <div 
         className="relative z-20 flex items-center justify-center px-4" 
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
-        onClick={(e) => {
-          // Block all clicks when overlay is shown
-          if (showOverlay) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }}
       >
         <div className="text-center max-w-4xl mx-auto">
           {/* Text Lines with AnimatePresence */}
           <AnimatePresence mode="wait">
-            {hasUserChosen && textAnimationStarted && exploreClicked && currentTextIndex >= 0 && (
+            {hasUserChosen && textAnimationStarted && currentTextIndex >= 0 && (
               <motion.h1
                 key={currentTextIndex}
                 initial={{ opacity: 0, y: 10 }}

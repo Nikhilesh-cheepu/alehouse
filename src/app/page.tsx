@@ -12,7 +12,6 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   const [isMuted, setIsMuted] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(true);
   const themeSongRef = useRef<HTMLAudioElement>(null);
   const heroVoiceRef = useRef<HTMLAudioElement>(null);
 
@@ -30,8 +29,7 @@ export default function Home() {
   };
 
   const handleNavClick = () => {
-    // Dismiss overlay and start audio when navigation is clicked
-    setShowOverlay(false);
+    // Start audio when navigation is clicked
     if (themeSongRef.current) {
       themeSongRef.current.play().catch(() => {});
     }
@@ -77,15 +75,13 @@ export default function Home() {
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
-      <Navigation showOverlay={showOverlay} onNavClick={handleNavClick} />
+      <Navigation onNavClick={handleNavClick} />
 
       <Hero 
         hasUserChosen={true}
         heroVoiceRef={heroVoiceRef}
-        showOverlay={showOverlay}
         onExploreClick={() => {
           // Enable audio when explore button is clicked
-          setShowOverlay(false);
           if (themeSongRef.current) {
             themeSongRef.current.play().catch(() => {});
           }
