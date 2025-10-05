@@ -12,19 +12,31 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   const [isMuted, setIsMuted] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
   const themeSongRef = useRef<HTMLAudioElement>(null);
   const heroVoiceRef = useRef<HTMLAudioElement>(null);
 
   const handleMuteToggle = () => {
     const newMutedState = !isMuted;
     setIsMuted(newMutedState);
-    
+
     // Mute/unmute both audios
     if (themeSongRef.current) {
       themeSongRef.current.muted = newMutedState;
     }
     if (heroVoiceRef.current) {
       heroVoiceRef.current.muted = newMutedState;
+    }
+  };
+
+  const handleNavClick = () => {
+    // Dismiss overlay and start audio when navigation is clicked
+    setShowOverlay(false);
+    if (themeSongRef.current) {
+      themeSongRef.current.play().catch(() => {});
+    }
+    if (heroVoiceRef.current) {
+      heroVoiceRef.current.play().catch(() => {});
     }
   };
 
@@ -135,13 +147,15 @@ export default function Home() {
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
-      <Navigation />
+      <Navigation showOverlay={showOverlay} onNavClick={handleNavClick} />
 
-      <Hero
+      <Hero 
         hasUserChosen={true}
         heroVoiceRef={heroVoiceRef}
+        showOverlay={showOverlay}
         onExploreClick={() => {
           // Enable audio when explore button is clicked
+          setShowOverlay(false);
           if (themeSongRef.current) {
             themeSongRef.current.play().catch(() => {});
           }
@@ -149,6 +163,7 @@ export default function Home() {
             heroVoiceRef.current.play().catch(() => {});
           }
         }}
+        onNavClick={handleNavClick}
       />
 
       <CTASection />

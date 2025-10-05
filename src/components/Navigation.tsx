@@ -5,7 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
-const Navigation = () => {
+interface NavigationProps {
+  showOverlay?: boolean;
+  onNavClick?: () => void;
+}
+
+const Navigation = ({ showOverlay = false, onNavClick }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Removed isScrolled state as it's not used in the new design
   
@@ -93,6 +98,11 @@ const Navigation = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
+    // If overlay is shown, dismiss it and start audio first
+    if (showOverlay && onNavClick) {
+      onNavClick();
+    }
+    
     // Close mobile menu if open
     if (isMenuOpen) {
       setIsMenuOpen(false);
@@ -137,6 +147,11 @@ const Navigation = () => {
 
   // New Book Table button handler
   const handleBookTableClick = () => {
+    // If overlay is shown, dismiss it and start audio first
+    if (showOverlay && onNavClick) {
+      onNavClick();
+    }
+    
     const element = document.getElementById('book-table');
     if (element) {
       element.scrollIntoView({ 

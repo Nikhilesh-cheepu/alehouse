@@ -7,13 +7,15 @@ interface HeroProps {
   hasUserChosen: boolean;
   heroVoiceRef: React.RefObject<HTMLAudioElement | null>;
   onExploreClick?: () => void;
+  onNavClick?: () => void; // New prop for navigation clicks
+  showOverlay?: boolean; // Overlay state from parent
 }
 
-const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
+const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOverlay = true }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [exploreClicked, setExploreClicked] = useState(false);
-  const [showExploreOverlay, setShowExploreOverlay] = useState(true);
+  // Use showOverlay prop from parent instead of local state
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -272,7 +274,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
       style={{ zIndex: 20 }}
     >
       {/* Full-Screen Explore Overlay - Blocks all interaction until clicked */}
-      {showExploreOverlay && (
+      {showOverlay && (
         <div 
           className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-sm"
           style={{
@@ -285,9 +287,12 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
             backgroundColor: 'rgba(0, 0, 0, 0.95)',
             backdropFilter: 'blur(10px)'
           }}
-          onClick={(e) => {
-            // Only allow clicks on the Explore button, not the overlay background
-            e.stopPropagation();
+          onClick={() => {
+            // ANY click on overlay background dismisses it and starts audio/text
+            setExploreClicked(true);
+            if (onExploreClick) {
+              onExploreClick();
+            }
           }}
         >
           <div className="text-center max-w-4xl mx-auto px-4">
@@ -326,9 +331,9 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
               transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
             >
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering overlay background click
                   setExploreClicked(true);
-                  setShowExploreOverlay(false);
                   if (onExploreClick) {
                     onExploreClick();
                   }
@@ -386,7 +391,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
         onClick={(e) => {
           // Block all clicks when overlay is shown
-          if (showExploreOverlay) {
+          if (showOverlay) {
             e.preventDefault();
             e.stopPropagation();
           }
@@ -461,7 +466,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
         onClick={(e) => {
           // Block all clicks when overlay is shown
-          if (showExploreOverlay) {
+          if (showOverlay) {
             e.preventDefault();
             e.stopPropagation();
           }
