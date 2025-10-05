@@ -84,60 +84,27 @@ export default function Home() {
       }
     };
 
-    // AGGRESSIVE SIMULATION OF USER INTERACTION
-    const simulateMassiveUserInteraction = () => {
-      // Create and dispatch multiple types of user events
-      const events = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup', 'keydown', 'keyup'];
-      const targets = [document, document.body, document.documentElement];
-      
-      events.forEach(eventType => {
-        targets.forEach(target => {
-          // Dispatch synthetic events
-          const event = new Event(eventType, { bubbles: true, cancelable: true });
-          target.dispatchEvent(event);
-          
-          // Also try MouseEvent and TouchEvent
-          if (eventType === 'click' || eventType === 'mousedown') {
-            const mouseEvent = new MouseEvent(eventType, { bubbles: true, cancelable: true });
-            target.dispatchEvent(mouseEvent);
-          }
-          
-          if (eventType.includes('touch')) {
-            try {
-              const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
-              target.dispatchEvent(touchEvent);
-            } catch {
-              // TouchEvent not supported, skip
-            }
-          }
-        });
-      });
-      
+    // Simple simulation of user interaction - less aggressive
+    const simulateUserInteraction = () => {
+      try {
+        const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+        document.dispatchEvent(clickEvent);
+      } catch {
+        // Ignore errors
+      }
     };
 
     // IMMEDIATE EXECUTION
     forcePlayThemeSong();
-    simulateMassiveUserInteraction();
+    simulateUserInteraction();
     
-    // AGGRESSIVE RETRY SCHEDULE
-    const retryTimes = [50, 100, 200, 500, 1000, 2000, 3000];
+    // Simple retry schedule - less aggressive to prevent crashes
+    const retryTimes = [100, 500, 1000];
     retryTimes.forEach(delay => {
       setTimeout(() => {
         forcePlayThemeSong();
-        simulateMassiveUserInteraction();
       }, delay);
     });
-
-    // CONTINUOUS RETRY EVERY 2 SECONDS
-    const continuousRetry = setInterval(() => {
-      if (themeSongRef.current && themeSongRef.current.paused) {
-        forcePlayThemeSong();
-      }
-    }, 2000);
-
-    return () => {
-      clearInterval(continuousRetry);
-    };
 
   }, []);
 
