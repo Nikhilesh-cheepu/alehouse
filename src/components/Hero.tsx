@@ -14,6 +14,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [exploreClicked, setExploreClicked] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(false);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -188,6 +189,14 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
     setTextAnimationStarted(true);
   }, []);
 
+  // Enable audio when user clicks the audio button
+  const handleEnableAudio = () => {
+    setAudioEnabled(true);
+    if (onExploreClick) {
+      onExploreClick();
+    }
+  };
+
   // Handle text animation sequence - START AUTOMATICALLY
   useEffect(() => {
     if (!textAnimationStarted) {
@@ -343,6 +352,43 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
       >
         <div className="text-center max-w-4xl mx-auto">
+          {/* Audio Enable Button - Only show if audio not enabled */}
+          {!audioEnabled && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="mb-8"
+            >
+              <button
+                onClick={handleEnableAudio}
+                className="group relative px-8 py-4 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
+                style={{
+                  fontFamily: 'GameOfThrones, serif',
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                  boxShadow: '0 8px 25px rgba(230, 200, 122, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  border: '2px solid rgba(230, 200, 122, 0.3)',
+                  background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
+                }}
+              >
+                <span className="relative z-10">🎵 ENABLE AUDIO</span>
+                
+                {/* Glow effect */}
+                <div 
+                  className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
+                    filter: 'blur(10px)',
+                    transform: 'scale(1.2)'
+                  }}
+                />
+              </button>
+              <p className="text-sm text-gray-400 mt-4">
+                Click to enable audio experience
+              </p>
+            </motion.div>
+          )}
+
           {/* Text Lines with AnimatePresence */}
           <AnimatePresence mode="wait">
             {hasUserChosen && textAnimationStarted && currentTextIndex >= 0 && (
