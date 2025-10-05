@@ -243,68 +243,52 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
         
         {/* Mobile Background (Portrait) - Video */}
         <div className="block md:hidden" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
-          {/* Fallback image that shows immediately */}
-          <img 
-            src="/hero-assets/hero-bg-mobile.png" 
-            alt="Hero background" 
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
-          />
           <video
             ref={mobileVideoRef}
             src="/hero-assets/hero-mobile-video.mp4"
-            className="hero-video w-full h-full object-cover relative z-10"
+            className="hero-video w-full h-full object-cover"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            onLoadStart={() => console.log('Mobile video started loading')}
-            onCanPlay={() => {
-              console.log('Mobile video can play');
-              // Hide fallback image when video starts playing
-              const fallbackImg = mobileVideoRef.current?.parentElement?.querySelector('img');
-              if (fallbackImg) {
-                fallbackImg.style.display = 'none';
-              }
-            }}
             onError={(e) => {
-              console.log('Mobile video failed to load, keeping fallback image');
-              // Keep the fallback image visible
+              console.log('Mobile video failed to load, showing fallback image');
+              // Fallback to image if video fails to load
+              e.currentTarget.style.display = 'none';
+              const fallbackImg = document.createElement('img');
+              fallbackImg.src = '/hero-assets/hero-bg-mobile.png';
+              fallbackImg.className = 'w-full h-full object-cover';
+              fallbackImg.style.height = '100vh';
+              fallbackImg.style.minHeight = '100vh';
+              fallbackImg.style.maxHeight = '100vh';
+              e.currentTarget.parentElement!.appendChild(fallbackImg);
             }}
           />
         </div>
         
         {/* Desktop Background (Landscape) - Video */}
         <div className="hidden md:block" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
-          {/* Fallback image that shows immediately */}
-          <img 
-            src="/hero-assets/hero-bg-desktop.png" 
-            alt="Hero background" 
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
-          />
           <video
             ref={desktopVideoRef}
             src="/hero-assets/hero-desktop-video.mp4"
-            className="hero-video w-full h-full object-cover relative z-10"
+            className="hero-video w-full h-full object-cover"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            onLoadStart={() => console.log('Desktop video started loading')}
-            onCanPlay={() => {
-              console.log('Desktop video can play');
-              // Hide fallback image when video starts playing
-              const fallbackImg = desktopVideoRef.current?.parentElement?.querySelector('img');
-              if (fallbackImg) {
-                fallbackImg.style.display = 'none';
-              }
-            }}
             onError={(e) => {
-              console.log('Desktop video failed to load, keeping fallback image');
-              // Keep the fallback image visible
+              console.log('Desktop video failed to load, showing fallback image');
+              // Fallback to image if video fails to load
+              e.currentTarget.style.display = 'none';
+              const fallbackImg = document.createElement('img');
+              fallbackImg.src = '/hero-assets/hero-bg-desktop.png';
+              fallbackImg.className = 'w-full h-full object-cover';
+              fallbackImg.style.height = '100vh';
+              fallbackImg.style.minHeight = '100vh';
+              fallbackImg.style.maxHeight = '100vh';
+              e.currentTarget.parentElement!.appendChild(fallbackImg);
             }}
           />
         </div>

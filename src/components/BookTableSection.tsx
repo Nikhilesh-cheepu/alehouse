@@ -19,8 +19,8 @@ const BookTableSection = () => {
     men: '',
     women: '',
     couples: '',
-    date: '',
-    time: ''
+    date: 'Tue, 7 Oct, 2025', // Default date as requested
+    time: '2 PM' // Default time to make form work
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -51,7 +51,7 @@ const BookTableSection = () => {
     
     if (!formData.mobile.trim()) {
       newErrors.mobile = 'Mobile number is required';
-    } else if (!/^[6-9]\d{9}$/.test(formData.mobile.replace(/\s/g, ''))) {
+    } else if (!/^\d{10}$/.test(formData.mobile.replace(/\s/g, ''))) {
       newErrors.mobile = 'Please enter a valid 10-digit mobile number';
     }
     
@@ -119,6 +119,8 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   };
 
   const handleBookTable = async () => {
+    console.log('Book button clicked, form data:', formData);
+    console.log('Form validation result:', validateForm());
     if (validateForm()) {
       const totalPeople = ((parseInt(formData.men) || 0) + (parseInt(formData.women) || 0) + (parseInt(formData.couples) || 0) * 2);
       
@@ -186,11 +188,24 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   // Real-time form validation for button state
   const isFormValid = React.useMemo(() => {
     const hasName = formData.name.trim().length > 0;
-    const hasValidMobile = formData.mobile.trim().length > 0 && /^[6-9]\d{9}$/.test(formData.mobile.replace(/\s/g, ''));
+    const hasValidMobile = formData.mobile.trim().length >= 10 && /^\d{10}$/.test(formData.mobile.replace(/\s/g, ''));
     const totalPeople = ((parseInt(formData.men) || 0) + (parseInt(formData.women) || 0) + (parseInt(formData.couples) || 0) * 2);
     const hasValidPeople = totalPeople > 0;
     const hasDate = formData.date.length > 0;
     const hasTime = formData.time.length > 0;
+    
+    // Debug logging
+    console.log('Form validation:', {
+      hasName,
+      hasValidMobile,
+      hasValidPeople,
+      hasDate,
+      hasTime,
+      totalPeople,
+      formData,
+      mobileTest: /^\d{10}$/.test(formData.mobile.replace(/\s/g, '')),
+      mobileLength: formData.mobile.trim().length
+    });
     
     return hasName && hasValidMobile && hasValidPeople && hasDate && hasTime;
   }, [formData]);
