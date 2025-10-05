@@ -19,7 +19,7 @@ const AudioController = ({
   const [hasUserInteracted, setHasUserInteracted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Audio enabled by default - no user interaction required
+  // Audio enabled by default - no user interaction required - FORCE DEPLOYMENT
 
   useEffect(() => {
     const audio = audioRef.current;

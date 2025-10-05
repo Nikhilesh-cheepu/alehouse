@@ -27,7 +27,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Start videos immediately when component mounts
+  // Start videos immediately when component mounts - FORCE DEPLOYMENT
   useEffect(() => {
     const startVideos = () => {
       // Start mobile video if it exists
