@@ -160,27 +160,18 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       const message = generateWhatsAppMessage();
       const whatsappUrl = `https://wa.me/918096060606?text=${message}`;
       
-      // Open WhatsApp directly
+      // Use Instagram browser approach for ALL browsers - direct navigation
       try {
-        const newWindow = window.open(whatsappUrl, '_blank');
-        
-        // Check if popup was blocked
-        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-          // Fallback to direct navigation
-          window.location.href = whatsappUrl;
-        }
+        // Direct navigation works better for all browsers (like Instagram browser)
+        window.location.href = whatsappUrl;
       } catch (error) {
-        console.log('window.open failed, trying direct navigation:', error);
-        try {
-          window.location.href = whatsappUrl;
-        } catch (navError) {
-          console.error('All methods failed:', navError);
-          navigator.clipboard.writeText(message).then(() => {
-            alert('WhatsApp link copied to clipboard! Please paste it in WhatsApp to complete your booking.');
-          }).catch(() => {
-            alert(`Please copy this message and send it to WhatsApp: ${message}`);
-          });
-        }
+        console.log('Direct navigation failed, trying clipboard method:', error);
+        // Fallback to clipboard if direct navigation fails
+        navigator.clipboard.writeText(message).then(() => {
+          alert('Your booking message has been copied! Please open WhatsApp and paste it to complete your booking.');
+        }).catch(() => {
+          alert(`Please copy this message and send it to WhatsApp: ${message}`);
+        });
       }
     }
   };
@@ -214,8 +205,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   
-  // Detect Instagram browser for UI adjustments
-  const isInstagramBrowser = typeof window !== 'undefined' && navigator.userAgent.toLowerCase().includes('instagram');
+  // All browsers now use the same approach (Instagram browser style)
 
   // Generate calendar days for current month
   const generateCalendarDays = () => {
@@ -643,14 +633,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                 </div>
               </div>
 
-              {/* Instagram Browser Notice */}
-              {isInstagramBrowser && (
-                <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                  <p className="text-blue-300 text-sm text-center">
-                    📱 <strong>Instagram User:</strong> After clicking &quot;Book Table&quot;, you may need to open WhatsApp manually if it doesn&apos;t open automatically.
-                  </p>
-                </div>
-              )}
+              {/* All browsers now use the same WhatsApp opening approach */}
 
               {/* Book Table Button */}
               <motion.button
