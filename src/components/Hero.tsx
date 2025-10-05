@@ -64,11 +64,11 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     };
   }, []);
 
-  // Start voice and animations immediately on mount
+  // Start voice and animations immediately on mount - NO CONDITIONS
   useEffect(() => {
     const startExperience = () => {
-      // Start voice immediately if audio is enabled, not muted, and hasn't completed
-      if (audioRef.current && !audioPlayed && audioEnabled && !isMuted && !voiceCompleted) {
+      // Start voice immediately - no conditions
+      if (audioRef.current) {
         audioRef.current.volume = 0.3; // Lower volume for better autoplay success
         audioRef.current.muted = false;
         
@@ -85,7 +85,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
           setTextAnimationStarted(true);
         });
       } else {
-        // If no audio, muted, or voice completed, start animations immediately
+        // Start animations immediately if no audio element
         setTextAnimationStarted(true);
       }
     };
@@ -97,11 +97,19 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     const timeoutId = setTimeout(startExperience, 100);
     
     return () => clearTimeout(timeoutId);
-  }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted, onVoiceStart]);
+  }, [onVoiceStart]);
 
-  // Handle text animation sequence
+  // Start text animations immediately on mount
   useEffect(() => {
-    if (!textAnimationStarted) return;
+    setTextAnimationStarted(true);
+  }, []);
+
+  // Handle text animation sequence - START IMMEDIATELY
+  useEffect(() => {
+    // Start text animations immediately - no conditions
+    if (!textAnimationStarted) {
+      setTextAnimationStarted(true);
+    }
 
     const textTimeline = [
       { index: 0, start: 0, end: 2.5 },    // "Legends weren't forged in palaces…"

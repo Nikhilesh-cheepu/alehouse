@@ -22,23 +22,23 @@ const AudioController = ({
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !audioEnabled) return;
+    if (!audio) return;
 
     // Set up audio properties
     audio.volume = 0.3;
     audio.loop = true;
     audio.muted = isMuted;
 
-    // Start playing immediately when audio is enabled and not muted
+    // Start playing immediately - NO CONDITIONS
     const playAudio = () => {
-      if (audio.paused && !isMuted && !document.hidden) {
+      if (audio.paused) {
         audio.volume = 0.3;
         audio.muted = false;
         
         audio.play().then(() => {
           setIsPlaying(true);
         }).catch((error) => {
-          console.log('Audio autoplay failed:', error);
+          console.log('Theme song autoplay failed:', error);
           setIsPlaying(false);
         });
       }
@@ -59,29 +59,26 @@ const AudioController = ({
           setWasPlayingBeforeHidden(true);
           pauseAudio();
         }
-      } else if (wasPlayingBeforeHidden && !isMuted && audioEnabled) {
+      } else if (wasPlayingBeforeHidden && !isMuted) {
         playAudio();
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Start playing immediately if audio is enabled, not muted and tab is visible
-    if (audioEnabled && !isMuted && !document.hidden) {
-      // Start immediately
+    // Start playing immediately - NO CONDITIONS
+    playAudio();
+    
+    // Also try after a short delay to ensure DOM is ready
+    setTimeout(() => {
       playAudio();
-      
-      // Also try after a short delay to ensure DOM is ready
-      setTimeout(() => {
-        playAudio();
-      }, 100);
-    }
+    }, 100);
 
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [audioEnabled, isMuted, wasPlayingBeforeHidden]);
+  }, [isMuted, wasPlayingBeforeHidden]);
 
   // Handle mute state changes
   useEffect(() => {
