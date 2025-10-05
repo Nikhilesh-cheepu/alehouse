@@ -85,16 +85,13 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
             });
           },
           
-          // Strategy 3: Create new audio element
+          // Strategy 3: Force reload and play
           () => {
-            const newAudio = new Audio('/hero-assets/hero-voice.mp3');
-            newAudio.volume = 0.3;
-            newAudio.loop = false;
-            newAudio.muted = false;
-            return newAudio.play().then(() => {
-              // Replace the ref
-              heroVoiceRef.current = newAudio;
-            });
+            if (heroVoiceRef.current) {
+              heroVoiceRef.current.load();
+              return heroVoiceRef.current.play();
+            }
+            return Promise.reject('No audio element');
           }
         ];
         
@@ -174,6 +171,29 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
     };
 
   }, [heroVoiceRef]);
+
+  // Pause/Resume audio when switching tabs
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (heroVoiceRef.current) {
+        if (document.hidden) {
+          // Tab is hidden, pause audio
+          heroVoiceRef.current.pause();
+        } else {
+          // Tab is visible again, resume audio if it was playing
+          if (exploreClicked && heroVoiceRef.current.currentTime > 0) {
+            heroVoiceRef.current.play().catch(() => {});
+          }
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [exploreClicked]);
 
   // Start text animations only when Explore button is clicked
   useEffect(() => {
@@ -277,6 +297,10 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
             backgroundColor: 'rgba(0, 0, 0, 0.95)',
             backdropFilter: 'blur(10px)'
           }}
+          onClick={(e) => {
+            // Only allow clicks on the Explore button, not the overlay background
+            e.stopPropagation();
+          }}
         >
           <div className="text-center max-w-4xl mx-auto px-4">
             {/* Alehouse Logo/Title */}
@@ -369,7 +393,17 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
         </div>
       )}
       {/* Responsive Background Videos */}
-      <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
+      <div 
+        className="absolute inset-0 m-0 p-0" 
+        style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
+        onClick={(e) => {
+          // Block all clicks when overlay is shown
+          if (showExploreOverlay) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+      >
         {/* Fallback black background when videos are not playing */}
         {!hasUserChosen && (
           <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
@@ -434,7 +468,17 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
 
 
       {/* Cinematic Text Content */}
-      <div className="relative z-20 flex items-center justify-center px-4" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
+      <div 
+        className="relative z-20 flex items-center justify-center px-4" 
+        style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
+        onClick={(e) => {
+          // Block all clicks when overlay is shown
+          if (showExploreOverlay) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+      >
         <div className="text-center max-w-4xl mx-auto">
           {/* Text Lines with AnimatePresence */}
           <AnimatePresence mode="wait">

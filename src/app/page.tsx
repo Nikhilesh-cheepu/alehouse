@@ -53,16 +53,13 @@ export default function Home() {
             });
           },
           
-          // Strategy 3: Create new audio element
+          // Strategy 3: Force reload and play
           () => {
-            const newAudio = new Audio('/theme-song/Game of Thrones Edit - A Song of Ice and Fire.mp3');
-            newAudio.volume = 0.4;
-            newAudio.loop = true;
-            newAudio.muted = false;
-            return newAudio.play().then(() => {
-              // Replace the ref
-              themeSongRef.current = newAudio;
-            });
+            if (themeSongRef.current) {
+              themeSongRef.current.load();
+              return themeSongRef.current.play();
+            }
+            return Promise.reject('No audio element');
           }
         ];
         
@@ -142,6 +139,29 @@ export default function Home() {
       clearInterval(continuousRetry);
     };
 
+  }, []);
+
+  // Pause/Resume audio when switching tabs
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (themeSongRef.current) {
+        if (document.hidden) {
+          // Tab is hidden, pause audio
+          themeSongRef.current.pause();
+        } else {
+          // Tab is visible again, resume audio if it was playing
+          if (themeSongRef.current.currentTime > 0) {
+            themeSongRef.current.play().catch(() => {});
+          }
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
 
