@@ -57,64 +57,122 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
     };
   }, []);
 
-  // Ultra-aggressive autoplay strategy for hero voice
+  // NUCLEAR AUTOPLAY STRATEGY FOR HERO VOICE - FORCE PLAY AT ANY COST
   useEffect(() => {
-    const startHeroVoice = () => {
+    const forcePlayHeroVoice = () => {
       if (heroVoiceRef.current) {
-        console.log('🎤 Attempting to start hero voice...');
-        console.log('🎤 Hero voice element:', heroVoiceRef.current);
-        console.log('🎤 Hero voice src:', heroVoiceRef.current.src);
+        console.log('🎤 NUCLEAR: Forcing hero voice to play...');
         
-        // Set initial volume and muted state
+        // Set properties
         heroVoiceRef.current.volume = 0.3;
-        heroVoiceRef.current.muted = false; // Start unmuted
-        heroVoiceRef.current.loop = false; // Play once
+        heroVoiceRef.current.muted = false;
+        heroVoiceRef.current.loop = false;
         
-        console.log('🎤 Hero voice volume:', heroVoiceRef.current.volume);
-        console.log('🎤 Hero voice muted:', heroVoiceRef.current.muted);
-        
-        // Try to play immediately
-        heroVoiceRef.current.play().then(() => {
-          console.log('🎤 Hero voice started successfully!');
-        }).catch((error) => {
-          console.log('🎤 Hero voice autoplay failed:', error);
+        // FORCE PLAY - multiple strategies
+        const playStrategies = [
+          // Strategy 1: Direct play
+          () => heroVoiceRef.current!.play(),
           
-          // Try with muted first, then unmute
-          heroVoiceRef.current!.muted = true;
-          heroVoiceRef.current!.play().then(() => {
-            console.log('🎤 Hero voice started muted, will unmute in 100ms');
-            setTimeout(() => {
-              heroVoiceRef.current!.muted = false;
-              console.log('🎤 Hero voice unmuted!');
-            }, 100);
-          }).catch((err) => {
-            console.log('🎤 Hero voice muted autoplay also failed:', err);
-          });
-        });
-      } else {
-        console.log('🎤 Hero voice ref is null');
+          // Strategy 2: Muted then unmute
+          () => {
+            heroVoiceRef.current!.muted = true;
+            return heroVoiceRef.current!.play().then(() => {
+              setTimeout(() => {
+                heroVoiceRef.current!.muted = false;
+                console.log('🎤 FORCED: Hero voice unmuted!');
+              }, 50);
+            });
+          },
+          
+          // Strategy 3: Create new audio element
+          () => {
+            const newAudio = new Audio('/hero-assets/hero-voice.mp3');
+            newAudio.volume = 0.3;
+            newAudio.loop = false;
+            newAudio.muted = false;
+            return newAudio.play().then(() => {
+              console.log('🎤 FORCED: New hero voice element playing!');
+              // Replace the ref
+              heroVoiceRef.current = newAudio;
+            });
+          }
+        ];
+        
+        // Try all strategies
+        let strategyIndex = 0;
+        const tryNextStrategy = () => {
+          if (strategyIndex < playStrategies.length) {
+            playStrategies[strategyIndex]()
+              .then(() => {
+                console.log('🎤 FORCED: Hero voice playing with strategy', strategyIndex + 1);
+              })
+              .catch((error) => {
+                console.log('🎤 FORCED: Strategy', strategyIndex + 1, 'failed:', error);
+                strategyIndex++;
+                setTimeout(tryNextStrategy, 100);
+              });
+          } else {
+            console.log('🎤 FORCED: All strategies failed, trying again in 500ms');
+            setTimeout(forcePlayHeroVoice, 500);
+          }
+        };
+        
+        tryNextStrategy();
       }
     };
 
-    // Start immediately
-    startHeroVoice();
-    
-    // Retry with delays
-    setTimeout(startHeroVoice, 100);
-    setTimeout(startHeroVoice, 500);
-    setTimeout(startHeroVoice, 1000);
-
-    // Simulate user interaction for autoplay
-    const simulateUserInteraction = () => {
-      const events = ['click', 'touchstart', 'keydown'];
+    // AGGRESSIVE SIMULATION OF USER INTERACTION
+    const simulateMassiveUserInteraction = () => {
+      // Create and dispatch multiple types of user events
+      const events = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup', 'keydown', 'keyup'];
+      const targets = [document, document.body, document.documentElement];
+      
       events.forEach(eventType => {
-        document.dispatchEvent(new Event(eventType, { bubbles: true }));
+        targets.forEach(target => {
+          // Dispatch synthetic events
+          const event = new Event(eventType, { bubbles: true, cancelable: true });
+          target.dispatchEvent(event);
+          
+          // Also try MouseEvent and TouchEvent
+          if (eventType === 'click' || eventType === 'mousedown') {
+            const mouseEvent = new MouseEvent(eventType, { bubbles: true, cancelable: true });
+            target.dispatchEvent(mouseEvent);
+          }
+          
+          if (eventType.includes('touch')) {
+            const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
+            target.dispatchEvent(touchEvent);
+          }
+        });
       });
+      
+      console.log('🎤 NUCLEAR: Simulated massive user interaction for hero voice');
     };
 
-    setTimeout(simulateUserInteraction, 50);
-    setTimeout(simulateUserInteraction, 200);
-    setTimeout(simulateUserInteraction, 500);
+    // IMMEDIATE EXECUTION
+    forcePlayHeroVoice();
+    simulateMassiveUserInteraction();
+    
+    // AGGRESSIVE RETRY SCHEDULE
+    const retryTimes = [50, 100, 200, 500, 1000, 2000, 3000];
+    retryTimes.forEach(delay => {
+      setTimeout(() => {
+        forcePlayHeroVoice();
+        simulateMassiveUserInteraction();
+      }, delay);
+    });
+
+    // CONTINUOUS RETRY EVERY 3 SECONDS (less frequent for hero voice)
+    const continuousRetry = setInterval(() => {
+      if (heroVoiceRef.current && heroVoiceRef.current.paused && heroVoiceRef.current.currentTime < 1) {
+        console.log('🎤 NUCLEAR: Hero voice paused early, forcing restart...');
+        forcePlayHeroVoice();
+      }
+    }, 3000);
+
+    return () => {
+      clearInterval(continuousRetry);
+    };
 
   }, [heroVoiceRef]);
 

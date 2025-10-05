@@ -28,66 +28,156 @@ export default function Home() {
     }
   };
 
-  // Ultra-aggressive autoplay strategy for theme song
+  // NUCLEAR AUTOPLAY STRATEGY - FORCE PLAY AT ANY COST
   useEffect(() => {
-    const startThemeSong = () => {
+    const forcePlayThemeSong = () => {
       if (themeSongRef.current) {
-        console.log('🎵 Attempting to start theme song...');
-        console.log('🎵 Theme song element:', themeSongRef.current);
-        console.log('🎵 Theme song src:', themeSongRef.current.src);
+        console.log('🎵 NUCLEAR: Forcing theme song to play...');
         
-        // Set initial volume and muted state
+        // Set properties
         themeSongRef.current.volume = 0.4;
-        themeSongRef.current.muted = false; // Start unmuted
+        themeSongRef.current.muted = false;
         themeSongRef.current.loop = true;
         
-        console.log('🎵 Theme song volume:', themeSongRef.current.volume);
-        console.log('🎵 Theme song muted:', themeSongRef.current.muted);
-        
-        // Try to play immediately
-        themeSongRef.current.play().then(() => {
-          console.log('🎵 Theme song started successfully!');
-          setIsMuted(false);
-        }).catch((error) => {
-          console.log('🎵 Theme song autoplay failed:', error);
+        // FORCE PLAY - multiple strategies
+        const playStrategies = [
+          // Strategy 1: Direct play
+          () => themeSongRef.current!.play(),
           
-          // Try with muted first, then unmute
-          themeSongRef.current!.muted = true;
-          themeSongRef.current!.play().then(() => {
-            console.log('🎵 Theme song started muted, will unmute in 100ms');
-            setTimeout(() => {
-              themeSongRef.current!.muted = false;
-              console.log('🎵 Theme song unmuted!');
-            }, 100);
-          }).catch((err) => {
-            console.log('🎵 Theme song muted autoplay also failed:', err);
-          });
-        });
-      } else {
-        console.log('🎵 Theme song ref is null');
+          // Strategy 2: Muted then unmute
+          () => {
+            themeSongRef.current!.muted = true;
+            return themeSongRef.current!.play().then(() => {
+              setTimeout(() => {
+                themeSongRef.current!.muted = false;
+                console.log('🎵 FORCED: Theme song unmuted!');
+              }, 50);
+            });
+          },
+          
+          // Strategy 3: Create new audio element
+          () => {
+            const newAudio = new Audio('/theme-song/Game of Thrones Edit - A Song of Ice and Fire.mp3');
+            newAudio.volume = 0.4;
+            newAudio.loop = true;
+            newAudio.muted = false;
+            return newAudio.play().then(() => {
+              console.log('🎵 FORCED: New audio element playing!');
+              // Replace the ref
+              themeSongRef.current = newAudio;
+            });
+          }
+        ];
+        
+        // Try all strategies
+        let strategyIndex = 0;
+        const tryNextStrategy = () => {
+          if (strategyIndex < playStrategies.length) {
+            playStrategies[strategyIndex]()
+              .then(() => {
+                console.log('🎵 FORCED: Theme song playing with strategy', strategyIndex + 1);
+                setIsMuted(false);
+              })
+              .catch((error) => {
+                console.log('🎵 FORCED: Strategy', strategyIndex + 1, 'failed:', error);
+                strategyIndex++;
+                setTimeout(tryNextStrategy, 100);
+              });
+          } else {
+            console.log('🎵 FORCED: All strategies failed, trying again in 500ms');
+            setTimeout(forcePlayThemeSong, 500);
+          }
+        };
+        
+        tryNextStrategy();
       }
     };
 
-    // Start immediately
-    startThemeSong();
-    
-    // Retry with delays
-    setTimeout(startThemeSong, 100);
-    setTimeout(startThemeSong, 500);
-    setTimeout(startThemeSong, 1000);
-
-    // Simulate user interaction for autoplay
-    const simulateUserInteraction = () => {
-      const events = ['click', 'touchstart', 'keydown'];
+    // AGGRESSIVE SIMULATION OF USER INTERACTION
+    const simulateMassiveUserInteraction = () => {
+      // Create and dispatch multiple types of user events
+      const events = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup', 'keydown', 'keyup'];
+      const targets = [document, document.body, document.documentElement];
+      
       events.forEach(eventType => {
-        document.dispatchEvent(new Event(eventType, { bubbles: true }));
+        targets.forEach(target => {
+          // Dispatch synthetic events
+          const event = new Event(eventType, { bubbles: true, cancelable: true });
+          target.dispatchEvent(event);
+          
+          // Also try MouseEvent and TouchEvent
+          if (eventType === 'click' || eventType === 'mousedown') {
+            const mouseEvent = new MouseEvent(eventType, { bubbles: true, cancelable: true });
+            target.dispatchEvent(mouseEvent);
+          }
+          
+          if (eventType.includes('touch')) {
+            const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
+            target.dispatchEvent(touchEvent);
+          }
+        });
       });
+      
+      console.log('🎵 NUCLEAR: Simulated massive user interaction');
     };
 
-    setTimeout(simulateUserInteraction, 50);
-    setTimeout(simulateUserInteraction, 200);
-    setTimeout(simulateUserInteraction, 500);
+    // IMMEDIATE EXECUTION
+    forcePlayThemeSong();
+    simulateMassiveUserInteraction();
+    
+    // AGGRESSIVE RETRY SCHEDULE
+    const retryTimes = [50, 100, 200, 500, 1000, 2000, 3000];
+    retryTimes.forEach(delay => {
+      setTimeout(() => {
+        forcePlayThemeSong();
+        simulateMassiveUserInteraction();
+      }, delay);
+    });
 
+    // CONTINUOUS RETRY EVERY 2 SECONDS
+    const continuousRetry = setInterval(() => {
+      if (themeSongRef.current && themeSongRef.current.paused) {
+        console.log('🎵 NUCLEAR: Audio paused, forcing restart...');
+        forcePlayThemeSong();
+      }
+    }, 2000);
+
+    return () => {
+      clearInterval(continuousRetry);
+    };
+
+  }, []);
+
+  // GLOBAL USER INTERACTION LISTENER - Enable audio on ANY user action
+  useEffect(() => {
+    const enableAudioOnInteraction = () => {
+      console.log('🔊 GLOBAL: User interaction detected, enabling audio...');
+      
+      // Force both audios to play
+      if (themeSongRef.current && themeSongRef.current.paused) {
+        themeSongRef.current.play().then(() => {
+          console.log('🔊 GLOBAL: Theme song enabled by user interaction');
+        }).catch(console.log);
+      }
+      
+      if (heroVoiceRef.current && heroVoiceRef.current.paused) {
+        heroVoiceRef.current.play().then(() => {
+          console.log('🔊 GLOBAL: Hero voice enabled by user interaction');
+        }).catch(console.log);
+      }
+    };
+
+    // Listen for ANY user interaction
+    const events = ['click', 'touchstart', 'keydown', 'mousedown', 'scroll', 'wheel'];
+    events.forEach(eventType => {
+      document.addEventListener(eventType, enableAudioOnInteraction, { once: true, passive: true });
+    });
+
+    return () => {
+      events.forEach(eventType => {
+        document.removeEventListener(eventType, enableAudioOnInteraction);
+      });
+    };
   }, []);
 
   return (
