@@ -16,7 +16,7 @@ const AudioController = ({
 }: AudioControllerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [wasPlayingBeforeHidden, setWasPlayingBeforeHidden] = useState(false);
-  const [showEnableButton, setShowEnableButton] = useState(true);
+  const [showEnableButton, setShowEnableButton] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Audio enabled by default - no user interaction required - FORCE DEPLOYMENT
@@ -31,11 +31,10 @@ const AudioController = ({
     audio.muted = false;
     audio.preload = 'auto';
 
-    // Aggressive autoplay strategy
+    // Ultra-aggressive autoplay strategy
     const startAudio = () => {
       console.log('Attempting to start theme song...');
       
-      // Try multiple approaches
       const tryPlay = () => {
         audio.volume = 0.3;
         audio.muted = false;
@@ -50,25 +49,36 @@ const AudioController = ({
         });
       };
 
-      // Try immediately
+      // Try multiple strategies
       tryPlay().catch(() => {
-        // Try with user gesture simulation
-        console.log('Trying with simulated user interaction...');
-        
-        // Simulate user interaction
-        const clickEvent = new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          view: window
+        // Strategy 1: Simulate user interaction
+        console.log('Strategy 1: Simulating user interaction...');
+        const events = ['click', 'touchstart', 'mousedown', 'keydown'];
+        events.forEach(eventType => {
+          const event = new Event(eventType, { bubbles: true, cancelable: true });
+          document.dispatchEvent(event);
         });
         
-        document.body.dispatchEvent(clickEvent);
-        
-        setTimeout(() => {
-          tryPlay().catch(() => {
-            console.log('All autoplay attempts failed');
+        setTimeout(() => tryPlay().catch(() => {
+          // Strategy 2: Try with different audio properties
+          console.log('Strategy 2: Trying different audio properties...');
+          audio.muted = true;
+          audio.play().then(() => {
+            audio.muted = false;
+            setIsPlaying(true);
+          }).catch(() => {
+            // Strategy 3: Create new audio element
+            console.log('Strategy 3: Creating new audio element...');
+            const newAudio = new Audio(audio.src);
+            newAudio.volume = 0.3;
+            newAudio.loop = true;
+            newAudio.play().then(() => {
+              setIsPlaying(true);
+            }).catch(() => {
+              console.log('All autoplay strategies failed');
+            });
           });
-        }, 100);
+        }), 50);
       });
     };
 
@@ -98,10 +108,9 @@ const AudioController = ({
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Add global click handler to enable audio on any user interaction
+    // Try to start audio immediately without user interaction
     const enableAudioOnInteraction = () => {
       console.log('User interaction detected, enabling audio...');
-      setShowEnableButton(false);
       startAudio();
     };
 
@@ -156,30 +165,6 @@ const AudioController = ({
         }}
       />
       
-      {/* Enable Audio Button - Shows briefly */}
-      {showEnableButton && (
-        <button
-          onClick={() => {
-            setShowEnableButton(false);
-            const audio = audioRef.current;
-            if (audio) {
-              audio.play().then(() => {
-                setIsPlaying(true);
-                console.log('Audio enabled by user click');
-              }).catch((error) => {
-                console.log('Audio play failed:', error);
-              });
-            }
-          }}
-          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[99999] px-6 py-3 bg-yellow-500 text-black font-bold rounded-lg shadow-lg hover:bg-yellow-400 transition-colors"
-          style={{
-            animation: 'pulse 2s infinite',
-            zIndex: 99999,
-          }}
-        >
-          🎵 Click to Enable Audio
-        </button>
-      )}
       
       {/* Mute/Unmute Button - Always visible */}
       <button

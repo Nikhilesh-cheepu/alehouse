@@ -17,7 +17,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   const [voiceStarted, setVoiceStarted] = useState(false);
   const [voiceCompleted, setVoiceCompleted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [showVoiceButton, setShowVoiceButton] = useState(true);
+  const [showVoiceButton, setShowVoiceButton] = useState(false);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -344,33 +344,6 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
         className="hidden"
       />
 
-      {/* Enable Voice Button - Shows briefly */}
-      {showVoiceButton && (
-        <button
-          onClick={() => {
-            setShowVoiceButton(false);
-            if (audioRef.current) {
-              audioRef.current.play().then(() => {
-                setAudioPlayed(true);
-                setVoiceStarted(true);
-                onVoiceStart();
-                setTextAnimationStarted(true);
-                console.log('Hero voice enabled by user click');
-              }).catch((error) => {
-                console.log('Hero voice play failed:', error);
-                setTextAnimationStarted(true);
-              });
-            }
-          }}
-          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[99998] px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-lg hover:bg-red-400 transition-colors"
-          style={{
-            animation: 'pulse 2s infinite',
-            zIndex: 99998,
-          }}
-        >
-          🎤 Click to Enable Voice
-        </button>
-      )}
 
       {/* Cinematic Text Content */}
       <div className="relative z-20 flex items-center justify-center px-4" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
