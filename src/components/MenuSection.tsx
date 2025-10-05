@@ -531,7 +531,7 @@ const MenuSection = () => {
             lineHeight: '1.6',
             fontWeight: '400'
           }}>
-            Use these quick links to explore our menu and place your order. We&apos;ll take care of everything else. 🍽️🍹
+          	Use these quick links to explore our menu and place your order. We&apos;ll take care of everything else. 🍴🥂
           </p>
         </motion.div>
 
