@@ -33,6 +33,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       // Start mobile video if it exists
       if (mobileVideoRef.current) {
         mobileVideoRef.current.muted = true; // Ensure muted for autoplay
+        mobileVideoRef.current.load(); // Ensure video is loaded
         mobileVideoRef.current.play().catch((error) => {
           console.log('Mobile video play failed:', error);
         });
@@ -41,6 +42,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       // Start desktop video if it exists
       if (desktopVideoRef.current) {
         desktopVideoRef.current.muted = true; // Ensure muted for autoplay
+        desktopVideoRef.current.load(); // Ensure video is loaded
         desktopVideoRef.current.play().catch((error) => {
           console.log('Desktop video play failed:', error);
         });
@@ -53,7 +55,13 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     // Also try again after a short delay to ensure DOM is ready
     const timeoutId = setTimeout(startVideos, 100);
     
-    return () => clearTimeout(timeoutId);
+    // Try one more time after a longer delay
+    const timeoutId2 = setTimeout(startVideos, 500);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutId2);
+    };
   }, []);
 
   // Start voice and animations immediately on mount
@@ -229,48 +237,74 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       {/* Responsive Background Videos */}
       <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
         {/* Fallback black background when videos are not playing */}
-        <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
+        {!hasUserChosen && (
+          <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
+        )}
         
         {/* Mobile Background (Portrait) - Video */}
         <div className="block md:hidden" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
+          {/* Fallback image that shows immediately */}
+          <img 
+            src="/hero-assets/hero-bg-mobile.png" 
+            alt="Hero background" 
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
+          />
           <video
             ref={mobileVideoRef}
             src="/hero-assets/hero-mobile-video.mp4"
-            className="hero-video w-full"
+            className="hero-video w-full h-full object-cover relative z-10"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
+            onLoadStart={() => console.log('Mobile video started loading')}
+            onCanPlay={() => {
+              console.log('Mobile video can play');
+              // Hide fallback image when video starts playing
+              const fallbackImg = mobileVideoRef.current?.parentElement?.querySelector('img');
+              if (fallbackImg) {
+                fallbackImg.style.display = 'none';
+              }
+            }}
             onError={(e) => {
-              // Fallback to gradient background if video fails to load
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement!.className = 'block md:hidden w-full h-full bg-gradient-to-b from-aleblack via-gray-900 to-black';
-              e.currentTarget.parentElement!.style.height = '100vh';
-              e.currentTarget.parentElement!.style.minHeight = '100vh';
-              e.currentTarget.parentElement!.style.maxHeight = '100vh';
+              console.log('Mobile video failed to load, keeping fallback image');
+              // Keep the fallback image visible
             }}
           />
         </div>
         
         {/* Desktop Background (Landscape) - Video */}
         <div className="hidden md:block" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
+          {/* Fallback image that shows immediately */}
+          <img 
+            src="/hero-assets/hero-bg-desktop.png" 
+            alt="Hero background" 
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
+          />
           <video
             ref={desktopVideoRef}
             src="/hero-assets/hero-desktop-video.mp4"
-            className="hero-video w-full"
+            className="hero-video w-full h-full object-cover relative z-10"
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
+            onLoadStart={() => console.log('Desktop video started loading')}
+            onCanPlay={() => {
+              console.log('Desktop video can play');
+              // Hide fallback image when video starts playing
+              const fallbackImg = desktopVideoRef.current?.parentElement?.querySelector('img');
+              if (fallbackImg) {
+                fallbackImg.style.display = 'none';
+              }
+            }}
             onError={(e) => {
-              // Fallback to gradient background if video fails to load
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement!.className = 'hidden md:block w-full h-full bg-gradient-to-b from-aleblack via-gray-900 to-black';
-              e.currentTarget.parentElement!.style.height = '100vh';
-              e.currentTarget.parentElement!.style.minHeight = '100vh';
-              e.currentTarget.parentElement!.style.maxHeight = '100vh';
+              console.log('Desktop video failed to load, keeping fallback image');
+              // Keep the fallback image visible
             }}
           />
         </div>
