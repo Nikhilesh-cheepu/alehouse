@@ -32,25 +32,39 @@ export default function Home() {
   useEffect(() => {
     const startThemeSong = () => {
       if (themeSongRef.current) {
+        console.log('🎵 Attempting to start theme song...');
+        console.log('🎵 Theme song element:', themeSongRef.current);
+        console.log('🎵 Theme song src:', themeSongRef.current.src);
+        
         // Set initial volume and muted state
         themeSongRef.current.volume = 0.4;
         themeSongRef.current.muted = false; // Start unmuted
         themeSongRef.current.loop = true;
         
+        console.log('🎵 Theme song volume:', themeSongRef.current.volume);
+        console.log('🎵 Theme song muted:', themeSongRef.current.muted);
+        
         // Try to play immediately
-        themeSongRef.current.play().catch((error) => {
-          console.log('Theme song autoplay failed:', error);
+        themeSongRef.current.play().then(() => {
+          console.log('🎵 Theme song started successfully!');
+          setIsMuted(false);
+        }).catch((error) => {
+          console.log('🎵 Theme song autoplay failed:', error);
           
           // Try with muted first, then unmute
           themeSongRef.current!.muted = true;
           themeSongRef.current!.play().then(() => {
+            console.log('🎵 Theme song started muted, will unmute in 100ms');
             setTimeout(() => {
               themeSongRef.current!.muted = false;
+              console.log('🎵 Theme song unmuted!');
             }, 100);
           }).catch((err) => {
-            console.log('Theme song muted autoplay also failed:', err);
+            console.log('🎵 Theme song muted autoplay also failed:', err);
           });
         });
+      } else {
+        console.log('🎵 Theme song ref is null');
       }
     };
 
@@ -94,6 +108,31 @@ export default function Home() {
         isMuted={isMuted}
         onMuteToggle={handleMuteToggle}
       />
+
+      {/* Debug Audio Test Button */}
+      <button
+        onClick={() => {
+          console.log('🔊 Testing audio files manually...');
+          if (themeSongRef.current) {
+            themeSongRef.current.play().then(() => {
+              console.log('🎵 Theme song manual test successful!');
+            }).catch((err) => {
+              console.log('🎵 Theme song manual test failed:', err);
+            });
+          }
+          if (heroVoiceRef.current) {
+            heroVoiceRef.current.play().then(() => {
+              console.log('🎤 Hero voice manual test successful!');
+            }).catch((err) => {
+              console.log('🎤 Hero voice manual test failed:', err);
+            });
+          }
+        }}
+        className="fixed bottom-20 right-4 z-[99999] p-2 bg-red-500 text-white text-xs rounded"
+        style={{ position: 'fixed', zIndex: 99999 }}
+      >
+        Test Audio
+      </button>
 
       <Footer />
 

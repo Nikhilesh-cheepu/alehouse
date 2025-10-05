@@ -61,25 +61,38 @@ const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
   useEffect(() => {
     const startHeroVoice = () => {
       if (heroVoiceRef.current) {
+        console.log('🎤 Attempting to start hero voice...');
+        console.log('🎤 Hero voice element:', heroVoiceRef.current);
+        console.log('🎤 Hero voice src:', heroVoiceRef.current.src);
+        
         // Set initial volume and muted state
         heroVoiceRef.current.volume = 0.3;
         heroVoiceRef.current.muted = false; // Start unmuted
         heroVoiceRef.current.loop = false; // Play once
         
+        console.log('🎤 Hero voice volume:', heroVoiceRef.current.volume);
+        console.log('🎤 Hero voice muted:', heroVoiceRef.current.muted);
+        
         // Try to play immediately
-        heroVoiceRef.current.play().catch((error) => {
-          console.log('Hero voice autoplay failed:', error);
+        heroVoiceRef.current.play().then(() => {
+          console.log('🎤 Hero voice started successfully!');
+        }).catch((error) => {
+          console.log('🎤 Hero voice autoplay failed:', error);
           
           // Try with muted first, then unmute
           heroVoiceRef.current!.muted = true;
           heroVoiceRef.current!.play().then(() => {
+            console.log('🎤 Hero voice started muted, will unmute in 100ms');
             setTimeout(() => {
               heroVoiceRef.current!.muted = false;
+              console.log('🎤 Hero voice unmuted!');
             }, 100);
           }).catch((err) => {
-            console.log('Hero voice muted autoplay also failed:', err);
+            console.log('🎤 Hero voice muted autoplay also failed:', err);
           });
         });
+      } else {
+        console.log('🎤 Hero voice ref is null');
       }
     };
 
