@@ -13,6 +13,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [exploreClicked, setExploreClicked] = useState(false);
+  const [showExploreOverlay, setShowExploreOverlay] = useState(true);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -262,6 +263,111 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
       className="hero-section relative w-full m-0 p-0"
       style={{ zIndex: 20 }}
     >
+      {/* Full-Screen Explore Overlay - Blocks all interaction until clicked */}
+      {showExploreOverlay && (
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 99999,
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+            backdropFilter: 'blur(10px)'
+          }}
+        >
+          <div className="text-center max-w-4xl mx-auto px-4">
+            {/* Alehouse Logo/Title */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="mb-8"
+            >
+              <h1 
+                className="text-4xl md:text-6xl font-bold text-[#e6c87a] mb-4"
+                style={{
+                  fontFamily: 'GameOfThrones, serif',
+                  textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))'
+                }}
+              >
+                ALEHOUSE
+              </h1>
+              <p 
+                className="text-lg md:text-xl text-[#e6c87a]/80"
+                style={{
+                  fontFamily: 'GameOfThrones, serif',
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
+                }}
+              >
+                The Realm of Alehouse
+              </p>
+            </motion.div>
+
+            {/* Explore Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+            >
+              <button
+                onClick={() => {
+                  setExploreClicked(true);
+                  setShowExploreOverlay(false);
+                  if (onExploreClick) {
+                    onExploreClick();
+                  }
+                }}
+                className="group relative px-12 py-6 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-xl rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
+                style={{
+                  fontFamily: 'GameOfThrones, serif',
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                  boxShadow: '0 8px 25px rgba(230, 200, 122, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  border: '2px solid rgba(230, 200, 122, 0.3)',
+                  background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
+                }}
+              >
+                <span className="relative z-10">EXPLORE ALEHOUSE</span>
+                
+                {/* Glow effect */}
+                <div 
+                  className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
+                    filter: 'blur(10px)',
+                    transform: 'scale(1.2)'
+                  }}
+                />
+                
+                {/* Shine effect */}
+                <div 
+                  className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{
+                    background: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
+                    transform: 'translateX(-100%)',
+                    animation: 'shine 2s infinite'
+                  }}
+                />
+              </button>
+            </motion.div>
+
+            {/* Subtitle */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5, duration: 0.8 }}
+              className="mt-6"
+            >
+              <p className="text-sm text-gray-400">
+                Click to begin your journey into the realm
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      )}
       {/* Responsive Background Videos */}
       <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
         {/* Fallback black background when videos are not playing */}
@@ -355,54 +461,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
             )}
           </AnimatePresence>
 
-          {/* Explore Button - Alehouse Style */}
-          {!exploreClicked && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
-              className="mt-8"
-            >
-            <button
-              onClick={() => {
-                setExploreClicked(true);
-                if (onExploreClick) {
-                  onExploreClick();
-                }
-              }}
-              className="group relative px-8 py-4 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
-              style={{
-                fontFamily: 'GameOfThrones, serif',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                boxShadow: '0 8px 25px rgba(230, 200, 122, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                border: '2px solid rgba(230, 200, 122, 0.3)',
-                background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
-              }}
-            >
-              <span className="relative z-10">EXPLORE ALEHOUSE</span>
-              
-              {/* Glow effect */}
-              <div 
-                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
-                  filter: 'blur(10px)',
-                  transform: 'scale(1.2)'
-                }}
-              />
-              
-              {/* Shine effect */}
-              <div 
-                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
-                  transform: 'translateX(-100%)',
-                  animation: 'shine 2s infinite'
-                }}
-              />
-            </button>
-            </motion.div>
-          )}
         </div>
       </div>
 
