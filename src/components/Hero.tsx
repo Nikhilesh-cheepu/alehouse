@@ -6,15 +6,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface HeroProps {
   hasUserChosen: boolean;
   heroVoiceRef: React.RefObject<HTMLAudioElement | null>;
+  showOverlay?: boolean;
   onExploreClick?: () => void;
   onNavClick?: () => void; // New prop for navigation clicks
 }
 
-const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroProps) => {
+const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavClick }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [exploreClicked, setExploreClicked] = useState(false);
-  const [audioEnabled, setAudioEnabled] = useState(false);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -61,105 +61,31 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
     };
   }, []);
 
-  // NUCLEAR AUTOPLAY STRATEGY FOR HERO VOICE - FORCE PLAY AT ANY COST
+  // Start hero voice only after user interaction
   useEffect(() => {
-    const forcePlayHeroVoice = () => {
-      if (heroVoiceRef.current) {
-        
-        // Set properties
-        heroVoiceRef.current.volume = 0.7;
-        heroVoiceRef.current.muted = false;
-        heroVoiceRef.current.loop = false;
-        
-        // FORCE PLAY - multiple strategies
-        const playStrategies = [
-          // Strategy 1: Direct play
-          () => heroVoiceRef.current!.play(),
-          
-          // Strategy 2: Muted then unmute
-          () => {
-            heroVoiceRef.current!.muted = true;
-            return heroVoiceRef.current!.play().then(() => {
-              setTimeout(() => {
-                heroVoiceRef.current!.muted = false;
-              }, 50);
+    if (exploreClicked && heroVoiceRef.current) {
+      const forcePlayHeroVoice = () => {
+        if (heroVoiceRef.current) {
+          // Set properties
+          heroVoiceRef.current.volume = 0.7;
+          heroVoiceRef.current.muted = false;
+          heroVoiceRef.current.loop = false;
+
+          // Try to play
+          heroVoiceRef.current.play()
+            .then(() => {
+              console.log('Hero voice started successfully');
+            })
+            .catch(() => {
+              console.log('Hero voice play failed, retrying...');
+              setTimeout(forcePlayHeroVoice, 100);
             });
-          },
-          
-          // Strategy 3: Force reload and play
-          () => {
-            if (heroVoiceRef.current) {
-              heroVoiceRef.current.load();
-              return heroVoiceRef.current.play();
-            }
-            return Promise.reject('No audio element');
-          }
-        ];
-        
-        // Try all strategies
-        let strategyIndex = 0;
-        const tryNextStrategy = () => {
-          if (strategyIndex < playStrategies.length) {
-            playStrategies[strategyIndex]()
-              .then(() => {
-              })
-              .catch(() => {
-                strategyIndex++;
-                setTimeout(tryNextStrategy, 100);
-              });
-          } else {
-            setTimeout(forcePlayHeroVoice, 500);
-          }
-        };
-        
-        tryNextStrategy();
-      }
-    };
+        }
+      };
 
-    // AGGRESSIVE SIMULATION OF USER INTERACTION
-    const simulateMassiveUserInteraction = () => {
-      // Create and dispatch multiple types of user events
-      const events = ['click', 'touchstart', 'touchend', 'mousedown', 'mouseup', 'keydown', 'keyup'];
-      const targets = [document, document.body, document.documentElement];
-      
-      events.forEach(eventType => {
-        targets.forEach(target => {
-          // Dispatch synthetic events
-          const event = new Event(eventType, { bubbles: true, cancelable: true });
-          target.dispatchEvent(event);
-          
-          // Also try MouseEvent and TouchEvent
-          if (eventType === 'click' || eventType === 'mousedown') {
-            const mouseEvent = new MouseEvent(eventType, { bubbles: true, cancelable: true });
-            target.dispatchEvent(mouseEvent);
-          }
-          
-          if (eventType.includes('touch')) {
-            try {
-              const touchEvent = new TouchEvent(eventType, { bubbles: true, cancelable: true });
-              target.dispatchEvent(touchEvent);
-            } catch {
-              // TouchEvent not supported, skip
-            }
-          }
-        });
-      });
-      
-    };
-
-    // IMMEDIATE EXECUTION
-    forcePlayHeroVoice();
-    simulateMassiveUserInteraction();
-    
-    // Simple retry schedule - less aggressive to prevent crashes
-    const retryTimes = [100, 500, 1000];
-    retryTimes.forEach(delay => {
-      setTimeout(() => {
-        forcePlayHeroVoice();
-      }, delay);
-    });
-
-  }, [heroVoiceRef]);
+      forcePlayHeroVoice();
+    }
+  }, [exploreClicked]);
 
   // Pause/Resume audio when switching tabs
   useEffect(() => {
@@ -184,22 +110,16 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
     };
   }, [exploreClicked]);
 
-  // Start text animations automatically
+  // Start text animations only after user interaction
   useEffect(() => {
-    setTextAnimationStarted(true);
-  }, []);
-
-  // Enable audio when user clicks the audio button
-  const handleEnableAudio = () => {
-    setAudioEnabled(true);
-    if (onExploreClick) {
-      onExploreClick();
+    if (exploreClicked) {
+      setTextAnimationStarted(true);
     }
-  };
+  }, [exploreClicked]);
 
-  // Handle text animation sequence - START AUTOMATICALLY
+  // Handle text animation sequence - START AFTER USER INTERACTION
   useEffect(() => {
-    if (!textAnimationStarted) {
+    if (!textAnimationStarted || !exploreClicked) {
       return;
     }
 
@@ -222,7 +142,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
       }, end * 1000);
     });
 
-  }, [textAnimationStarted]);
+  }, [textAnimationStarted, exploreClicked]);
 
 
   const textLines = [
@@ -346,49 +266,90 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick }: HeroP
 
 
 
+      {/* Full Screen Overlay */}
+      {showOverlay && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExploreClicked(true);
+            if (onNavClick) {
+              onNavClick();
+            }
+          }}
+        >
+          <div className="text-center max-w-4xl mx-auto px-8">
+            {/* Main Heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="text-2xl md:text-3xl font-bold text-[#e6c87a] mb-8 leading-relaxed"
+              style={{
+                fontFamily: 'GameOfThrones, serif',
+                textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
+                filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))'
+              }}
+            >
+              A Game of Thrones–inspired nightclub and bar.
+            </motion.h1>
+
+            {/* Explore Button */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExploreClicked(true);
+                if (onExploreClick) {
+                  onExploreClick();
+                }
+              }}
+              className="group relative px-12 py-4 bg-transparent border-2 border-[#e6c87a] text-[#e6c87a] font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#e6c87a] hover:to-[#d4af37] hover:text-black hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
+              style={{
+                fontFamily: 'GameOfThrones, serif',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)',
+                boxShadow: '0 8px 25px rgba(230, 200, 122, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              }}
+            >
+              <span className="relative z-10">EXPLORE ALEHOUSE</span>
+              
+              {/* Glow effect */}
+              <div 
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
+                  filter: 'blur(10px)',
+                  transform: 'scale(1.2)'
+                }}
+              />
+            </motion.button>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="text-sm text-gray-400 mt-6"
+            >
+              Click to begin your journey into the realm
+            </motion.p>
+          </div>
+        </div>
+      )}
+
       {/* Cinematic Text Content */}
       <div 
         className="relative z-20 flex items-center justify-center px-4" 
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
+        onClick={(e) => {
+          if (showOverlay) {
+            e.stopPropagation();
+          }
+        }}
       >
         <div className="text-center max-w-4xl mx-auto">
-          {/* Audio Enable Button - Only show if audio not enabled */}
-          {!audioEnabled && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="mb-8"
-            >
-              <button
-                onClick={handleEnableAudio}
-                className="group relative px-8 py-4 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                  boxShadow: '0 8px 25px rgba(230, 200, 122, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                  border: '2px solid rgba(230, 200, 122, 0.3)',
-                  background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
-                }}
-              >
-                <span className="relative z-10">🎵 ENABLE AUDIO</span>
-                
-                {/* Glow effect */}
-                <div 
-                  className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
-                    filter: 'blur(10px)',
-                    transform: 'scale(1.2)'
-                  }}
-                />
-              </button>
-              <p className="text-sm text-gray-400 mt-4">
-                Click to enable audio experience
-              </p>
-            </motion.div>
-          )}
-
           {/* Text Lines with AnimatePresence */}
           <AnimatePresence mode="wait">
             {hasUserChosen && textAnimationStarted && currentTextIndex >= 0 && (

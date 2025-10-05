@@ -29,7 +29,8 @@ export default function Home() {
   };
 
   const handleNavClick = () => {
-    // Start audio when navigation is clicked
+    // Dismiss overlay and start audio when navigation is clicked
+    setShowOverlay(false);
     if (themeSongRef.current) {
       themeSongRef.current.play().catch(() => {});
     }
@@ -37,6 +38,19 @@ export default function Home() {
       heroVoiceRef.current.play().catch(() => {});
     }
   };
+
+  const handleExploreClick = () => {
+    // Dismiss overlay and start audio when explore button is clicked
+    setShowOverlay(false);
+    if (themeSongRef.current) {
+      themeSongRef.current.play().catch(() => {});
+    }
+    if (heroVoiceRef.current) {
+      heroVoiceRef.current.play().catch(() => {});
+    }
+  };
+
+  const [showOverlay, setShowOverlay] = useState(true);
 
   // Setup theme song but don't autoplay - wait for user interaction
   useEffect(() => {
@@ -75,20 +89,13 @@ export default function Home() {
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
-      <Navigation onNavClick={handleNavClick} />
+      <Navigation showOverlay={showOverlay} onNavClick={handleNavClick} />
 
       <Hero 
         hasUserChosen={true}
         heroVoiceRef={heroVoiceRef}
-        onExploreClick={() => {
-          // Enable audio when explore button is clicked
-          if (themeSongRef.current) {
-            themeSongRef.current.play().catch(() => {});
-          }
-          if (heroVoiceRef.current) {
-            heroVoiceRef.current.play().catch(() => {});
-          }
-        }}
+        showOverlay={showOverlay}
+        onExploreClick={handleExploreClick}
         onNavClick={handleNavClick}
       />
 
