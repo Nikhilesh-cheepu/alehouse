@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface HeroProps {
   hasUserChosen: boolean;
+  heroVoiceRef: React.RefObject<HTMLAudioElement | null>;
 }
 
-const Hero = ({ hasUserChosen }: HeroProps) => {
+const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   
@@ -55,6 +56,54 @@ const Hero = ({ hasUserChosen }: HeroProps) => {
       clearTimeout(timeoutId2);
     };
   }, []);
+
+  // Ultra-aggressive autoplay strategy for hero voice
+  useEffect(() => {
+    const startHeroVoice = () => {
+      if (heroVoiceRef.current) {
+        // Set initial volume and muted state
+        heroVoiceRef.current.volume = 0.3;
+        heroVoiceRef.current.muted = false; // Start unmuted
+        heroVoiceRef.current.loop = false; // Play once
+        
+        // Try to play immediately
+        heroVoiceRef.current.play().catch((error) => {
+          console.log('Hero voice autoplay failed:', error);
+          
+          // Try with muted first, then unmute
+          heroVoiceRef.current!.muted = true;
+          heroVoiceRef.current!.play().then(() => {
+            setTimeout(() => {
+              heroVoiceRef.current!.muted = false;
+            }, 100);
+          }).catch((err) => {
+            console.log('Hero voice muted autoplay also failed:', err);
+          });
+        });
+      }
+    };
+
+    // Start immediately
+    startHeroVoice();
+    
+    // Retry with delays
+    setTimeout(startHeroVoice, 100);
+    setTimeout(startHeroVoice, 500);
+    setTimeout(startHeroVoice, 1000);
+
+    // Simulate user interaction for autoplay
+    const simulateUserInteraction = () => {
+      const events = ['click', 'touchstart', 'keydown'];
+      events.forEach(eventType => {
+        document.dispatchEvent(new Event(eventType, { bubbles: true }));
+      });
+    };
+
+    setTimeout(simulateUserInteraction, 50);
+    setTimeout(simulateUserInteraction, 200);
+    setTimeout(simulateUserInteraction, 500);
+
+  }, [heroVoiceRef]);
 
   // Start text animations immediately
   useEffect(() => {
@@ -237,6 +286,15 @@ const Hero = ({ hasUserChosen }: HeroProps) => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Hero Voice Audio */}
+      <audio
+        ref={heroVoiceRef}
+        preload="auto"
+        style={{ display: 'none' }}
+      >
+        <source src="/hero-assets/hero-voice.mp3" type="audio/mpeg" />
+      </audio>
     </section>
   );
 };
