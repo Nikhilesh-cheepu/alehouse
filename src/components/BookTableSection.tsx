@@ -158,46 +158,26 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       const message = generateWhatsAppMessage();
       const whatsappUrl = `https://wa.me/918096060606?text=${message}`;
       
-      // Detect Instagram browser
-      const userAgent = navigator.userAgent.toLowerCase();
-      const isInstagramBrowser = userAgent.includes('instagram');
-      
-      // Try multiple methods to open WhatsApp (Instagram browser compatibility)
-      if (isInstagramBrowser) {
-        // For Instagram browser, try direct navigation first
+      // Open WhatsApp directly
+      try {
+        const newWindow = window.open(whatsappUrl, '_blank');
+        
+        // Check if popup was blocked
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          // Fallback to direct navigation
+          window.location.href = whatsappUrl;
+        }
+      } catch (error) {
+        console.log('window.open failed, trying direct navigation:', error);
         try {
           window.location.href = whatsappUrl;
-        } catch (error) {
-          console.log('Instagram browser navigation failed, trying clipboard method:', error);
-          // Copy message to clipboard for Instagram users
+        } catch (navError) {
+          console.error('All methods failed:', navError);
           navigator.clipboard.writeText(message).then(() => {
-            alert('Your booking message has been copied! Please open WhatsApp and paste it to complete your booking.');
+            alert('WhatsApp link copied to clipboard! Please paste it in WhatsApp to complete your booking.');
           }).catch(() => {
             alert(`Please copy this message and send it to WhatsApp: ${message}`);
           });
-        }
-      } else {
-        // For regular browsers, try window.open first
-        try {
-          const newWindow = window.open(whatsappUrl, '_blank');
-          
-          // Check if popup was blocked
-          if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-            // Fallback to direct navigation
-            window.location.href = whatsappUrl;
-          }
-        } catch (error) {
-          console.log('window.open failed, trying direct navigation:', error);
-          try {
-            window.location.href = whatsappUrl;
-          } catch (navError) {
-            console.error('All methods failed:', navError);
-            navigator.clipboard.writeText(message).then(() => {
-              alert('WhatsApp link copied to clipboard! Please paste it in WhatsApp to complete your booking.');
-            }).catch(() => {
-              alert(`Please copy this message and send it to WhatsApp: ${message}`);
-            });
-          }
         }
       }
     }

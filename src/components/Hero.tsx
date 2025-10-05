@@ -27,62 +27,68 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Start videos when component mounts
+  // Start videos immediately when component mounts
   useEffect(() => {
-    // Start mobile video if it exists
-    if (mobileVideoRef.current) {
-      mobileVideoRef.current.play().catch((error) => {
-        console.log('Mobile video play failed:', error);
-      });
-    }
+    const startVideos = () => {
+      // Start mobile video if it exists
+      if (mobileVideoRef.current) {
+        mobileVideoRef.current.muted = true; // Ensure muted for autoplay
+        mobileVideoRef.current.play().catch((error) => {
+          console.log('Mobile video play failed:', error);
+        });
+      }
+      
+      // Start desktop video if it exists
+      if (desktopVideoRef.current) {
+        desktopVideoRef.current.muted = true; // Ensure muted for autoplay
+        desktopVideoRef.current.play().catch((error) => {
+          console.log('Desktop video play failed:', error);
+        });
+      }
+    };
+
+    // Start videos immediately
+    startVideos();
     
-    // Start desktop video if it exists
-    if (desktopVideoRef.current) {
-      desktopVideoRef.current.play().catch((error) => {
-        console.log('Desktop video play failed:', error);
-      });
-    }
+    // Also try again after a short delay to ensure DOM is ready
+    const timeoutId = setTimeout(startVideos, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
+  // Start voice and animations immediately on mount
   useEffect(() => {
-    // Start the experience immediately
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !textAnimationStarted) {
-            // Start voice immediately if audio is enabled, not muted, and hasn't completed
-            if (audioRef.current && !audioPlayed && audioEnabled && !isMuted && !voiceCompleted) {
-              audioRef.current.volume = 0.3; // Lower volume for better autoplay success
-              audioRef.current.muted = false;
-              
-              audioRef.current.play().then(() => {
-                setAudioPlayed(true);
-                setVoiceStarted(true);
-                onVoiceStart(); // Notify parent that voice has started
-                
-                // Start text animations after voice starts
-                setTextAnimationStarted(true);
-              }).catch((error) => {
-                console.log('Hero voice autoplay failed:', error);
-                // If voice fails, still start animations
-                setTextAnimationStarted(true);
-              });
-            } else {
-              // If no audio, muted, or voice completed, start animations immediately
-              setTextAnimationStarted(true);
-            }
-          }
+    const startExperience = () => {
+      // Start voice immediately if audio is enabled, not muted, and hasn't completed
+      if (audioRef.current && !audioPlayed && audioEnabled && !isMuted && !voiceCompleted) {
+        audioRef.current.volume = 0.3; // Lower volume for better autoplay success
+        audioRef.current.muted = false;
+        
+        audioRef.current.play().then(() => {
+          setAudioPlayed(true);
+          setVoiceStarted(true);
+          onVoiceStart(); // Notify parent that voice has started
+          
+          // Start text animations after voice starts
+          setTextAnimationStarted(true);
+        }).catch((error) => {
+          console.log('Hero voice autoplay failed:', error);
+          // If voice fails, still start animations
+          setTextAnimationStarted(true);
         });
-      },
-      { threshold: 0.3 }
-    );
+      } else {
+        // If no audio, muted, or voice completed, start animations immediately
+        setTextAnimationStarted(true);
+      }
+    };
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
-
-    return () => observer.disconnect();
+    // Start immediately
+    startExperience();
+    
+    // Also try after a short delay to ensure DOM is ready
+    const timeoutId = setTimeout(startExperience, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted]);
 
   // Handle text animation sequence
@@ -223,9 +229,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       {/* Responsive Background Videos */}
       <div className="absolute inset-0 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
         {/* Fallback black background when videos are not playing */}
-        {!hasUserChosen && (
-          <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
-        )}
+        <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
         
         {/* Mobile Background (Portrait) - Video */}
         <div className="block md:hidden" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
@@ -233,10 +237,11 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
             ref={mobileVideoRef}
             src="/hero-assets/hero-mobile-video.mp4"
             className="hero-video w-full"
-            autoPlay={hasUserChosen}
+            autoPlay
             muted
             loop
             playsInline
+            preload="auto"
             onError={(e) => {
               // Fallback to gradient background if video fails to load
               e.currentTarget.style.display = 'none';
@@ -254,10 +259,11 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
             ref={desktopVideoRef}
             src="/hero-assets/hero-desktop-video.mp4"
             className="hero-video w-full"
-            autoPlay={hasUserChosen}
+            autoPlay
             muted
             loop
             playsInline
+            preload="auto"
             onError={(e) => {
               // Fallback to gradient background if video fails to load
               e.currentTarget.style.display = 'none';

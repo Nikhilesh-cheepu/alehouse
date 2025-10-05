@@ -26,11 +26,11 @@ const AudioController = ({
     if (!audio || !audioEnabled) return;
 
     // Set up audio properties
-    audio.volume = 0.5;
+    audio.volume = 0.3;
     audio.loop = true;
     audio.muted = isMuted;
 
-    // Start playing when audio is enabled and not muted
+    // Start playing immediately when audio is enabled and not muted
     const playAudio = () => {
       if (audio.paused && !isMuted && !document.hidden) {
         audio.volume = 0.3;
@@ -67,12 +67,15 @@ const AudioController = ({
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Start playing if audio is enabled, not muted and tab is visible
+    // Start playing immediately if audio is enabled, not muted and tab is visible
     if (audioEnabled && !isMuted && !document.hidden) {
-      // Add a small delay to ensure DOM is ready
+      // Start immediately
+      playAudio();
+      
+      // Also try after a short delay to ensure DOM is ready
       setTimeout(() => {
         playAudio();
-      }, 500);
+      }, 100);
     }
 
     // Cleanup
