@@ -12,6 +12,7 @@ interface HeroProps {
 const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [exploreClicked, setExploreClicked] = useState(false);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -169,16 +170,17 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
 
   }, [heroVoiceRef]);
 
-  // Start text animations immediately
+  // Start text animations only when Explore button is clicked
   useEffect(() => {
-    setTextAnimationStarted(true);
-  }, []);
-
-  // Handle text animation sequence - START IMMEDIATELY
-  useEffect(() => {
-    // Start text animations immediately - no conditions
-    if (!textAnimationStarted) {
+    if (exploreClicked) {
       setTextAnimationStarted(true);
+    }
+  }, [exploreClicked]);
+
+  // Handle text animation sequence - START ONLY WHEN EXPLORE IS CLICKED
+  useEffect(() => {
+    if (!textAnimationStarted || !exploreClicked) {
+      return;
     }
 
     const textTimeline = [
@@ -200,7 +202,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
       }, end * 1000);
     });
 
-  }, [textAnimationStarted]);
+  }, [textAnimationStarted, exploreClicked]);
 
 
   const textLines = [
@@ -326,7 +328,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
         <div className="text-center max-w-4xl mx-auto">
           {/* Text Lines with AnimatePresence */}
           <AnimatePresence mode="wait">
-            {hasUserChosen && textAnimationStarted && currentTextIndex >= 0 && (
+            {hasUserChosen && textAnimationStarted && exploreClicked && currentTextIndex >= 0 && (
               <motion.h1
                 key={currentTextIndex}
                 initial={{ opacity: 0, y: 10 }}
@@ -350,14 +352,20 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
           </AnimatePresence>
 
           {/* Explore Button - Alehouse Style */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
-            className="mt-8"
-          >
+          {!exploreClicked && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+              className="mt-8"
+            >
             <button
-              onClick={onExploreClick}
+              onClick={() => {
+                setExploreClicked(true);
+                if (onExploreClick) {
+                  onExploreClick();
+                }
+              }}
               className="group relative px-8 py-4 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
               style={{
                 fontFamily: 'GameOfThrones, serif',
@@ -389,7 +397,8 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
                 }}
               />
             </button>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </div>
 
