@@ -24,84 +24,87 @@ const AudioController = ({
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Set up audio properties
+    // Set up audio properties - IMMEDIATE START
     audio.volume = 0.3;
     audio.loop = true;
-    audio.muted = isMuted;
+    audio.muted = false; // Never muted for autoplay
 
-    // Start playing immediately - NO CONDITIONS
-    const playAudio = () => {
-      if (audio.paused) {
-        audio.volume = 0.3;
-        audio.muted = false;
-        
-        audio.play().then(() => {
-          setIsPlaying(true);
-        }).catch((error) => {
-          console.log('Theme song autoplay failed:', error);
-          setIsPlaying(false);
-        });
-      }
-    };
-
-    // Function to pause audio
-    const pauseAudio = () => {
-      if (!audio.paused) {
-        audio.pause();
+    // Start playing immediately - NO CONDITIONS AT ALL
+    const startAudio = () => {
+      console.log('Starting theme song...');
+      audio.volume = 0.3;
+      audio.muted = false;
+      
+      audio.play().then(() => {
+        console.log('Theme song started successfully');
+        setIsPlaying(true);
+      }).catch((error) => {
+        console.log('Theme song autoplay failed:', error);
         setIsPlaying(false);
-      }
+        
+        // Try again after a delay
+        setTimeout(() => {
+          audio.play().then(() => {
+            console.log('Theme song started on retry');
+            setIsPlaying(true);
+          }).catch((retryError) => {
+            console.log('Theme song retry failed:', retryError);
+          });
+        }, 1000);
+      });
     };
 
-    // Simplified visibility handling
+    // Start immediately
+    startAudio();
+    
+    // Try multiple times to ensure it starts
+    setTimeout(startAudio, 100);
+    setTimeout(startAudio, 500);
+    setTimeout(startAudio, 1000);
+
+    // Handle visibility changes
     const handleVisibilityChange = () => {
       if (document.hidden) {
         if (!audio.paused) {
           setWasPlayingBeforeHidden(true);
-          pauseAudio();
+          audio.pause();
+          setIsPlaying(false);
         }
-      } else if (wasPlayingBeforeHidden && !isMuted) {
-        playAudio();
+      } else if (wasPlayingBeforeHidden) {
+        startAudio();
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Start playing immediately - NO CONDITIONS
-    playAudio();
-    
-    // Also try after a short delay to ensure DOM is ready
-    setTimeout(() => {
-      playAudio();
-    }, 100);
-
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [isMuted, wasPlayingBeforeHidden]);
+  }, []); // No dependencies - start immediately
 
-  // Handle mute state changes
+  // Handle mute state changes - but don't interfere with autoplay
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (isMuted) {
-      // Pause and remember state when muted
+      // Pause when muted
       if (!audio.paused) {
-        setWasPlayingBeforeHidden(true);
         audio.pause();
         setIsPlaying(false);
       }
-    } else if (audioEnabled && !document.hidden) {
-      // Resume if it was playing before and tab is visible
-      if (wasPlayingBeforeHidden) {
+    } else {
+      // Resume when unmuted - but only if it was playing before
+      if (wasPlayingBeforeHidden || isPlaying) {
         audio.play().then(() => {
           setIsPlaying(true);
-        }).catch(() => {
+        }).catch((error) => {
+          console.log('Resume audio failed:', error);
         });
       }
     }
-  }, [isMuted, audioEnabled, wasPlayingBeforeHidden]);
+  }, [isMuted, wasPlayingBeforeHidden, isPlaying]);
 
   // Always show the audio controller button
 

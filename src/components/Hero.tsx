@@ -72,7 +72,9 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
         audioRef.current.volume = 0.3; // Lower volume for better autoplay success
         audioRef.current.muted = false;
         
+        console.log('Starting hero voice...');
         audioRef.current.play().then(() => {
+          console.log('Hero voice started successfully');
           setAudioPlayed(true);
           setVoiceStarted(true);
           onVoiceStart(); // Notify parent that voice has started
@@ -93,10 +95,16 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     // Start immediately
     startExperience();
     
-    // Also try after a short delay to ensure DOM is ready
-    const timeoutId = setTimeout(startExperience, 100);
+    // Try multiple times to ensure it starts
+    const timeoutId1 = setTimeout(startExperience, 100);
+    const timeoutId2 = setTimeout(startExperience, 500);
+    const timeoutId3 = setTimeout(startExperience, 1000);
     
-    return () => clearTimeout(timeoutId);
+    return () => {
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+      clearTimeout(timeoutId3);
+    };
   }, [onVoiceStart]);
 
   // Start text animations immediately on mount
