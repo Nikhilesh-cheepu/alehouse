@@ -40,84 +40,14 @@ export default function Home() {
     }
   };
 
-  // NUCLEAR AUTOPLAY STRATEGY - FORCE PLAY AT ANY COST
+  // Setup theme song but don't autoplay - wait for user interaction
   useEffect(() => {
-    const forcePlayThemeSong = () => {
-      if (themeSongRef.current) {
-        
-        // Set properties
-        themeSongRef.current.volume = 0.4;
-        themeSongRef.current.muted = false;
-        themeSongRef.current.loop = true;
-        
-        // FORCE PLAY - multiple strategies
-        const playStrategies = [
-          // Strategy 1: Direct play
-          () => themeSongRef.current!.play(),
-          
-          // Strategy 2: Muted then unmute
-          () => {
-            themeSongRef.current!.muted = true;
-            return themeSongRef.current!.play().then(() => {
-              setTimeout(() => {
-                themeSongRef.current!.muted = false;
-              }, 50);
-            });
-          },
-          
-          // Strategy 3: Force reload and play
-          () => {
-            if (themeSongRef.current) {
-              themeSongRef.current.load();
-              return themeSongRef.current.play();
-            }
-            return Promise.reject('No audio element');
-          }
-        ];
-        
-        // Try all strategies
-        let strategyIndex = 0;
-        const tryNextStrategy = () => {
-          if (strategyIndex < playStrategies.length) {
-            playStrategies[strategyIndex]()
-              .then(() => {
-                setIsMuted(false);
-              })
-              .catch(() => {
-                strategyIndex++;
-                setTimeout(tryNextStrategy, 100);
-              });
-          } else {
-            setTimeout(forcePlayThemeSong, 500);
-          }
-        };
-        
-        tryNextStrategy();
-      }
-    };
-
-    // Simple simulation of user interaction - less aggressive
-    const simulateUserInteraction = () => {
-      try {
-        const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
-        document.dispatchEvent(clickEvent);
-      } catch {
-        // Ignore errors
-      }
-    };
-
-    // IMMEDIATE EXECUTION
-    forcePlayThemeSong();
-    simulateUserInteraction();
-    
-    // Simple retry schedule - less aggressive to prevent crashes
-    const retryTimes = [100, 500, 1000];
-    retryTimes.forEach(delay => {
-      setTimeout(() => {
-        forcePlayThemeSong();
-      }, delay);
-    });
-
+    if (themeSongRef.current) {
+      // Set properties but don't play yet
+      themeSongRef.current.volume = 0.4;
+      themeSongRef.current.muted = false;
+      themeSongRef.current.loop = true;
+    }
   }, []);
 
   // Pause/Resume audio when switching tabs

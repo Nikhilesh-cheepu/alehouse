@@ -68,7 +68,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
       if (heroVoiceRef.current) {
         
         // Set properties
-        heroVoiceRef.current.volume = 0.3;
+        heroVoiceRef.current.volume = 0.7;
         heroVoiceRef.current.muted = false;
         heroVoiceRef.current.loop = false;
         
@@ -304,24 +304,15 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
               className="mb-8"
             >
               <h1 
-                className="text-4xl md:text-6xl font-bold text-[#e6c87a] mb-4"
+                className="text-2xl md:text-3xl font-bold text-[#e6c87a] mb-8"
                 style={{
                   fontFamily: 'GameOfThrones, serif',
                   textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
                   filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))'
                 }}
               >
-                ALEHOUSE
+                A Game of Thrones–inspired nightclub and bar.
               </h1>
-              <p 
-                className="text-lg md:text-xl text-[#e6c87a]/80"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
-                }}
-              >
-                The Realm of Alehouse
-              </p>
             </motion.div>
 
             {/* Explore Button */}
@@ -338,12 +329,12 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick, onNavClick, showOve
                     onExploreClick();
                   }
                 }}
-                className="group relative px-12 py-6 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-xl rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
+                className="group relative px-16 py-8 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-2xl rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(230,200,122,0.8)] active:scale-95"
                 style={{
                   fontFamily: 'GameOfThrones, serif',
                   textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                  boxShadow: '0 8px 25px rgba(230, 200, 122, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                  border: '2px solid rgba(230, 200, 122, 0.3)',
+                  boxShadow: '0 12px 35px rgba(230, 200, 122, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  border: '3px solid rgba(230, 200, 122, 0.5)',
                   background: 'linear-gradient(135deg, #e6c87a 0%, #d4af37 50%, #b8941f 100%)',
                 }}
               >
