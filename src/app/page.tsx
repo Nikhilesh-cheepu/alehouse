@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Hero from '@/components/Hero';
-import AudioController from '@/components/AudioController';
 import Navigation from '@/components/Navigation';
 import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
@@ -11,12 +10,6 @@ import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 
 export default function Home() {
-  const [audioEnabled] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
-
-  const handleMuteToggle = () => {
-    setIsMuted(!isMuted);
-  };
 
 
   return (
@@ -32,11 +25,6 @@ export default function Home() {
       <AboutSection />
       <MenuSection />
 
-      <AudioController
-        audioEnabled={audioEnabled}
-        isMuted={isMuted}
-        onMuteToggle={handleMuteToggle}
-      />
 
       <Footer />
 
