@@ -97,7 +97,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     const timeoutId = setTimeout(startExperience, 100);
     
     return () => clearTimeout(timeoutId);
-  }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted]);
+  }, [audioPlayed, textAnimationStarted, audioEnabled, isMuted, voiceCompleted, onVoiceStart]);
 
   // Handle text animation sequence
   useEffect(() => {
@@ -146,7 +146,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [audioPlayed, voiceStarted, voiceCompleted, isMuted]);
+  }, [audioPlayed, voiceStarted, voiceCompleted, isMuted, audioEnabled]);
 
   // Handle mute state changes
   useEffect(() => {

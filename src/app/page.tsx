@@ -11,7 +11,7 @@ import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 
 export default function Home() {
-  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [audioEnabled] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
 
   const handleMuteToggle = () => {

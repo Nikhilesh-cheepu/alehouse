@@ -16,7 +16,6 @@ const AudioController = ({
 }: AudioControllerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [wasPlayingBeforeHidden, setWasPlayingBeforeHidden] = useState(false);
-  const [hasUserInteracted, setHasUserInteracted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Audio enabled by default - no user interaction required - FORCE DEPLOYMENT
