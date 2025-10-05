@@ -18,24 +18,13 @@ export default function Home() {
     setIsMuted(!isMuted);
   };
 
-  const handleVoiceStart = () => {
-    // Voice started
-  };
-
-  const handleVoiceEnd = () => {
-    // Voice ended
-  };
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
       <Navigation />
 
       <Hero
-        audioEnabled={audioEnabled}
         hasUserChosen={true}
-        isMuted={isMuted}
-        onVoiceStart={handleVoiceStart}
-        onVoiceEnd={handleVoiceEnd}
       />
 
       <CTASection />

@@ -4,26 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface HeroProps {
-  audioEnabled: boolean;
   hasUserChosen: boolean;
-  isMuted: boolean;
-  onVoiceStart: () => void;
-  onVoiceEnd: () => void;
 }
 
-const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }: HeroProps) => {
-  const [audioPlayed, setAudioPlayed] = useState(false);
+const Hero = ({ hasUserChosen }: HeroProps) => {
   const [textAnimationStarted, setTextAnimationStarted] = useState(false);
-  const [voiceStarted, setVoiceStarted] = useState(false);
-  const [voiceCompleted, setVoiceCompleted] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [showVoiceButton, setShowVoiceButton] = useState(false);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
   const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
   
-  const audioRef = useRef<HTMLAudioElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
@@ -65,72 +56,7 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
     };
   }, []);
 
-  // Start voice and animations immediately on mount - AGGRESSIVE AUTOPLAY
-  useEffect(() => {
-    const startExperience = () => {
-      // Start voice immediately - no conditions
-      if (audioRef.current) {
-        audioRef.current.volume = 0.3;
-        audioRef.current.muted = false;
-        audioRef.current.preload = 'auto';
-        
-        console.log('Attempting to start hero voice...');
-        
-        const tryPlay = () => {
-          return audioRef.current.play().then(() => {
-            console.log('Hero voice started successfully');
-            setAudioPlayed(true);
-            setVoiceStarted(true);
-            onVoiceStart();
-            setTextAnimationStarted(true);
-          }).catch((error) => {
-            console.log('Hero voice play failed:', error);
-            setTextAnimationStarted(true);
-            return Promise.reject(error);
-          });
-        };
-
-        // Try immediately
-        tryPlay().catch(() => {
-          // Try with user gesture simulation
-          console.log('Trying hero voice with simulated user interaction...');
-          
-          const clickEvent = new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-            view: window
-          });
-          
-          document.body.dispatchEvent(clickEvent);
-          
-          setTimeout(() => {
-            tryPlay().catch(() => {
-              console.log('Hero voice autoplay failed');
-            });
-          }, 100);
-        });
-      } else {
-        setTextAnimationStarted(true);
-      }
-    };
-
-    // Start immediately
-    startExperience();
-    
-    // Try multiple times with different delays
-    setTimeout(startExperience, 50);
-    setTimeout(startExperience, 100);
-    setTimeout(startExperience, 200);
-    setTimeout(startExperience, 500);
-    setTimeout(startExperience, 1000);
-    setTimeout(startExperience, 2000);
-    
-    return () => {
-      // Cleanup handled by individual timeouts
-    };
-  }, [onVoiceStart]);
-
-  // Start text animations immediately on mount
+  // Start text animations immediately
   useEffect(() => {
     setTextAnimationStarted(true);
   }, []);
@@ -163,62 +89,6 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
 
   }, [textAnimationStarted]);
 
-  // Handle tab visibility changes
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (audioRef.current) {
-        if (document.hidden) {
-          // Pause voice when tab is hidden (only if it's playing and not completed)
-          if (!audioRef.current.paused && !voiceCompleted) {
-            audioRef.current.pause();
-          }
-        } else {
-          // Resume voice when tab becomes visible (only if it was playing, not completed, not muted)
-          if (audioPlayed && voiceStarted && !voiceCompleted && !isMuted && audioEnabled) {
-            audioRef.current.play().catch((error) => {
-              console.log('Hero voice resume failed:', error);
-            });
-          }
-        }
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [audioPlayed, voiceStarted, voiceCompleted, isMuted, audioEnabled]);
-
-  // Handle mute state changes
-  useEffect(() => {
-    if (audioRef.current && voiceStarted && !voiceCompleted) {
-      if (isMuted) {
-        // Pause voice when muted
-        if (!audioRef.current.paused) {
-          audioRef.current.pause();
-        }
-      } else {
-        // Resume voice when unmuted (only if tab is visible and not completed)
-        if (!document.hidden && audioEnabled) {
-          audioRef.current.play().catch((error) => {
-            console.log('Hero voice resume after unmute failed:', error);
-          });
-        }
-      }
-    }
-  }, [isMuted, voiceStarted, voiceCompleted, audioEnabled]);
-
-  // Handle voice end
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleEnded = () => {
-      setVoiceCompleted(true);
-      onVoiceEnd();
-    };
-
-    audio.addEventListener('ended', handleEnded);
-    return () => audio.removeEventListener('ended', handleEnded);
-  }, [onVoiceEnd]);
 
   const textLines = [
     "Legends weren't forged in palaces…",
@@ -336,13 +206,6 @@ const Hero = ({ audioEnabled, hasUserChosen, isMuted, onVoiceStart, onVoiceEnd }
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/10 m-0 p-0" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
 
-      {/* Voice-over Audio Element */}
-      <audio
-        ref={audioRef}
-        src="/hero-assets/hero-voice.mp3"
-        preload="auto"
-        className="hidden"
-      />
 
 
       {/* Cinematic Text Content */}
