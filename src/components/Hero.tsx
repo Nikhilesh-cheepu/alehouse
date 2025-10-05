@@ -319,14 +319,12 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
               </p>
             </motion.div>
 
-            {/* Navigation Buttons */}
+            {/* Explore Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
-              className="flex flex-col sm:flex-row gap-4 items-center justify-center"
             >
-              {/* Main Explore Button */}
               <button
                 onClick={() => {
                   setExploreClicked(true);
@@ -334,12 +332,8 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
                   if (onExploreClick) {
                     onExploreClick();
                   }
-                  // Scroll to hero section
-                  setTimeout(() => {
-                    document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
                 }}
-                className="group relative px-8 py-4 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
+                className="group relative px-12 py-6 bg-gradient-to-r from-[#e6c87a] to-[#d4af37] text-black font-bold text-xl rounded-full shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
                 style={{
                   fontFamily: 'GameOfThrones, serif',
                   textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
@@ -370,78 +364,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
                   }}
                 />
               </button>
-
-              {/* Menu Button */}
-              <button
-                onClick={() => {
-                  setExploreClicked(true);
-                  setShowExploreOverlay(false);
-                  if (onExploreClick) {
-                    onExploreClick();
-                  }
-                  // Scroll to menu section
-                  setTimeout(() => {
-                    document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
-                className="group relative px-6 py-3 bg-gradient-to-r from-[#8B4513] to-[#A0522D] text-white font-bold text-base rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(139,69,19,0.6)] active:scale-95"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-                  boxShadow: '0 6px 20px rgba(139, 69, 19, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(139, 69, 19, 0.5)',
-                }}
-              >
-                <span className="relative z-10">🍽️ VIEW MENU</span>
-              </button>
-
-              {/* Book Table Button */}
-              <button
-                onClick={() => {
-                  setExploreClicked(true);
-                  setShowExploreOverlay(false);
-                  if (onExploreClick) {
-                    onExploreClick();
-                  }
-                  // Scroll to booking section
-                  setTimeout(() => {
-                    document.getElementById('book-table')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
-                className="group relative px-6 py-3 bg-gradient-to-r from-[#228B22] to-[#32CD32] text-white font-bold text-base rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(34,139,34,0.6)] active:scale-95"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-                  boxShadow: '0 6px 20px rgba(34, 139, 34, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(34, 139, 34, 0.5)',
-                }}
-              >
-                <span className="relative z-10">📅 BOOK TABLE</span>
-              </button>
-
-              {/* About Button */}
-              <button
-                onClick={() => {
-                  setExploreClicked(true);
-                  setShowExploreOverlay(false);
-                  if (onExploreClick) {
-                    onExploreClick();
-                  }
-                  // Scroll to about section
-                  setTimeout(() => {
-                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
-                className="group relative px-6 py-3 bg-gradient-to-r from-[#4169E1] to-[#6495ED] text-white font-bold text-base rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(65,105,225,0.6)] active:scale-95"
-                style={{
-                  fontFamily: 'GameOfThrones, serif',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-                  boxShadow: '0 6px 20px rgba(65, 105, 225, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                  border: '2px solid rgba(65, 105, 225, 0.5)',
-                }}
-              >
-                <span className="relative z-10">🏰 ABOUT US</span>
-              </button>
             </motion.div>
 
             {/* Subtitle */}
@@ -452,7 +374,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, onExploreClick }: HeroProps) => {
               className="mt-6"
             >
               <p className="text-sm text-gray-400">
-                Choose your adventure and begin your journey into the realm
+                Click to begin your journey into the realm
               </p>
             </motion.div>
           </div>
