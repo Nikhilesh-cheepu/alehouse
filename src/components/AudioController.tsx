@@ -24,43 +24,63 @@ const AudioController = ({
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Set up audio properties - IMMEDIATE START
+    // Set up audio properties for autoplay
     audio.volume = 0.3;
     audio.loop = true;
-    audio.muted = false; // Never muted for autoplay
+    audio.muted = false;
+    audio.preload = 'auto';
 
-    // Start playing immediately - NO CONDITIONS AT ALL
+    // Aggressive autoplay strategy
     const startAudio = () => {
-      console.log('Starting theme song...');
-      audio.volume = 0.3;
-      audio.muted = false;
+      console.log('Attempting to start theme song...');
       
-      audio.play().then(() => {
-        console.log('Theme song started successfully');
-        setIsPlaying(true);
-      }).catch((error) => {
-        console.log('Theme song autoplay failed:', error);
-        setIsPlaying(false);
+      // Try multiple approaches
+      const tryPlay = () => {
+        audio.volume = 0.3;
+        audio.muted = false;
         
-        // Try again after a delay
+        return audio.play().then(() => {
+          console.log('Theme song started successfully');
+          setIsPlaying(true);
+        }).catch((error) => {
+          console.log('Theme song play failed:', error);
+          setIsPlaying(false);
+          return Promise.reject(error);
+        });
+      };
+
+      // Try immediately
+      tryPlay().catch(() => {
+        // Try with user gesture simulation
+        console.log('Trying with simulated user interaction...');
+        
+        // Simulate user interaction
+        const clickEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+        
+        document.body.dispatchEvent(clickEvent);
+        
         setTimeout(() => {
-          audio.play().then(() => {
-            console.log('Theme song started on retry');
-            setIsPlaying(true);
-          }).catch((retryError) => {
-            console.log('Theme song retry failed:', retryError);
+          tryPlay().catch(() => {
+            console.log('All autoplay attempts failed');
           });
-        }, 1000);
+        }, 100);
       });
     };
 
     // Start immediately
     startAudio();
     
-    // Try multiple times to ensure it starts
+    // Try multiple times with different delays
+    setTimeout(startAudio, 50);
     setTimeout(startAudio, 100);
+    setTimeout(startAudio, 200);
     setTimeout(startAudio, 500);
     setTimeout(startAudio, 1000);
+    setTimeout(startAudio, 2000);
 
     // Handle visibility changes
     const handleVisibilityChange = () => {
@@ -77,9 +97,22 @@ const AudioController = ({
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    // Add global click handler to enable audio on any user interaction
+    const enableAudioOnInteraction = () => {
+      console.log('User interaction detected, enabling audio...');
+      startAudio();
+    };
+
+    document.addEventListener('click', enableAudioOnInteraction, { once: true });
+    document.addEventListener('touchstart', enableAudioOnInteraction, { once: true });
+    document.addEventListener('keydown', enableAudioOnInteraction, { once: true });
+
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('click', enableAudioOnInteraction);
+      document.removeEventListener('touchstart', enableAudioOnInteraction);
+      document.removeEventListener('keydown', enableAudioOnInteraction);
     };
   }, []); // No dependencies - start immediately
 
