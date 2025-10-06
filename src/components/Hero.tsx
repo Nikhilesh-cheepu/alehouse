@@ -30,6 +30,11 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
       // Start mobile video if it exists
       if (mobileVideoRef.current) {
         mobileVideoRef.current.muted = true; // Ensure muted for autoplay
+        // Ensure best autoplay compatibility on iOS/Instagram
+        mobileVideoRef.current.setAttribute('playsinline', 'true');
+        // @ts-ignore - webkit inline hint
+        mobileVideoRef.current.setAttribute('webkit-playsinline', 'true');
+        mobileVideoRef.current.controls = false;
         mobileVideoRef.current.load(); // Ensure video is loaded
         mobileVideoRef.current.play().catch((error) => {
           console.log('Mobile video play failed:', error);
@@ -39,6 +44,10 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
       // Start desktop video if it exists
       if (desktopVideoRef.current) {
         desktopVideoRef.current.muted = true; // Ensure muted for autoplay
+        desktopVideoRef.current.setAttribute('playsinline', 'true');
+        // @ts-ignore - webkit inline hint
+        desktopVideoRef.current.setAttribute('webkit-playsinline', 'true');
+        desktopVideoRef.current.controls = false;
         desktopVideoRef.current.load(); // Ensure video is loaded
         desktopVideoRef.current.play().catch((error) => {
           console.log('Desktop video play failed:', error);
@@ -60,6 +69,48 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
       clearTimeout(timeoutId2);
     };
   }, []);
+
+  // After first user interaction, force-start videos with retries (for Instagram webview)
+  useEffect(() => {
+    if (!exploreClicked) return;
+
+    let cancelled = false;
+
+    const forceStartVideos = () => {
+      if (cancelled) return;
+      const tryPlay = (video?: HTMLVideoElement | null) => {
+        if (!video) return;
+        video.muted = true;
+        video.setAttribute('playsinline', 'true');
+        // @ts-ignore
+        video.setAttribute('webkit-playsinline', 'true');
+        video.controls = false;
+        video.play().catch(() => {
+          // schedule a quick retry
+          setTimeout(() => {
+            if (!cancelled) {
+              video.play().catch(() => {});
+            }
+          }, 100);
+        });
+      };
+
+      tryPlay(mobileVideoRef.current);
+      tryPlay(desktopVideoRef.current);
+    };
+
+    // immediate attempt
+    forceStartVideos();
+    // short retry window
+    const t1 = setTimeout(forceStartVideos, 150);
+    const t2 = setTimeout(forceStartVideos, 400);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [exploreClicked]);
 
   // Start hero voice only after user interaction
   useEffect(() => {
@@ -218,6 +269,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             muted
             loop
             playsInline
+            poster="/hero-assets/hero-bg-mobile.png"
             preload="auto"
             onError={(e) => {
               console.log('Mobile video failed to load, showing fallback image');
@@ -244,6 +296,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             muted
             loop
             playsInline
+            poster="/hero-assets/hero-bg-desktop.png"
             preload="auto"
             onError={(e) => {
               console.log('Desktop video failed to load, showing fallback image');
@@ -271,6 +324,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
           onClick={(e) => {
+            // Any tap dismisses overlay and starts experience
             e.stopPropagation();
             setExploreClicked(true);
             if (onNavClick) {
@@ -300,10 +354,14 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
               onClick={(e) => {
+                // Explore behaves like any overlay tap
                 e.stopPropagation();
                 setExploreClicked(true);
                 if (onExploreClick) {
                   onExploreClick();
+                }
+                if (onNavClick) {
+                  onNavClick();
                 }
               }}
               className="group relative px-12 py-4 bg-transparent border-2 border-[#e6c87a] text-[#e6c87a] font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#e6c87a] hover:to-[#d4af37] hover:text-black hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
