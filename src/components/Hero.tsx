@@ -80,8 +80,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
         if (!video) return;
         video.muted = true;
         video.setAttribute('playsinline', 'true');
-        // @ts-ignore
-        video.setAttribute('webkit-playsinline', 'true');
+        (video as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
         video.controls = false;
         video.play().catch(() => {
           // schedule a quick retry
