@@ -89,7 +89,7 @@ export default function Home() {
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
-      <Navigation showOverlay={showOverlay} onNavClick={handleNavClick} />
+      <Navigation onNavClick={handleNavClick} />
 
       <Hero 
         hasUserChosen={true}

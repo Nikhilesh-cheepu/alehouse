@@ -32,8 +32,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
         mobileVideoRef.current.muted = true; // Ensure muted for autoplay
         // Ensure best autoplay compatibility on iOS/Instagram
         mobileVideoRef.current.setAttribute('playsinline', 'true');
-        // @ts-ignore - webkit inline hint
-        mobileVideoRef.current.setAttribute('webkit-playsinline', 'true');
+        (mobileVideoRef.current as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
         mobileVideoRef.current.controls = false;
         mobileVideoRef.current.load(); // Ensure video is loaded
         mobileVideoRef.current.play().catch((error) => {
@@ -45,8 +44,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
       if (desktopVideoRef.current) {
         desktopVideoRef.current.muted = true; // Ensure muted for autoplay
         desktopVideoRef.current.setAttribute('playsinline', 'true');
-        // @ts-ignore - webkit inline hint
-        desktopVideoRef.current.setAttribute('webkit-playsinline', 'true');
+        (desktopVideoRef.current as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
         desktopVideoRef.current.controls = false;
         desktopVideoRef.current.load(); // Ensure video is loaded
         desktopVideoRef.current.play().catch((error) => {

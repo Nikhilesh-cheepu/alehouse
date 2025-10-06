@@ -6,11 +6,10 @@ import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 interface NavigationProps {
-  showOverlay?: boolean;
   onNavClick?: () => void;
 }
 
-const Navigation = ({ showOverlay, onNavClick }: NavigationProps) => {
+const Navigation = ({ onNavClick }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // Removed isScrolled state as it's not used in the new design
   
