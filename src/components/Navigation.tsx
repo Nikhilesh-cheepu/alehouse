@@ -93,7 +93,7 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
     };
   }, [logoClickTimeout]);
 
-  // Handle smooth scroll to sections
+  // Handle smooth scroll to sections or navigate to pages
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
@@ -108,23 +108,16 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
       document.body.style.overflow = 'unset';
     }
     
-    // Simple scroll function
-    const scrollToElement = () => {
-      const element = document.querySelector(href);
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
-        
-        window.scrollTo({
-          top: elementTop,
-          behavior: 'smooth'
-        });
-      } else {
-        // Fallback: try getElementById
-        const elementById = document.getElementById(href.replace('#', ''));
-        if (elementById) {
-          const rect = elementById.getBoundingClientRect();
+    // Check if it's a page link (starts with /) or a hash link
+    if (href.startsWith('/')) {
+      // Navigate to a new page
+      window.location.href = href;
+    } else {
+      // Handle hash links for smooth scrolling
+      const scrollToElement = () => {
+        const element = document.querySelector(href);
+        if (element) {
+          const rect = element.getBoundingClientRect();
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
           const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
           
@@ -132,15 +125,28 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
             top: elementTop,
             behavior: 'smooth'
           });
+        } else {
+          // Fallback: try getElementById
+          const elementById = document.getElementById(href.replace('#', ''));
+          if (elementById) {
+            const rect = elementById.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
+            
+            window.scrollTo({
+              top: elementTop,
+              behavior: 'smooth'
+            });
+          }
         }
+      };
+      
+      // Execute immediately for desktop, with delay for mobile
+      if (isMenuOpen) {
+        setTimeout(scrollToElement, 300);
+      } else {
+        scrollToElement();
       }
-    };
-    
-    // Execute immediately for desktop, with delay for mobile
-    if (isMenuOpen) {
-      setTimeout(scrollToElement, 300);
-    } else {
-      scrollToElement();
     }
   };
 
@@ -151,19 +157,14 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
       onNavClick();
     }
     
-    const element = document.getElementById('book-table');
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+    // Navigate to booking page
+    window.location.href = '/booking';
   };
 
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
-    { name: 'Menu', href: '#menu' },
+    { name: 'Menu', href: '/menu' },
   ];
 
   return (

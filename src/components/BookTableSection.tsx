@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
 import { track } from '@vercel/analytics';
+import { trackConversion } from '@/lib/gtag';
 
 interface TimeOption {
   value: string;
@@ -132,6 +133,9 @@ Please confirm my table reservation for this medieval dining experience. Thank y
         date: formData.date,
         time: formData.time
       });
+      
+      // Track conversion with Google Ads
+      trackConversion();
       
       // Send booking data to your API (for Google Sheets integration)
       try {
