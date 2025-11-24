@@ -1,23 +1,17 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp, FaHome, FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp, FaHome, FaSearch, FaUtensils } from 'react-icons/fa';
 import { track } from '@vercel/analytics';
 import { trackConversion } from '@/lib/gtag';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
-import { menuData, MenuItem } from '@/data/menuData';
-import Image from 'next/image';
 
 interface TimeOption {
   value: string;
   label: string;
   available: boolean;
-}
-
-interface CartItem extends MenuItem {
-  quantity: number;
 }
 
 const BookingPage = () => {
@@ -33,20 +27,6 @@ const BookingPage = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
-
-  // Menu-related state
-  const [activeTab, setActiveTab] = useState('food');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCart, setShowCart] = useState(false);
-  const [cart, setCart] = useState<CartItem[]>([]);
-
-  const [isMenuImageModalOpen, setIsMenuImageModalOpen] = useState(false);
-  const [selectedMenuImages, setSelectedMenuImages] = useState<string[]>([]);
-  const [selectedMenuTitle, setSelectedMenuTitle] = useState('');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imageLoading, setImageLoading] = useState(true);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -313,156 +293,6 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   }, [showCalendar, showTimeDropdown]);
 
   // Menu-related functions
-  const nextImage = useCallback(() => {
-    setCurrentImageIndex((prev) => 
-      prev < selectedMenuImages.length - 1 ? prev + 1 : 0
-    );
-    setImageLoading(true);
-  }, [selectedMenuImages.length]);
-
-  const prevImage = useCallback(() => {
-    setCurrentImageIndex((prev) => 
-      prev > 0 ? prev - 1 : selectedMenuImages.length - 1
-    );
-    setImageLoading(true);
-  }, [selectedMenuImages.length]);
-
-  const closeImageModal = useCallback(() => {
-    setIsMenuImageModalOpen(false);
-    setCurrentImageIndex(0);
-    setSelectedMenuImages([]);
-  }, []);
-
-  // Load cart from localStorage on component mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem('alehouse_cart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-  }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('alehouse_cart', JSON.stringify(cart));
-  }, [cart]);
-
-  // Get current menu data based on active tab
-  const currentMenuData = menuData[activeTab];
-
-  // Filter items based on search term and category
-  const filteredItems = currentMenuData.items.filter((item: MenuItem) => {
-    const matchesSearch = searchTerm.trim() === '' || 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
-
-  // Group items by category with custom sorting
-  const groupedItems = filteredItems.reduce((groups: { [key: string]: MenuItem[] }, item: MenuItem) => {
-    const category = item.category;
-    if (!groups[category]) {
-      groups[category] = [];
-    }
-    groups[category].push(item);
-    return groups;
-  }, {});
-
-  // Sort items within each category by price
-  Object.keys(groupedItems).forEach(category => {
-    groupedItems[category].sort((a: MenuItem, b: MenuItem) => a.price - b.price);
-  });
-
-  // Custom sorting for categories
-  const sortedCategories = Object.keys(groupedItems).sort((a: string, b: string) => {
-    if (activeTab === 'food') {
-      // Food menu: Starters first, then Extras, then rest alphabetically
-      if (a === 'Starters') return -1;
-      if (b === 'Starters') return 1;
-      if (a === 'Extras') return -1;
-      if (b === 'Extras') return 1;
-      return a.localeCompare(b);
-    } else {
-      // Liquor menu: Drink & Munch at 69 first, then rest alphabetically
-      if (a === 'Drink & Munch at 69') return -1;
-      if (b === 'Drink & Munch at 69') return 1;
-      return a.localeCompare(b);
-    }
-  });
-
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    setSearchTerm('');
-    setSelectedCategory('All');
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-  };
-
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedCategory('All');
-  };
-
-  const handleAddToCart = (item: MenuItem) => {
-    const existingItem = cart.find(cartItem => cartItem.id === item.id);
-    
-    if (existingItem) {
-      // Item already in cart - increase quantity
-      setCart(cart.map(cartItem => 
-        cartItem.id === item.id 
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
-          : cartItem
-      ));
-    } else {
-      // Add new item to cart
-      setCart([...cart, { ...item, quantity: 1 }]);
-    }
-  };
-
-  const removeFromCart = (itemId: string) => {
-    setCart(cart.filter(item => item.id !== itemId));
-  };
-
-  const updateQuantity = (itemId: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      removeFromCart(itemId);
-    } else {
-      setCart(cart.map(item => 
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
-      ));
-    }
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
-  const getTotalItems = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
-  };
-
-  const getTotalCost = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setShowCart(false);
-    document.body.style.overflow = 'unset';
-  };
 
   return (
     <div className="min-h-screen bg-black">

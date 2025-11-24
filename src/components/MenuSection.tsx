@@ -129,8 +129,6 @@ const MenuSection = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    setSearchTerm('');
-    setSelectedCategory('All');
   };
 
   const handleAddToCart = (item: MenuItem) => {
