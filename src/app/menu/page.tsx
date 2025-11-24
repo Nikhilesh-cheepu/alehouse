@@ -257,6 +257,25 @@ const MenuPage = () => {
             }}>
               Eat and drink anything @127 from 12PM - 7PM
             </p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              style={{
+                fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
+                color: '#ffa500',
+                maxWidth: '700px',
+                margin: '0 auto 2rem auto',
+                lineHeight: '1.5',
+                fontStyle: 'italic',
+                padding: '0.75rem 1rem',
+                background: 'rgba(255, 165, 0, 0.1)',
+                border: '1px solid rgba(255, 165, 0, 0.3)',
+                borderRadius: '8px'
+              }}
+            >
+              About the errors in food section menu and we are working on it to resolve it as soon as possible.
+            </motion.p>
             
             {/* Back to Home Button */}
             <motion.div
