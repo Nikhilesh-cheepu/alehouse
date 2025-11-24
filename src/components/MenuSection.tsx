@@ -262,7 +262,7 @@ const MenuSection = () => {
               borderRadius: '8px'
             }}
           >
-            Note: There are a few mistakes in the food menu. We are updating it soon.
+            About the errors in food section menu and we are working on it to resolve it as soon as possible.
           </motion.p>
         </motion.div>
 
