@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
+import { FaUtensils, FaWineGlassAlt, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
 import { menuData, MenuItem } from '@/data/menuData';
 import Image from 'next/image';
 
@@ -10,8 +10,6 @@ interface CartItem extends MenuItem {
 
 const MenuSection = () => {
   const [activeTab, setActiveTab] = useState('food');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -94,16 +92,8 @@ const MenuSection = () => {
   // Get current menu data based on active tab
   const currentMenuData = menuData[activeTab];
 
-  // Filter items based on search term and category
-  const filteredItems = currentMenuData.items.filter((item: MenuItem) => {
-    const matchesSearch = searchTerm.trim() === '' || 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
+  // Show all items (sorted later)
+  const filteredItems = currentMenuData.items;
 
   // Group items by category with custom sorting
   const groupedItems = filteredItems.reduce((groups: { [key: string]: MenuItem[] }, item: MenuItem) => {
@@ -139,19 +129,6 @@ const MenuSection = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    setSearchTerm('');
-    setSelectedCategory('All');
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-  };
-
-  const clearFilters = () => {
     setSearchTerm('');
     setSelectedCategory('All');
   };
@@ -254,10 +231,80 @@ const MenuSection = () => {
             color: '#999999',
             maxWidth: '700px',
             margin: '0 auto',
-            lineHeight: '1.6'
+            lineHeight: '1.6',
+            marginBottom: '1rem'
           }}>
             From sizzling starters and gourmet mains to signature cocktails and mocktails, discover why ALEHOUSE is the perfect destination for exceptional food, drinks, and unforgettable experiences.
           </p>
+          <p style={{
+            fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
+            color: '#e6c87a',
+            maxWidth: '700px',
+            margin: '0 auto',
+            lineHeight: '1.6',
+            fontWeight: '600',
+            marginTop: '1rem'
+          }}>
+            Eat and drink anything @127 from 12PM - 7PM
+          </p>
+        </motion.div>
+
+        {/* Menu Shortcuts */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.12 }}
+          viewport={{ once: true }}
+          className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-10 flex-wrap max-w-2xl mx-auto"
+        >
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => window.location.href = '/booking'}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+              minWidth: 'fit-content'
+            }}
+          >
+            Reserve Table
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => window.location.href = '/#gallery'}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+              minWidth: 'fit-content'
+            }}
+          >
+            View Gallery
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => {
+              localStorage.setItem('skipIntroOverlay', 'true');
+              window.location.href = '/';
+            }}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+              minWidth: 'fit-content'
+            }}
+          >
+            Back to Home
+          </motion.button>
         </motion.div>
 
         {/* Menu Image Buttons */}
@@ -277,17 +324,14 @@ const MenuSection = () => {
           <motion.button
             onClick={() => {
               const foodImages = [
-                '/menu/FOOD/Ale House Food Menu copy_page-0001.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0002.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0003.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0004.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0005.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0006.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0007.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0008.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0009.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0010.jpg',
-                '/menu/FOOD/Ale House Food Menu copy_page-0011.jpg'
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0001.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0002.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0003.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0004.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0005.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0006.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0007.jpg',
+                '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0008.jpg'
               ];
               setSelectedMenuImages(foodImages);
               setSelectedMenuTitle('Food Menu');
@@ -352,7 +396,7 @@ const MenuSection = () => {
                 letterSpacing: '0.02em',
                 textTransform: 'uppercase'
               }}>
-                View Food Menu
+                Food
               </h3>
             </div>
           </motion.button>
@@ -431,7 +475,7 @@ const MenuSection = () => {
                 letterSpacing: '0.02em',
                 textTransform: 'uppercase'
               }}>
-                View Beverages Menu
+                Beverage
               </h3>
             </div>
           </motion.button>
@@ -440,11 +484,8 @@ const MenuSection = () => {
           <motion.button
             onClick={() => {
               const happyHourImages = [
-                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0001.jpg',
-                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0002.jpg',
-                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0003.jpg',
-                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0004.jpg',
-                '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0005.jpg'
+                '/menu/HAPPY HOURS/IMG_7673.PNG',
+                '/menu/HAPPY HOURS/IMG_7674.PNG'
               ];
               setSelectedMenuImages(happyHourImages);
               setSelectedMenuTitle('Happy Hour Menu');
@@ -509,7 +550,7 @@ const MenuSection = () => {
                 letterSpacing: '0.02em',
                 textTransform: 'uppercase'
               }}>
-                View Happy Hour Menu
+                Happy Hours
               </h3>
             </div>
           </motion.button>
@@ -1082,98 +1123,7 @@ const MenuSection = () => {
                   ))}
                 </div>
 
-                {/* Search and Filter Controls */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                  marginBottom: '2rem',
-                  maxWidth: '800px',
-                  margin: '0 auto 2rem auto'
-                }}>
-                  {/* Search Bar */}
-                  <div style={{ position: 'relative' }}>
-                    <FaSearch style={{
-                      position: 'absolute',
-                      left: '1rem',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: '#999999',
-                      fontSize: '1rem'
-                    }} />
-                    <input
-                      type="text"
-                      placeholder={`Search ${activeTab === 'food' ? 'food' : 'drinks'}...`}
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem 1rem 0.75rem 2.5rem',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '8px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        color: '#ffffff',
-                        fontSize: '1rem',
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
-
-                  {/* Filter Controls */}
-                  <div style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    alignItems: 'center',
-                    flexWrap: 'wrap'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <FaFilter style={{ color: '#999999', fontSize: '0.9rem' }} />
-                      <span style={{ color: '#999999', fontSize: '0.9rem' }}>Filter by:</span>
-                    </div>
-                    <select
-                      value={selectedCategory}
-                      onChange={handleCategoryChange}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '6px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        color: '#ffffff',
-                        fontSize: '0.9rem',
-                        outline: 'none',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {currentMenuData.categories.map((category: string) => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
-                    {(searchTerm || selectedCategory !== 'All') && (
-                      <motion.button
-                        onClick={clearFilters}
-                        style={{
-                          padding: '0.5rem 1rem',
-                          border: '1px solid #B8860B',
-                          borderRadius: '25px',
-                          background: 'rgba(184, 134, 11, 0.1)',
-                          color: '#DAA520',
-                          fontSize: '0.9rem',
-                          cursor: 'pointer',
-                          transition: 'all 0.3s ease'
-                        }}
-                        whileHover={{
-                          background: '#B8860B',
-                          color: '#ffffff'
-                        }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                      >
-                        Clear Filters
-                      </motion.button>
-                    )}
-                  </div>
-                </div>
+        
 
                 {/* Results Count */}
                 <div style={{

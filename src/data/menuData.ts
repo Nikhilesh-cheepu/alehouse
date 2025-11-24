@@ -11,878 +11,184 @@ export interface MenuData {
   items: MenuItem[];
 }
 
+// Helper function to parse price (handles "400/450" format by taking first price)
+const parsePrice = (priceStr: string | null): number => {
+  if (!priceStr) return 0;
+  const firstPrice = priceStr.split('/')[0].trim();
+  return parseInt(firstPrice) || 0;
+};
+
+// Helper function to create description from type
+const createDescription = (type: string | null, priceStr: string | null): string | undefined => {
+  if (!type && !priceStr) return undefined;
+  if (priceStr && priceStr.includes('/')) {
+    return `Available in multiple variants`;
+  }
+  if (type) {
+    return `Available: ${type}`;
+  }
+  return undefined;
+};
+
 export const menuData: { [key: string]: MenuData } = {
   food: {
-    categories: ['All', 'Soups', 'Fresh Salads', 'Sizzling Starters - Vegetarian', 'Sizzling Starters - Non-Vegetarian', 'Main Course - Vegetarian', 'Main Course - Non-Vegetarian', 'Asian & Chinese - Veg Starters', 'Asian & Chinese - Non-Veg Starters', 'Rice and Noodles - Vegetarian', 'Rice and Noodles - Non-Vegetarian', 'Pizza - Vegetarian', 'Pizza - Non-Vegetarian', 'Pasta - Vegetarian', 'Pasta - Non-Vegetarian', 'Rice Specials - Vegetarian', 'Rice Specials - Non-Vegetarian', 'Indian Breads', 'Desserts'],
+    categories: [
+      'All',
+      'Soups',
+      'Fresh Salads',
+      'Sizzling Starters',
+      'Dumplings',
+      'Pizza',
+      'Pasta',
+      'Stews & Curries',
+      'Asian & Chinese',
+      'Rice Specials',
+      'Indian Breads',
+      'Desserts & Snacks'
+    ],
     items: [
       // Soups
-      {
-        id: 'soup-1',
-        name: 'Spinach & Broccoli Soup',
-        description: 'Hearty, rich, and satisfying dish perfect as a standalone meal',
-        price: 349,
-        category: 'Soups'
-      },
-      {
-        id: 'soup-2',
-        name: 'Mushroom & Barley Soup',
-        description: 'Hearty, rich, and satisfying dish perfect as a standalone meal',
-        price: 349,
-        category: 'Soups'
-      },
-      {
-        id: 'soup-3',
-        name: 'Herb Roasted Chicken Soup',
-        description: 'Hearty, rich, and satisfying dish perfect as a standalone meal',
-        price: 349,
-        category: 'Soups'
-      },
-      {
-        id: 'soup-4',
-        name: 'Mutton Paya Soup',
-        description: 'Hearty, rich, and satisfying dish perfect as a standalone meal',
-        price: 469,
-        category: 'Soups'
-      },
-      {
-        id: 'soup-5',
-        name: 'Thai Prawns Coconut Soup',
-        description: 'Hearty, rich, and satisfying dish perfect as a standalone meal',
-        price: 449,
-        category: 'Soups'
-      },
+      { id: 'soup-1', name: 'Mutton Paya', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Soups' },
+      { id: 'soup-2', name: 'Miso', description: createDescription('Veg/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Soups' },
+      { id: 'soup-3', name: 'Tom Yum', description: createDescription('Veg/Chicken', '350/400'), price: parsePrice('350/400'), category: 'Soups' },
+      { id: 'soup-4', name: 'Pho', description: createDescription('Veg/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Soups' },
+      { id: 'soup-5', name: 'Lemon Coriander', description: createDescription('Veg/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Soups' },
+      { id: 'soup-6', name: 'Manchow', description: createDescription('Veg/Chicken', '300/350'), price: parsePrice('300/350'), category: 'Soups' },
+      { id: 'soup-7', name: 'Hot n Sour', description: createDescription('Veg/Chicken', '300/350'), price: parsePrice('300/350'), category: 'Soups' },
 
       // Fresh Salads
-      {
-        id: 'salad-1',
-        name: 'Honey Glazed Vegetable Salad',
-        description: 'Light, bold flavors from fresh produce and grilled meats',
-        price: 389,
-        category: 'Fresh Salads'
-      },
-      {
-        id: 'salad-2',
-        name: 'Feta & Fruit Salad',
-        description: 'Light, bold flavors from fresh produce and grilled meats',
-        price: 389,
-        category: 'Fresh Salads'
-      },
-      {
-        id: 'salad-3',
-        name: 'Caesar Salad Veg',
-        description: 'Light, bold flavors from fresh produce and grilled meats',
-        price: 389,
-        category: 'Fresh Salads'
-      },
-      {
-        id: 'salad-4',
-        name: 'Greek Chicken Salad',
-        description: 'Light, bold flavors from fresh produce and grilled meats',
-        price: 449,
-        category: 'Fresh Salads'
-      },
-      {
-        id: 'salad-5',
-        name: 'Chicken Caesar Salad',
-        description: 'Light, bold flavors from fresh produce and grilled meats',
-        price: 449,
-        category: 'Fresh Salads'
-      },
-      {
-        id: 'salad-6',
-        name: 'Peri Peri Grilled Chicken Salad',
-        description: 'Light, bold flavors from fresh produce and grilled meats',
-        price: 449,
-        category: 'Fresh Salads'
-      },
+      { id: 'salad-1', name: 'Greek', description: createDescription('Veg/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Fresh Salads' },
+      { id: 'salad-2', name: 'Caesar', description: createDescription('Veg/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Fresh Salads' },
+      { id: 'salad-3', name: 'Green', description: createDescription(null, '250'), price: parsePrice('250'), category: 'Fresh Salads' },
+      { id: 'salad-4', name: 'Fresh Cut Fruits', description: createDescription(null, '350'), price: parsePrice('350'), category: 'Fresh Salads' },
+      { id: 'salad-5', name: 'Feta Cheese', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Fresh Salads' },
+      { id: 'salad-6', name: 'Peri Peri Chicken', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Fresh Salads' },
+      { id: 'salad-7', name: 'Tikka', description: createDescription('Paneer/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Fresh Salads' },
 
-      // Sizzling Starters - Vegetarian
-      {
-        id: 'veg-starter-1',
-        name: 'Pommies Fries',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 349,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-2',
-        name: 'Tomato Olive Bruschetta',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 399,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-3',
-        name: 'Paneer Tikka',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 429,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-4',
-        name: 'Dahi Ke Kebab',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 399,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-5',
-        name: 'Cheese-Creamed Broccoli',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 399,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-6',
-        name: 'Garlic Butter Mushrooms',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 399,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-7',
-        name: 'Peri Peri Paneer Skewers',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 429,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-8',
-        name: 'Loaded Veg Nachos',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 399,
-        category: 'Sizzling Starters - Vegetarian'
-      },
-      {
-        id: 'veg-starter-9',
-        name: 'Veg Cheese Croquettes',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 399,
-        category: 'Sizzling Starters - Vegetarian'
-      },
+      // Sizzling Starters
+      { id: 'starter-1', name: 'Steam Vegetables', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-2', name: 'Bruschetta', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-3', name: 'Pommes Frites', description: createDescription(null, '350'), price: parsePrice('350'), category: 'Sizzling Starters' },
+      { id: 'starter-4', name: 'Masala Papad', description: createDescription(null, '300'), price: parsePrice('300'), category: 'Sizzling Starters' },
+      { id: 'starter-5', name: 'Loaded Nachos', description: createDescription('Veg/Chicken', '400/450'), price: parsePrice('400/450'), category: 'Sizzling Starters' },
+      { id: 'starter-6', name: 'Croquetas', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-7', name: 'Thai Basil', description: createDescription('Paneer/Chicken/Prawn/Fish', '400/450/600/600'), price: parsePrice('400/450/600/600'), category: 'Sizzling Starters' },
+      { id: 'starter-8', name: 'Arabic Mezze Platter', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-9', name: 'Tempura', description: createDescription('Veg/Prawn/Squids', '350/600/650'), price: parsePrice('350/600/650'), category: 'Sizzling Starters' },
+      { id: 'starter-10', name: 'Mozzarella Sticks', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-11', name: 'Sambal', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-12', name: 'Tikka (Paneer/Mushroom)', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-13', name: 'Tikka (Chicken/Fish/Prawn)', description: createDescription(null, '450/500/600'), price: parsePrice('450/500/600'), category: 'Sizzling Starters' },
+      { id: 'starter-14', name: 'Chongqing', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-15', name: 'Peri Peri Chicken Wings', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-16', name: 'Tandoori Malai Broccoli', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-17', name: 'Fried Fingers', description: createDescription('Chicken/Fish', '500/550'), price: parsePrice('500/550'), category: 'Sizzling Starters' },
+      { id: 'starter-18', name: 'Sausage Sizzle', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-19', name: 'Jamaican Jerk', description: createDescription('Chicken/Pork', '500/550'), price: parsePrice('500/550'), category: 'Sizzling Starters' },
+      { id: 'starter-20', name: 'Fried Chicken', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Sizzling Starters' },
+      { id: 'starter-21', name: 'Crispy Fried Schezwan Chicken', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Sizzling Starters' },
+      { id: 'starter-22', name: 'Honey Chilly (Lotus Stem/Pork)', description: createDescription(null, '450/500'), price: parsePrice('450/500'), category: 'Sizzling Starters' },
+      { id: 'starter-23', name: 'Fish and Chips', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Sizzling Starters' },
+      { id: 'starter-24', name: 'Peri Peri Chicken', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Sizzling Starters' },
+      { id: 'starter-25', name: 'Crispy Lamb', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Sizzling Starters' },
+      { id: 'starter-26', name: 'Boti Kebab', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Sizzling Starters' },
+      { id: 'starter-27', name: 'Seekh Kebab', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Sizzling Starters' },
+      { id: 'starter-28', name: 'Salt & Pepper Calamari', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Sizzling Starters' },
+      { id: 'starter-29', name: 'Satay (Paneer/Chicken/Prawn)', description: createDescription(null, '400/450/550'), price: parsePrice('400/450/550'), category: 'Sizzling Starters' },
+      { id: 'starter-30', name: 'Chilly', description: createDescription('Paneer/Egg/Mushroom/Chicken/Fish/Prawn', '400/400/400/450/600/600'), price: parsePrice('400/400/400/450/600/600'), category: 'Sizzling Starters' },
+      { id: 'starter-31', name: 'Garlic Bread (Plain/Cheese/Chilly Cheese)', description: createDescription(null, '300/350'), price: parsePrice('300/350'), category: 'Sizzling Starters' },
+      { id: 'starter-32', name: 'Peanut Masala', description: createDescription(null, '300'), price: parsePrice('300'), category: 'Sizzling Starters' },
+      { id: 'starter-33', name: 'Crispy Corn', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-34', name: 'Chicken Ghee Roast', description: createDescription(null, '550'), price: parsePrice('550'), category: 'Sizzling Starters' },
+      { id: 'starter-35', name: 'Mutton Ghee Roast', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Sizzling Starters' },
+      { id: 'starter-36', name: 'Chicken 65', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Sizzling Starters' },
+      { id: 'starter-37', name: 'Loose Prawns', description: createDescription(null, '550'), price: parsePrice('550'), category: 'Sizzling Starters' },
+      { id: 'starter-38', name: 'Fried Cashew Masala', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-39', name: 'Tandoori Chicken (Half/Full)', description: createDescription(null, '550/850'), price: parsePrice('550/850'), category: 'Sizzling Starters' },
+      { id: 'starter-40', name: 'Murgh Malai Chicken', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Sizzling Starters' },
+      { id: 'starter-41', name: 'Manchurian (Gobi/Mushroom/Chicken/Prawn)', description: createDescription(null, '350/400/450/550'), price: parsePrice('350/400/450/550'), category: 'Sizzling Starters' },
+      { id: 'starter-42', name: 'Onion Rings', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Sizzling Starters' },
+      { id: 'starter-43', name: 'Butter Garlic (Mushroom/Prawn)', description: createDescription(null, '400/550'), price: parsePrice('400/550'), category: 'Sizzling Starters' },
 
-      // Sizzling Starters - Non-Vegetarian
-      {
-        id: 'nonveg-starter-1',
-        name: 'BBQ Chicken Wings',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-2',
-        name: 'Loaded Chicken Nachos',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 449,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-3',
-        name: 'Herb-Crusted Chicken Breast',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-4',
-        name: 'Peri Peri Chicken Kebab',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-5',
-        name: 'Grilled Chicken Tikka',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-6',
-        name: 'Hariyali Chicken Tikka',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-7',
-        name: 'Crispy Fried Chicken Strips',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-8',
-        name: 'Chicken Ghee Roast',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-9',
-        name: 'Chicken 65',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-10',
-        name: 'Murgh Malai Kebab',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 489,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-11',
-        name: 'Mutton Boti Kebab',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 599,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-12',
-        name: 'Mutton Ghee Roast',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 649,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-13',
-        name: 'Nilgiri Lamb',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 599,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-14',
-        name: 'Lamb Seekh Kebab',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 649,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-15',
-        name: 'Indian Lamb Chops',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 599,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-16',
-        name: 'Moroccan Fish Tikka',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 499,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-17',
-        name: 'Mustard Fish Tikka',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 499,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-18',
-        name: 'Appolo Fish',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 499,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-19',
-        name: 'Fish & Chips',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 529,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-20',
-        name: 'Charred Prawns',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 599,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-21',
-        name: 'Tandoori Prawns',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 599,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
-      {
-        id: 'nonveg-starter-22',
-        name: 'Creamy Butter Garlic Prawns',
-        description: 'A mouthwatering selection of grilled, fried, perfect to kick off your feast',
-        price: 589,
-        category: 'Sizzling Starters - Non-Vegetarian'
-      },
+      // Dumplings
+      { id: 'dumpling-1', name: 'Gyoza', description: createDescription('Veg/Chicken', '450/500'), price: parsePrice('450/500'), category: 'Dumplings' },
+      { id: 'dumpling-2', name: 'Momo', description: createDescription('Veg/Chicken', '450/500'), price: parsePrice('450/500'), category: 'Dumplings' },
 
-      // Main Course - Vegetarian
-      {
-        id: 'main-veg-1',
-        name: 'Vegetable Karahi',
-        description: 'Spiced mixed vegetables served with Indian bread and steam rice.',
-        price: 469,
-        category: 'Main Course - Vegetarian'
-      },
-      {
-        id: 'main-veg-2',
-        name: 'Dal Makhani',
-        description: 'Creamy black lentils, slow cooked with butter and spices, served with your choice of Indian bread or steam rice.',
-        price: 489,
-        category: 'Main Course - Vegetarian'
-      },
-      {
-        id: 'main-veg-3',
-        name: 'Dal Tadka',
-        description: 'Slow cooked toor dal in Indian style tadka with jeera rice.',
-        price: 499,
-        category: 'Main Course - Vegetarian'
-      },
-      {
-        id: 'main-veg-4',
-        name: 'Mushroom and Green Peas Curry',
-        description: 'Mushroom and green peas toasted in Indian spice and herbs and creamy, with roti.',
-        price: 499,
-        category: 'Main Course - Vegetarian'
-      },
-      {
-        id: 'main-veg-5',
-        name: 'Paneer Butter Masala',
-        description: 'Grilled paneer in creamy makhani sauce, with Indian bread.',
-        price: 449,
-        category: 'Main Course - Vegetarian'
-      },
+      // Pizza
+      { id: 'pizza-1', name: 'Margherita', description: createDescription(null, '450/550'), price: parsePrice('450/550'), category: 'Pizza' },
+      { id: 'pizza-2', name: 'Keema Naan', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Pizza' },
+      { id: 'pizza-3', name: 'Etli Ekmek', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Pizza' },
+      { id: 'pizza-4', name: 'Pepperoni', description: createDescription(null, '650/750'), price: parsePrice('650/750'), category: 'Pizza' },
+      { id: 'pizza-5', name: 'Quattro Formaggi', description: createDescription(null, '750/850'), price: parsePrice('750/850'), category: 'Pizza' },
+      { id: 'pizza-6', name: 'Peri Peri Chicken', description: createDescription(null, '650/750'), price: parsePrice('650/750'), category: 'Pizza' },
+      { id: 'pizza-7', name: 'Chicken Tikka', description: createDescription(null, '650/750'), price: parsePrice('650/750'), category: 'Pizza' },
+      { id: 'pizza-8', name: 'Mexican (Veg)', description: createDescription(null, '450/550'), price: parsePrice('450/550'), category: 'Pizza' },
+      { id: 'pizza-9', name: 'Paneer Tikka', description: createDescription(null, '450/550'), price: parsePrice('450/550'), category: 'Pizza' },
 
-      // Main Course - Non-Vegetarian
-      {
-        id: 'main-nonveg-1',
-        name: 'Chicken Karahi',
-        description: 'Grilled chicken in spiced karahi sauce, with Indian bread.',
-        price: 549,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-2',
-        name: 'Methi Chicken Curry',
-        description: 'Methi flavours and Indian spiced chicken gravy with garlic naan.',
-        price: 499,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-3',
-        name: 'Pesto Chicken',
-        description: 'Grilled chicken marinated in pesto with roti.',
-        price: 549,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-4',
-        name: 'Madras Curry Chicken',
-        description: 'A spicy, flavourful South Indian curry with steam rice.',
-        price: 599,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-5',
-        name: 'Creamy Butter Chicken',
-        description: 'Grilled chicken in creamy makhani sauce, served with butter naan.',
-        price: 599,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-6',
-        name: 'Thai Curry Chicken (Yellow/Green/Red)',
-        description: 'A rich and creamy Thai curry with tender chicken, coconut milk, and aromatic spices served with fragrant jasmine rice.',
-        price: 649,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-7',
-        name: 'Thyme Grilled Chicken with Hunter Sauce',
-        description: 'Breast chicken marinated in thyme, garlic and herbs with grilled vegetable and mash potato.',
-        price: 619,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-8',
-        name: 'Lahori Mutton',
-        description: 'Mutton with bone marinated in aromatic spice and rich flavor with butter naan.',
-        price: 629,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-9',
-        name: 'Lamb Shepherd&apos;s Pie',
-        description: 'Minced lamb with peas and mashed potatoes.',
-        price: 599,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-10',
-        name: 'Cajun Grilled Fish with Lemon Butter Sauce',
-        description: 'Basa fish marinated in Cajun spice, with grilled vegetable and mash potato.',
-        price: 649,
-        category: 'Main Course - Non-Vegetarian'
-      },
-      {
-        id: 'main-nonveg-11',
-        name: 'Malabar Prawns Curry',
-        description: 'Creamy and coconut flavor in Madras curry spice with Malabar paratha.',
-        price: 649,
-        category: 'Main Course - Non-Vegetarian'
-      },
+      // Pasta
+      { id: 'pasta-1', name: 'Penne All\'Arrabbiata', description: createDescription('Veg/Chicken', '400/500'), price: parsePrice('400/500'), category: 'Pasta' },
+      { id: 'pasta-2', name: 'Spaghetti Aglio E Olio', description: createDescription('Veg/Chicken', '400/500'), price: parsePrice('400/500'), category: 'Pasta' },
+      { id: 'pasta-3', name: 'Spaghetti and Meatballs', description: createDescription(null, '550'), price: parsePrice('550'), category: 'Pasta' },
+      { id: 'pasta-4', name: 'Lasagne Alla Bolognese', description: createDescription('Veg/Chicken/Lamb', '450/550/650'), price: parsePrice('450/550/650'), category: 'Pasta' },
+      { id: 'pasta-5', name: 'Shepherd\'s Pie', description: createDescription(null, '650'), price: parsePrice('650'), category: 'Pasta' },
+      { id: 'pasta-6', name: 'Penne Alfredo', description: createDescription('Veg/Chicken', '400/500'), price: parsePrice('400/500'), category: 'Pasta' },
 
-      // Asian & Chinese - Veg Starters
-      {
-        id: 'asian-veg-1',
-        name: 'Chilli Paneer',
-        description: 'Asian & Chinese vegetarian starter',
-        price: 449,
-        category: 'Asian & Chinese - Veg Starters'
-      },
-      {
-        id: 'asian-veg-2',
-        name: 'Funghi Cigar Roll',
-        description: 'Asian & Chinese vegetarian starter',
-        price: 449,
-        category: 'Asian & Chinese - Veg Starters'
-      },
-      {
-        id: 'asian-veg-3',
-        name: 'Burmese Parcel',
-        description: 'Asian & Chinese vegetarian starter',
-        price: 449,
-        category: 'Asian & Chinese - Veg Starters'
-      },
-      {
-        id: 'asian-veg-4',
-        name: 'Chilli Mushroom',
-        description: 'Asian & Chinese vegetarian starter',
-        price: 399,
-        category: 'Asian & Chinese - Veg Starters'
-      },
-      {
-        id: 'asian-veg-5',
-        name: 'Schezwan Paneer',
-        description: 'Asian & Chinese vegetarian starter',
-        price: 449,
-        category: 'Asian & Chinese - Veg Starters'
-      },
+      // Stews & Curries
+      { id: 'stew-1', name: 'Punjabi Kadhi with Rice or Indian Bread', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Stews & Curries' },
+      { id: 'stew-2', name: 'Kadai Paneer with Rice or Indian Bread', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Stews & Curries' },
+      { id: 'stew-3', name: 'Pasanda with White Rice or Indian Bread', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Stews & Curries' },
+      { id: 'stew-4', name: 'Dal Makhani with Rice or Indian Bread', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Stews & Curries' },
+      { id: 'stew-5', name: 'Dal with Rice or Indian Bread', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Stews & Curries' },
+      { id: 'stew-6', name: 'Massaman Curry', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Stews & Curries' },
+      { id: 'stew-7', name: 'Butter Chicken with Rice or Indian Bread', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Stews & Curries' },
+      { id: 'stew-8', name: 'Madras Curry with Rice or Indian Bread', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Stews & Curries' },
+      { id: 'stew-9', name: 'Korma with Rice or Indian Bread (Chicken/Mutton)', description: createDescription(null, '500/650'), price: parsePrice('500/650'), category: 'Stews & Curries' },
+      { id: 'stew-10', name: 'Yellow Curry with Jasmine Rice (Tofu/Chicken/Shrimp)', description: createDescription(null, '550/600/700'), price: parsePrice('550/600/700'), category: 'Stews & Curries' },
+      { id: 'stew-11', name: 'Laal Maas with Rice or Indian Bread', description: createDescription(null, '650'), price: parsePrice('650'), category: 'Stews & Curries' },
+      { id: 'stew-12', name: 'Rogan Josh with Rice or Indian Bread', description: createDescription(null, '600'), price: parsePrice('600'), category: 'Stews & Curries' },
+      { id: 'stew-13', name: 'Keema with Rice or Indian Bread', description: createDescription(null, '650'), price: parsePrice('650'), category: 'Stews & Curries' },
+      { id: 'stew-14', name: 'Paneer Butter Masala with Rice or Indian Bread', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Stews & Curries' },
+      { id: 'stew-15', name: 'Mushroom Lababdar with Rice or Indian Bread', description: createDescription(null, '500'), price: parsePrice('500'), category: 'Stews & Curries' },
+      { id: 'stew-16', name: 'Chicken Tikka Masala with Rice or Indian Bread', description: createDescription(null, '550'), price: parsePrice('550'), category: 'Stews & Curries' },
 
-      // Asian & Chinese - Non-Veg Starters
-      {
-        id: 'asian-nonveg-1',
-        name: 'Honey Chilli Chicken',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 489,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
-      {
-        id: 'asian-nonveg-2',
-        name: 'Coriander Chicken',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 489,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
-      {
-        id: 'asian-nonveg-3',
-        name: 'Diced Schezwan Chicken',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 489,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
-      {
-        id: 'asian-nonveg-4',
-        name: 'Crispy Lamb',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 499,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
-      {
-        id: 'asian-nonveg-5',
-        name: 'Hot Garlic Chilli Fish',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 499,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
-      {
-        id: 'asian-nonveg-6',
-        name: 'Crispy Fried Pepper Prawns',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 569,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
-      {
-        id: 'asian-nonveg-7',
-        name: 'Chilli Basil Prawns',
-        description: 'Asian & Chinese non-vegetarian starter',
-        price: 569,
-        category: 'Asian & Chinese - Non-Veg Starters'
-      },
+      // Asian & Chinese
+      { id: 'asian-1', name: 'Veg Platter', description: createDescription(null, '1500'), price: parsePrice('1500'), category: 'Asian & Chinese' },
+      { id: 'asian-2', name: 'Non-Veg Platter', description: createDescription(null, '2000'), price: parsePrice('2000'), category: 'Asian & Chinese' },
+      { id: 'asian-3', name: 'Sea Food Platter', description: createDescription(null, '3000'), price: parsePrice('3000'), category: 'Asian & Chinese' },
+      { id: 'asian-4', name: 'Roasted Lamb Leg (As Per Size)', description: createDescription(null, null), price: 0, category: 'Asian & Chinese' },
+      { id: 'asian-5', name: 'Grilled Lobster (As Per Size)', description: createDescription(null, null), price: 0, category: 'Asian & Chinese' },
+      { id: 'asian-6', name: 'Grilled Murrel (As Per Size)', description: createDescription(null, null), price: 0, category: 'Asian & Chinese' },
 
-      // Rice and Noodles - Vegetarian
-      {
-        id: 'rice-noodles-veg-1',
-        name: 'Chilli Basil Fried Rice Veg',
-        description: 'Main course rice and noodles - vegetarian',
-        price: 499,
-        category: 'Rice and Noodles - Vegetarian'
-      },
-      {
-        id: 'rice-noodles-veg-2',
-        name: 'Classic Veg Fried Rice with Hot Garlic Sauce',
-        description: 'Main course rice and noodles - vegetarian',
-        price: 489,
-        category: 'Rice and Noodles - Vegetarian'
-      },
-      {
-        id: 'rice-noodles-veg-3',
-        name: 'Chilli Garlic Noodles',
-        description: 'Main course rice and noodles - vegetarian',
-        price: 499,
-        category: 'Rice and Noodles - Vegetarian'
-      },
+      // Rice Specials
+      { id: 'rice-1', name: 'Curd Rice', description: createDescription(null, '300'), price: parsePrice('300'), category: 'Rice Specials' },
+      { id: 'rice-2', name: 'Khichdi', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Rice Specials' },
+      { id: 'rice-3', name: 'Pad Thai Noodles', description: createDescription('Tofu/Chicken', '500/550'), price: parsePrice('500/550'), category: 'Rice Specials' },
+      { id: 'rice-4', name: 'Kebab Barg', description: createDescription('Lamb', '650'), price: parsePrice('650'), category: 'Rice Specials' },
+      { id: 'rice-5', name: 'Hyderabadi Biryani', description: createDescription('Veg/Chicken/Mutton', '450/500/650'), price: parsePrice('450/500/650'), category: 'Rice Specials' },
+      { id: 'rice-6', name: 'Fried Rice', description: createDescription('Veg/Egg/Chicken/Mix', '300/350/400/500'), price: parsePrice('300/350/400/500'), category: 'Rice Specials' },
+      { id: 'rice-7', name: 'Noodles', description: createDescription('Veg/Egg/Chicken/Mix', '300/350/400/500'), price: parsePrice('300/350/400/500'), category: 'Rice Specials' },
 
-      // Rice and Noodles - Non-Vegetarian
-      {
-        id: 'rice-noodles-nonveg-1',
-        name: 'Chilli Basil Fried Rice Chicken',
-        description: 'Main course rice and noodles - non-vegetarian',
-        price: 549,
-        category: 'Rice and Noodles - Non-Vegetarian'
-      },
-      {
-        id: 'rice-noodles-nonveg-2',
-        name: 'Classic Chicken Fried Rice with Hot Garlic Sauce',
-        description: 'Main course rice and noodles - non-vegetarian',
-        price: 529,
-        category: 'Rice and Noodles - Non-Vegetarian'
-      },
-      {
-        id: 'rice-noodles-nonveg-3',
-        name: 'Spicy Schezwan Chicken Noodles',
-        description: 'Main course rice and noodles - non-vegetarian',
-        price: 549,
-        category: 'Rice and Noodles - Non-Vegetarian'
-      },
+      // Indian Breads (Note: The JSON had salads here, but I'll use the correct category)
+      { id: 'bread-1', name: 'Plain Roti', description: createDescription(null, null), price: 0, category: 'Indian Breads' },
+      { id: 'bread-2', name: 'Plain Naan', description: createDescription(null, null), price: 0, category: 'Indian Breads' },
+      { id: 'bread-3', name: 'Butter Roti', description: createDescription(null, null), price: 0, category: 'Indian Breads' },
+      { id: 'bread-4', name: 'Butter Naan', description: createDescription(null, null), price: 0, category: 'Indian Breads' },
+      { id: 'bread-5', name: 'Garlic Naan', description: createDescription(null, null), price: 0, category: 'Indian Breads' },
+      { id: 'bread-6', name: 'Lachha Paratha', description: createDescription(null, null), price: 0, category: 'Indian Breads' },
 
-      // Pizza - Vegetarian
-      {
-        id: 'pizza-veg-1',
-        name: 'Veg Garden Pizza',
-        description: 'Vegetarian pizza',
-        price: 519,
-        category: 'Pizza - Vegetarian'
-      },
-      {
-        id: 'pizza-veg-2',
-        name: 'Quattro Formaggi Pizza',
-        description: 'Vegetarian pizza',
-        price: 519,
-        category: 'Pizza - Vegetarian'
-      },
-      {
-        id: 'pizza-veg-3',
-        name: 'Cottage Cheese Tikka Pizza',
-        description: 'Vegetarian pizza',
-        price: 529,
-        category: 'Pizza - Vegetarian'
-      },
-      {
-        id: 'pizza-veg-4',
-        name: 'Classic Margherita Pizza',
-        description: 'Vegetarian pizza',
-        price: 499,
-        category: 'Pizza - Vegetarian'
-      },
-      {
-        id: 'pizza-veg-5',
-        name: 'Mexican Veg Pizza',
-        description: 'Vegetarian pizza',
-        price: 519,
-        category: 'Pizza - Vegetarian'
-      },
-
-      // Pizza - Non-Vegetarian
-      {
-        id: 'pizza-nonveg-1',
-        name: 'Peri Peri Chicken Pizza',
-        description: 'Non-vegetarian pizza',
-        price: 549,
-        category: 'Pizza - Non-Vegetarian'
-      },
-      {
-        id: 'pizza-nonveg-2',
-        name: 'BBQ Chicken Pizza',
-        description: 'Non-vegetarian pizza',
-        price: 549,
-        category: 'Pizza - Non-Vegetarian'
-      },
-      {
-        id: 'pizza-nonveg-3',
-        name: 'Chicken Tikka Pizza',
-        description: 'Non-vegetarian pizza',
-        price: 589,
-        category: 'Pizza - Non-Vegetarian'
-      },
-      {
-        id: 'pizza-nonveg-4',
-        name: 'Mutton Keema Pizza',
-        description: 'Non-vegetarian pizza',
-        price: 589,
-        category: 'Pizza - Non-Vegetarian'
-      },
-      {
-        id: 'pizza-nonveg-5',
-        name: 'Lamb Pepperoni Pizza',
-        description: 'Non-vegetarian pizza',
-        price: 589,
-        category: 'Pizza - Non-Vegetarian'
-      },
-
-      // Pasta - Vegetarian
-      {
-        id: 'pasta-veg-1',
-        name: 'Penne Arrabbiata Veg',
-        description: 'Vegetarian pasta',
-        price: 489,
-        category: 'Pasta - Vegetarian'
-      },
-      {
-        id: 'pasta-veg-2',
-        name: 'Penne Veg Alfredo Sauce',
-        description: 'Vegetarian pasta',
-        price: 489,
-        category: 'Pasta - Vegetarian'
-      },
-      {
-        id: 'pasta-veg-3',
-        name: 'Spaghetti Aglio Olio Pasta Veg',
-        description: 'Vegetarian pasta',
-        price: 489,
-        category: 'Pasta - Vegetarian'
-      },
-      {
-        id: 'pasta-veg-4',
-        name: 'Pesto Pasta Veg',
-        description: 'Vegetarian pasta',
-        price: 489,
-        category: 'Pasta - Vegetarian'
-      },
-      {
-        id: 'pasta-veg-5',
-        name: 'Veg Lasagna',
-        description: 'Vegetarian pasta',
-        price: 489,
-        category: 'Pasta - Vegetarian'
-      },
-      {
-        id: 'pasta-veg-6',
-        name: 'Creamy Mac N Cheese Pasta Veg',
-        description: 'Vegetarian pasta',
-        price: 489,
-        category: 'Pasta - Vegetarian'
-      },
-
-      // Pasta - Non-Vegetarian
-      {
-        id: 'pasta-nonveg-1',
-        name: 'Penne Arrabbiata Chicken',
-        description: 'Non-vegetarian pasta',
-        price: 529,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-2',
-        name: 'Penne Chicken Alfredo Sauce',
-        description: 'Non-vegetarian pasta',
-        price: 529,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-3',
-        name: 'Spaghetti Aglio Olio Pasta Chicken',
-        description: 'Non-vegetarian pasta',
-        price: 529,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-4',
-        name: 'Pesto Pasta Chicken',
-        description: 'Non-vegetarian pasta',
-        price: 529,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-5',
-        name: 'Chicken Lasagna',
-        description: 'Non-vegetarian pasta',
-        price: 529,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-6',
-        name: 'Creamy Mac N Cheese Pasta Chicken',
-        description: 'Non-vegetarian pasta',
-        price: 529,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-7',
-        name: 'Lamb Lasagna',
-        description: 'Non-vegetarian pasta',
-        price: 589,
-        category: 'Pasta - Non-Vegetarian'
-      },
-      {
-        id: 'pasta-nonveg-8',
-        name: 'Spaghetti & Meatballs',
-        description: 'Non-vegetarian pasta',
-        price: 589,
-        category: 'Pasta - Non-Vegetarian'
-      },
-
-      // Rice Specials - Vegetarian
-      {
-        id: 'rice-special-veg-1',
-        name: 'Vegetable Pulao',
-        description: 'Rice special - vegetarian',
-        price: 499,
-        category: 'Rice Specials - Vegetarian'
-      },
-      {
-        id: 'rice-special-veg-2',
-        name: 'Vegetable Risotto',
-        description: 'Rice special - vegetarian',
-        price: 499,
-        category: 'Rice Specials - Vegetarian'
-      },
-      {
-        id: 'rice-special-veg-3',
-        name: 'Paneer 65 Pulao',
-        description: 'Rice special - vegetarian',
-        price: 499,
-        category: 'Rice Specials - Vegetarian'
-      },
-      {
-        id: 'rice-special-veg-4',
-        name: 'Jeera Rice',
-        description: 'Rice special - vegetarian',
-        price: 249,
-        category: 'Rice Specials - Vegetarian'
-      },
-      {
-        id: 'rice-special-veg-5',
-        name: 'Steam Rice',
-        description: 'Rice special - vegetarian',
-        price: 249,
-        category: 'Rice Specials - Vegetarian'
-      },
-
-      // Rice Specials - Non-Vegetarian
-      {
-        id: 'rice-special-nonveg-1',
-        name: 'Chicken Stroganoff',
-        description: 'Rice special - non-vegetarian',
-        price: 529,
-        category: 'Rice Specials - Non-Vegetarian'
-      },
-      {
-        id: 'rice-special-nonveg-2',
-        name: 'Chicken Pulao',
-        description: 'Rice special - non-vegetarian',
-        price: 549,
-        category: 'Rice Specials - Non-Vegetarian'
-      },
-      {
-        id: 'rice-special-nonveg-3',
-        name: 'Chicken Biryani',
-        description: 'Rice special - non-vegetarian',
-        price: 549,
-        category: 'Rice Specials - Non-Vegetarian'
-      },
-      {
-        id: 'rice-special-nonveg-4',
-        name: 'Mutton Pulao',
-        description: 'Rice special - non-vegetarian',
-        price: 599,
-        category: 'Rice Specials - Non-Vegetarian'
-      },
-      {
-        id: 'rice-special-nonveg-5',
-        name: 'Spiced Prawn Rice',
-        description: 'Rice special - non-vegetarian',
-        price: 589,
-        category: 'Rice Specials - Non-Vegetarian'
-      },
-
-      // Indian Breads
-      {
-        id: 'bread-1',
-        name: 'Plain Roti / Plain Naan',
-        description: 'Indian bread',
-        price: 89,
-        category: 'Indian Breads'
-      },
-      {
-        id: 'bread-2',
-        name: 'Butter Roti / Butter Naan',
-        description: 'Indian bread',
-        price: 99,
-        category: 'Indian Breads'
-      },
-      {
-        id: 'bread-3',
-        name: 'Garlic Naan',
-        description: 'Indian bread',
-        price: 109,
-        category: 'Indian Breads'
-      },
-      {
-        id: 'bread-4',
-        name: 'Lachha Paratha',
-        description: 'Indian bread',
-        price: 119,
-        category: 'Indian Breads'
-      },
-
-      // Desserts
-      {
-        id: 'dessert-1',
-        name: 'Vanilla Panna Cotta',
-        description: 'Creamy and smooth vanilla flavors with fresh crushed strawberry topping.',
-        price: 449,
-        category: 'Desserts'
-      },
-      {
-        id: 'dessert-2',
-        name: 'Layers Topping Shahi Tukda',
-        description: 'Layers of crisp bread and saffron syrup, creamy rabri and topped with a touch of nuts.',
-        price: 449,
-        category: 'Desserts'
-      },
-      {
-        id: 'dessert-3',
-        name: 'Chocolate of Heaven',
-        description: 'Rich dark chocolate layered with creamy coconut, a perfect blend of indulgence and tropical sweetness.',
-        price: 469,
-        category: 'Desserts'
-      },
-      {
-        id: 'dessert-4',
-        name: 'Cheese Cake',
-        description: 'Simple cheese cake topped with strawberry crush.',
-        price: 469,
-        category: 'Desserts'
-      },
-      {
-        id: 'dessert-5',
-        name: 'Chocolate Brownie',
-        description: 'Chocolate baked dessert with vanilla ice cream scoop.',
-        price: 449,
-        category: 'Desserts'
-      }
+      // Desserts & Snacks
+      { id: 'dessert-1', name: 'Grilled Cheese Sandwich', description: createDescription('Veg/Chicken', '350/400'), price: parsePrice('350/400'), category: 'Desserts & Snacks' },
+      { id: 'dessert-2', name: 'Quesadilla', description: createDescription('Veg/Chicken', '350/400'), price: parsePrice('350/400'), category: 'Desserts & Snacks' },
+      { id: 'dessert-3', name: 'Club Sandwich', description: createDescription('Veg/Chicken/Bacon', '450/500/550'), price: parsePrice('450/500/550'), category: 'Desserts & Snacks' },
+      { id: 'dessert-4', name: 'Kati Roll', description: createDescription('Veg/Chicken', '350/400'), price: parsePrice('350/400'), category: 'Desserts & Snacks' },
+      { id: 'dessert-5', name: 'Cheese Cake', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Desserts & Snacks' },
+      { id: 'dessert-6', name: 'Gulab Jamun', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Desserts & Snacks' },
+      { id: 'dessert-7', name: 'Brownies', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Desserts & Snacks' },
+      { id: 'dessert-8', name: 'Panna Cotta', description: createDescription(null, '400'), price: parsePrice('400'), category: 'Desserts & Snacks' },
+      { id: 'dessert-9', name: 'Tiramisu', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Desserts & Snacks' },
+      { id: 'dessert-10', name: 'Churros', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Desserts & Snacks' },
+      { id: 'dessert-11', name: 'Chocolate of Heaven', description: createDescription(null, '450'), price: parsePrice('450'), category: 'Desserts & Snacks' },
+      { id: 'dessert-12', name: 'Flavour of Ice-Cream', description: createDescription(null, '300'), price: parsePrice('300'), category: 'Desserts & Snacks' }
     ]
   },
 
@@ -892,65 +198,72 @@ export const menuData: { [key: string]: MenuData } = {
       // Whiskey - Blended
       {
         id: 'whiskey-blended-1',
-        name: 'Royal Salute',
+        name: 'DEWARS WITE LABEL',
         description: 'Blended Whiskey (30ML)',
-        price: 1949,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-2',
-        name: 'Hibiki',
+        name: 'Royal Salute',
         description: 'Blended Whiskey (30ML)',
-        price: 1649,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-3',
-        name: 'Chivas Regal 18 YO',
+        name: 'Hibiki',
         description: 'Blended Whiskey (30ML)',
-        price: 949,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-4',
-        name: 'Toki',
+        name: 'Chivas Regal 18 YO',
         description: 'Blended Whiskey (30ML)',
-        price: 589,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-5',
-        name: 'Chivas Regal 12 YO',
+        name: 'Toki',
         description: 'Blended Whiskey (30ML)',
-        price: 549,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-6',
-        name: 'JW Black Label',
+        name: 'Chivas Regal 12 YO',
         description: 'Blended Whiskey (30ML)',
-        price: 529,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-7',
-        name: 'JW Blonde',
+        name: 'JW Black Label',
         description: 'Blended Whiskey (30ML)',
-        price: 489,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-8',
-        name: 'Ballentine&apos;s Finest',
+        name: 'JW Blonde',
         description: 'Blended Whiskey (30ML)',
-        price: 389,
+        price: 127,
         category: 'Whiskey - Blended'
       },
       {
         id: 'whiskey-blended-9',
+        name: 'Ballentine&apos;s Finest',
+        description: 'Blended Whiskey (30ML)',
+        price: 127,
+        category: 'Whiskey - Blended'
+      },
+      {
+        id: 'whiskey-blended-10',
         name: 'JW Red Label',
         description: 'Blended Whiskey (30ML)',
-        price: 369,
+        price: 127,
         category: 'Whiskey - Blended'
       },
 
@@ -959,56 +272,56 @@ export const menuData: { [key: string]: MenuData } = {
         id: 'whiskey-single-1',
         name: 'Dalmore 15 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 1849,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-2',
         name: 'The Singleton 15 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 1249,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-3',
         name: 'Jura 12 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 969,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-4',
         name: 'Glenfiddich 15 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 969,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-5',
         name: 'The Singleton 12 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 849,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-6',
         name: 'Glenfiddich 12 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 749,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-7',
         name: 'Talisker 10 YO',
         description: 'Single Malts Whiskey (30ML)',
-        price: 729,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
       {
         id: 'whiskey-single-8',
         name: 'Godawan 01 / 02',
         description: 'Single Malts Whiskey (30ML)',
-        price: 649,
+        price: 127,
         category: 'Whiskey - Single Malts'
       },
 
@@ -1017,241 +330,311 @@ export const menuData: { [key: string]: MenuData } = {
         id: 'whiskey-rye-1',
         name: 'Templeton Rye 6 YO',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 1249,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
       {
         id: 'whiskey-rye-2',
         name: 'Gentleman Jack',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 749,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
       {
         id: 'whiskey-rye-3',
         name: 'Jack Daniel&apos;s',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 529,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
       {
         id: 'whiskey-rye-4',
         name: 'Bushmills Original',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 489,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
       {
         id: 'whiskey-rye-5',
         name: 'Black Velvet',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 469,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
       {
         id: 'whiskey-rye-6',
         name: 'Jameson',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 449,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
       {
         id: 'whiskey-rye-7',
         name: 'Jim Beam',
         description: 'Rye / American / Canadian / Irish Whiskey (30ML)',
-        price: 429,
+        price: 127,
         category: 'Whiskey - Rye/American/Canadian/Irish'
       },
 
       // Vodka
       {
         id: 'vodka-1',
-        name: 'Crystal Head',
+        name: 'SMIRNOFF VODKA',
         description: 'Vodka (30ML)',
-        price: 1349,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-2',
-        name: 'Roberto Cavalli',
+        name: 'Crystal Head',
         description: 'Vodka (30ML)',
-        price: 1249,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-3',
-        name: 'Uluvka',
+        name: 'Roberto Cavalli',
         description: 'Vodka (30ML)',
-        price: 949,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-4',
-        name: 'Beluga',
+        name: 'Uluvka',
         description: 'Vodka (30ML)',
-        price: 849,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-5',
-        name: 'Belvedere',
+        name: 'Beluga',
         description: 'Vodka (30ML)',
-        price: 749,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-6',
-        name: 'Grey Goose',
+        name: 'Belvedere',
         description: 'Vodka (30ML)',
-        price: 649,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-7',
-        name: 'Absolut',
+        name: 'Grey Goose',
         description: 'Vodka (30ML)',
-        price: 449,
+        price: 127,
         category: 'Vodka'
       },
       {
         id: 'vodka-8',
+        name: 'Absolut',
+        description: 'Vodka (30ML)',
+        price: 127,
+        category: 'Vodka'
+      },
+      {
+        id: 'vodka-9',
         name: 'Ketel One',
         description: 'Vodka (30ML)',
-        price: 389,
+        price: 127,
         category: 'Vodka'
       },
 
       // Gin
       {
         id: 'gin-1',
-        name: 'Roku',
+        name: 'GREAT INDIAN GIN',
         description: 'Gin (30ML)',
-        price: 849,
+        price: 127,
         category: 'Gin'
       },
       {
         id: 'gin-2',
-        name: 'Tanqueray No. 10',
+        name: 'Roku',
         description: 'Gin (30ML)',
-        price: 649,
+        price: 127,
         category: 'Gin'
       },
       {
         id: 'gin-3',
-        name: 'Bombay Sapphire',
+        name: 'Tanqueray No. 10',
         description: 'Gin (30ML)',
-        price: 489,
+        price: 127,
         category: 'Gin'
       },
       {
         id: 'gin-4',
-        name: 'Beefeater',
+        name: 'Bombay Sapphire',
         description: 'Gin (30ML)',
-        price: 449,
+        price: 127,
         category: 'Gin'
       },
       {
         id: 'gin-5',
+        name: 'Beefeater',
+        description: 'Gin (30ML)',
+        price: 127,
+        category: 'Gin'
+      },
+      {
+        id: 'gin-6',
         name: 'Gordons',
         description: 'Gin (30ML)',
-        price: 389,
+        price: 127,
         category: 'Gin'
       },
 
       // Rum
       {
         id: 'rum-1',
-        name: 'Viva El Ron De Cuba',
+        name: 'BACARDI RUM - WHITE / BLACK',
         description: 'Rum (30ML)',
-        price: 449,
+        price: 127,
         category: 'Rum'
       },
       {
         id: 'rum-2',
-        name: 'Captain Morgan Dark',
+        name: 'BACARDI RUM - MANGO CHILLY',
         description: 'Rum (30ML)',
-        price: 349,
+        price: 127,
         category: 'Rum'
       },
       {
         id: 'rum-3',
+        name: 'BACARDI RUM - GINGER',
+        description: 'Rum (30ML)',
+        price: 127,
+        category: 'Rum'
+      },
+      {
+        id: 'rum-4',
+        name: 'BACARDI RUM - ORANGE',
+        description: 'Rum (30ML)',
+        price: 127,
+        category: 'Rum'
+      },
+      {
+        id: 'rum-5',
+        name: 'BACARDI RUM - LEMON',
+        description: 'Rum (30ML)',
+        price: 127,
+        category: 'Rum'
+      },
+      {
+        id: 'rum-6',
+        name: 'OLD MONK LEGEND RUM',
+        description: 'Rum (30ML)',
+        price: 127,
+        category: 'Rum'
+      },
+      {
+        id: 'rum-7',
+        name: 'Viva El Ron De Cuba',
+        description: 'Rum (30ML)',
+        price: 127,
+        category: 'Rum'
+      },
+      {
+        id: 'rum-8',
+        name: 'Captain Morgan Dark',
+        description: 'Rum (30ML)',
+        price: 127,
+        category: 'Rum'
+      },
+      {
+        id: 'rum-9',
         name: 'Bacardi Carta Blanca',
         description: 'Rum (30ML)',
-        price: 349,
+        price: 127,
         category: 'Rum'
       },
 
       // Tequila
       {
         id: 'tequila-1',
-        name: 'Don Julio Reposado',
+        name: 'DESMONDJI TEQUILA 51% AGAVE',
         description: 'Tequila (30ML)',
-        price: 1349,
+        price: 127,
         category: 'Tequila'
       },
       {
         id: 'tequila-2',
-        name: 'Patron Reposado',
+        name: 'Don Julio Reposado',
         description: 'Tequila (30ML)',
-        price: 1249,
+        price: 127,
         category: 'Tequila'
       },
       {
         id: 'tequila-3',
-        name: 'Patron Silver',
+        name: 'Patron Reposado',
         description: 'Tequila (30ML)',
-        price: 1149,
+        price: 127,
         category: 'Tequila'
       },
       {
         id: 'tequila-4',
-        name: 'Jose Cuervo Gold',
+        name: 'Patron Silver',
         description: 'Tequila (30ML)',
-        price: 489,
+        price: 127,
         category: 'Tequila'
       },
       {
         id: 'tequila-5',
+        name: 'Jose Cuervo Gold',
+        description: 'Tequila (30ML)',
+        price: 127,
+        category: 'Tequila'
+      },
+      {
+        id: 'tequila-6',
         name: 'Jose Cuervo Silver',
         description: 'Tequila (30ML)',
-        price: 469,
+        price: 127,
         category: 'Tequila'
       },
 
       // Cognac/Brandy
       {
         id: 'cognac-1',
-        name: 'Hennessy V.S',
+        name: 'KYRON BRANDY',
         description: 'Cognac / Brandy (30ML)',
-        price: 1349,
+        price: 127,
         category: 'Cognac/Brandy'
       },
       {
         id: 'cognac-2',
-        name: 'Victor Fauconnier',
+        name: 'Hennessy V.S',
         description: 'Cognac / Brandy (30ML)',
-        price: 449,
+        price: 127,
         category: 'Cognac/Brandy'
       },
       {
         id: 'cognac-3',
-        name: 'Vecchia Romagna',
+        name: 'Victor Fauconnier',
         description: 'Cognac / Brandy (30ML)',
-        price: 439,
+        price: 127,
         category: 'Cognac/Brandy'
       },
       {
         id: 'cognac-4',
-        name: 'St-Remy VSOP',
+        name: 'Vecchia Romagna',
         description: 'Cognac / Brandy (30ML)',
-        price: 409,
+        price: 127,
         category: 'Cognac/Brandy'
       },
       {
         id: 'cognac-5',
+        name: 'St-Remy VSOP',
+        description: 'Cognac / Brandy (30ML)',
+        price: 127,
+        category: 'Cognac/Brandy'
+      },
+      {
+        id: 'cognac-6',
         name: 'Kyron',
         description: 'Cognac / Brandy (30ML)',
-        price: 349,
+        price: 127,
         category: 'Cognac/Brandy'
       },
 
@@ -1260,21 +643,21 @@ export const menuData: { [key: string]: MenuData } = {
         id: 'aperitif-1',
         name: 'Campari',
         description: 'Aperitif (30ML)',
-        price: 389,
+        price: 127,
         category: 'Aperitif'
       },
       {
         id: 'aperitif-2',
         name: 'Aperol',
         description: 'Aperitif (30ML)',
-        price: 369,
+        price: 127,
         category: 'Aperitif'
       },
       {
         id: 'aperitif-3',
         name: 'Martini Dry / Bianco',
         description: 'Aperitif (30ML)',
-        price: 389,
+        price: 127,
         category: 'Aperitif'
       },
 
@@ -1283,83 +666,181 @@ export const menuData: { [key: string]: MenuData } = {
         id: 'ales-1',
         name: 'Bira Belgium Style Wheat Ale (4.7%)',
         description: '330ML / 1500ML / 3000ML',
-        price: 449,
+        price: 127,
         category: 'Ales/Brews/Crafts'
       },
       {
         id: 'ales-2',
         name: 'Geist Dunkelweizen (5.4%)',
         description: '330ML / 1500ML / 3000ML',
-        price: 429,
+        price: 127,
         category: 'Ales/Brews/Crafts'
       },
       {
         id: 'ales-3',
         name: 'Beer Sampler - 6 x 100ML',
         description: 'Choose 6 beers from above',
-        price: 649,
+        price: 127,
         category: 'Ales/Brews/Crafts'
       },
 
       // Premium Ales & Brews
       {
         id: 'premium-ales-1',
-        name: 'Coopers Pale Ale (4.5%)',
-        description: '375ML bottle',
-        price: 989,
+        name: 'KF PREMIUM DRAUGHT BEER',
+        description: '330ML',
+        price: 127,
         category: 'Premium Ales & Brews'
       },
       {
         id: 'premium-ales-2',
+        name: 'KF ULTRA',
+        description: 'Premium Lager',
+        price: 189,
+        category: 'Premium Ales & Brews'
+      },
+      {
+        id: 'premium-ales-3',
+        name: 'KF ULTRA MAX',
+        description: 'Premium Lager',
+        price: 199,
+        category: 'Premium Ales & Brews'
+      },
+      {
+        id: 'premium-ales-4',
+        name: 'KF ULTRA WIT',
+        description: 'Premium Lager',
+        price: 269,
+        category: 'Premium Ales & Brews'
+      },
+      {
+        id: 'premium-ales-5',
+        name: 'Coopers Pale Ale (4.5%)',
+        description: '375ML bottle',
+        price: 127,
+        category: 'Premium Ales & Brews'
+      },
+      {
+        id: 'premium-ales-6',
         name: 'Corona Extra Lager (5%)',
         description: '330ML bottle',
-        price: 669,
+        price: 127,
         category: 'Premium Ales & Brews'
       },
 
       // Cocktails
       {
         id: 'cocktail-1',
-        name: 'Mimosa Margarita',
-        description: 'Sparkling Wine Based (Glass)',
-        price: 1896,
+        name: 'WHISKEY SOUR',
+        description: 'Modern Classics (Glass)',
+        price: 127,
         category: 'Cocktails'
       },
       {
         id: 'cocktail-2',
-        name: 'Whiskey Sour',
+        name: 'CAIPIROSKA',
         description: 'Modern Classics (Glass)',
-        price: 689,
+        price: 127,
         category: 'Cocktails'
       },
       {
         id: 'cocktail-3',
+        name: 'COSMOPOLITAN',
+        description: 'Modern Classics (Glass)',
+        price: 127,
+        category: 'Cocktails'
+      },
+      {
+        id: 'cocktail-4',
+        name: 'MOJITO',
+        description: 'Modern Classics (Glass)',
+        price: 127,
+        category: 'Cocktails'
+      },
+      {
+        id: 'cocktail-5',
+        name: 'DAIQUIRI',
+        description: 'Modern Classics (Glass)',
+        price: 127,
+        category: 'Cocktails'
+      },
+      {
+        id: 'cocktail-6',
+        name: 'GIMLET',
+        description: 'Modern Classics (Glass)',
+        price: 127,
+        category: 'Cocktails'
+      },
+      {
+        id: 'cocktail-7',
+        name: 'Mimosa Margarita',
+        description: 'Sparkling Wine Based (Glass)',
+        price: 127,
+        category: 'Cocktails'
+      },
+      {
+        id: 'cocktail-8',
         name: 'Mojito Classic',
         description: 'Modern Classics (Glass)',
-        price: 529,
+        price: 127,
         category: 'Cocktails'
       },
 
       // Mocktails
       {
         id: 'mocktail-1',
-        name: 'Spice Cooler',
+        name: 'MOJITO',
         description: 'Mocktails (Glass)',
-        price: 429,
+        price: 127,
         category: 'Mocktails'
       },
       {
         id: 'mocktail-2',
-        name: 'Nutty Dream',
+        name: 'BLUE ANGEL',
         description: 'Mocktails (Glass)',
-        price: 389,
+        price: 127,
         category: 'Mocktails'
       },
       {
         id: 'mocktail-3',
-        name: 'Mojito',
+        name: 'STRAWBERRY COLADA',
         description: 'Mocktails (Glass)',
-        price: 329,
+        price: 127,
+        category: 'Mocktails'
+      },
+      {
+        id: 'mocktail-4',
+        name: 'VIRGIN GUAVA MARRY',
+        description: 'Mocktails (Glass)',
+        price: 127,
+        category: 'Mocktails'
+      },
+      {
+        id: 'mocktail-5',
+        name: 'MANGO BLOOM',
+        description: 'Mocktails (Glass)',
+        price: 127,
+        category: 'Mocktails'
+      },
+      {
+        id: 'mocktail-6',
+        name: 'COLD PRESSED JUICES',
+        description: 'Mocktails (Glass)',
+        price: 127,
+        category: 'Mocktails'
+      },
+      {
+        id: 'mocktail-7',
+        name: 'Spice Cooler',
+        description: 'Mocktails (Glass)',
+        price: 127,
+        category: 'Mocktails'
+      },
+      {
+        id: 'mocktail-8',
+        name: 'Nutty Dream',
+        description: 'Mocktails (Glass)',
+        price: 127,
         category: 'Mocktails'
       }
     ]
@@ -1851,4 +1332,3 @@ export const menuData: { [key: string]: MenuData } = {
     ]
   }
 };
-

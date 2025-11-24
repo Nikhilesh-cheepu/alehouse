@@ -204,11 +204,12 @@ const MenuPage = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="pt-32 pb-16"
+        className="pb-16"
         style={{
           background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(184, 134, 11, 0.05) 50%, rgba(0, 0, 0, 0.95) 100%)',
           minHeight: '100vh',
-          position: 'relative'
+          position: 'relative',
+          paddingTop: 'clamp(7rem, 12vw, 9rem)'
         }}
       >
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
@@ -240,10 +241,21 @@ const MenuPage = () => {
               fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
               color: '#999999',
               maxWidth: '700px',
-              margin: '0 auto 2rem auto',
+              margin: '0 auto 1rem auto',
               lineHeight: '1.6'
             }}>
               From sizzling starters and gourmet mains to signature cocktails and mocktails, discover why ALEHOUSE is the perfect destination for exceptional food, drinks, and unforgettable experiences.
+            </p>
+            <p style={{
+              fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
+              color: '#e6c87a',
+              maxWidth: '700px',
+              margin: '0 auto 2rem auto',
+              lineHeight: '1.6',
+              fontWeight: '600',
+              marginTop: '1rem'
+            }}>
+              Eat and drink anything @127 from 12PM - 7PM
             </p>
             
             {/* Back to Home Button */}
@@ -254,6 +266,9 @@ const MenuPage = () => {
             >
               <Link 
                 href="/"
+                onClick={() => {
+                  localStorage.setItem('skipIntroOverlay', 'true');
+                }}
                 className="inline-flex items-center gap-2 px-4 py-2 text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-sm font-medium"
               >
                 <FaHome />
@@ -261,6 +276,64 @@ const MenuPage = () => {
               </Link>
             </motion.div>
           </motion.div>
+
+        {/* Menu Shortcuts */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.12 }}
+          viewport={{ once: true }}
+          className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-10 flex-wrap max-w-2xl mx-auto"
+        >
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => window.location.href = '/booking'}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+              minWidth: 'fit-content'
+            }}
+          >
+            Reserve Table
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => window.location.href = '/#gallery'}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+              minWidth: 'fit-content'
+            }}
+          >
+            View Gallery
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => {
+              localStorage.setItem('skipIntroOverlay', 'true');
+              window.location.href = '/';
+            }}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+              minWidth: 'fit-content'
+            }}
+          >
+            Back to Home
+          </motion.button>
+        </motion.div>
 
           {/* Menu Image Buttons */}
           <motion.div
@@ -276,22 +349,19 @@ const MenuPage = () => {
             }}
           >
             {/* Food Menu Button */}
-            <motion.button
-              onClick={() => {
-                const foodImages = [
-                  '/menu/FOOD/Ale House Food Menu copy_page-0001.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0002.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0003.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0004.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0005.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0006.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0007.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0008.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0009.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0010.jpg',
-                  '/menu/FOOD/Ale House Food Menu copy_page-0011.jpg'
-                ];
-                setSelectedMenuImages(foodImages);
+          <motion.button
+            onClick={() => {
+              const foodImages = [
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0001.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0002.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0003.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0004.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0005.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0006.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0007.jpg',
+                  '/menu/FOOD/Alehouse _MENU-20-11-2025_page-0008.jpg'
+              ];
+              setSelectedMenuImages(foodImages);
                 setSelectedMenuTitle('Food Menu');
                 setCurrentImageIndex(0);
                 setImageLoading(true);
@@ -354,7 +424,7 @@ const MenuPage = () => {
                   letterSpacing: '0.02em',
                   textTransform: 'uppercase'
                 }}>
-                  View Food Menu
+                  Food
                 </h3>
               </div>
             </motion.button>
@@ -433,7 +503,7 @@ const MenuPage = () => {
                   letterSpacing: '0.02em',
                   textTransform: 'uppercase'
                 }}>
-                  View Beverages Menu
+                  Beverage
                 </h3>
               </div>
             </motion.button>
@@ -442,11 +512,8 @@ const MenuPage = () => {
             <motion.button
               onClick={() => {
                 const happyHourImages = [
-                  '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0001.jpg',
-                  '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0002.jpg',
-                  '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0003.jpg',
-                  '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0004.jpg',
-                  '/menu/HAPPY HOURS/Ale House Happy Hour Menu copy_page-0005.jpg'
+                  '/menu/HAPPY HOURS/IMG_7673.PNG',
+                  '/menu/HAPPY HOURS/IMG_7674.PNG'
                 ];
                 setSelectedMenuImages(happyHourImages);
                 setSelectedMenuTitle('Happy Hour Menu');
@@ -511,7 +578,7 @@ const MenuPage = () => {
                   letterSpacing: '0.02em',
                   textTransform: 'uppercase'
                 }}>
-                  View Happy Hour Menu
+                  Happy Hours
                 </h3>
               </div>
             </motion.button>

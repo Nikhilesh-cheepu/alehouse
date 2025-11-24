@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import GoogleAdsTracking from "@/components/GoogleAdsTracking";
+import Navigation from "@/components/Navigation";
 
 export const metadata: Metadata = {
   title: "Alehouse - The Realm of Alehouse",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <GoogleAdsTracking />
       </head>
       <body className="antialiased font-cinzel">
+        <Navigation />
         {children}
         <Analytics />
       </body>

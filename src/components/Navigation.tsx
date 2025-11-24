@@ -97,7 +97,7 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
-    // Start audio when navigation is clicked
+    // Start audio when navigation is clicked (only if callback provided)
     if (onNavClick) {
       onNavClick();
     }
@@ -112,24 +112,16 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
     if (href.startsWith('/')) {
       // Navigate to a new page
       window.location.href = href;
-    } else {
-      // Handle hash links for smooth scrolling
-      const scrollToElement = () => {
-        const element = document.querySelector(href);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
-          
-          window.scrollTo({
-            top: elementTop,
-            behavior: 'smooth'
-          });
-        } else {
-          // Fallback: try getElementById
-          const elementById = document.getElementById(href.replace('#', ''));
-          if (elementById) {
-            const rect = elementById.getBoundingClientRect();
+    } else if (href.startsWith('#')) {
+      // Handle hash links - check if we're on home page
+      const currentPath = window.location.pathname;
+      
+      if (currentPath === '/' || currentPath === '') {
+        // We're on home page, scroll to section
+        const scrollToElement = () => {
+          const element = document.querySelector(href);
+          if (element) {
+            const rect = element.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
             
@@ -137,15 +129,31 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
               top: elementTop,
               behavior: 'smooth'
             });
+          } else {
+            // Fallback: try getElementById
+            const elementById = document.getElementById(href.replace('#', ''));
+            if (elementById) {
+              const rect = elementById.getBoundingClientRect();
+              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
+              
+              window.scrollTo({
+                top: elementTop,
+                behavior: 'smooth'
+              });
+            }
           }
+        };
+        
+        // Execute immediately for desktop, with delay for mobile
+        if (isMenuOpen) {
+          setTimeout(scrollToElement, 300);
+        } else {
+          scrollToElement();
         }
-      };
-      
-      // Execute immediately for desktop, with delay for mobile
-      if (isMenuOpen) {
-        setTimeout(scrollToElement, 300);
       } else {
-        scrollToElement();
+        // We're on a different page, navigate to home with hash
+        window.location.href = `/${href}`;
       }
     }
   };
@@ -161,10 +169,15 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
     window.location.href = '/booking';
   };
 
+  // Determine current page to set correct hrefs
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isHomePage = currentPath === '/' || currentPath === '';
+  
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
+    { name: 'Home', href: isHomePage ? '#home' : '/' },
+    { name: 'About', href: isHomePage ? '#about' : '/#about' },
     { name: 'Menu', href: '/menu' },
+    { name: 'Gallery', href: isHomePage ? '#gallery' : '/#gallery' },
   ];
 
   return (

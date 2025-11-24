@@ -469,7 +469,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       <Navigation />
       
       <section 
-        className="relative w-full flex items-center justify-center overflow-hidden bg-black pt-40 pb-16"
+        className="relative w-full flex items-center justify-center overflow-hidden bg-black pt-24 md:pt-32 pb-16"
         style={{
           minHeight: '100vh'
         }}
@@ -484,15 +484,23 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             className="text-center mb-8"
           >
             <h1 
-              className="text-4xl md:text-5xl font-bold mb-4 text-white"
+              className="text-2xl md:text-3xl font-bold mb-3 text-white"
               style={{ 
                 fontFamily: 'Game of Thrones, serif',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                fontSize: 'clamp(1.5rem, 4vw, 2rem)'
               }}
             >
               Book Your Table
             </h1>
-            <p className="text-gray-300 text-base md:text-lg max-w-2xl mx-auto font-medium mb-8" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+            <p 
+              className="text-gray-300 max-w-2xl mx-auto font-medium mb-6" 
+              style={{
+                textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                fontSize: 'clamp(0.75rem, 2vw, 1rem)',
+                lineHeight: '1.5'
+              }}
+            >
               Reserve your seat for an unforgettable medieval dining experience at AleHouse
             </p>
             
@@ -504,9 +512,15 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             >
               <Link 
                 href="/"
-                className="inline-flex items-center gap-2 px-4 py-2 text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-sm font-medium"
+                onClick={() => {
+                  localStorage.setItem('skipIntroOverlay', 'true');
+                }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-yellow-400 hover:text-yellow-300 transition-colors duration-300 font-medium"
+                style={{
+                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
+                }}
               >
-                <FaHome />
+                <FaHome className="text-xs" />
                 Back to Home
               </Link>
             </motion.div>
@@ -531,36 +545,43 @@ Please confirm my table reservation for this medieval dining experience. Thank y
               
               <form onSubmit={(e) => e.preventDefault()} className="relative z-10">
                 {/* Name Field */}
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-white mb-2">
+                <div className="mb-5">
+                  <label 
+                    className="block font-semibold text-white mb-1.5"
+                    style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
+                  >
                     Full Name *
                   </label>
                   <div className="relative">
-                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-yellow-400 text-sm" />
+                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-yellow-400" style={{ fontSize: '0.75rem' }} />
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Enter your full name"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-gray-400 focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300 text-base"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-gray-400 focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300"
                       style={{
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                        fontSize: 'clamp(0.75rem, 2vw, 1rem)'
                       }}
                     />
                   </div>
                   {errors.name && (
-                    <p className="text-red-400 text-xs mt-1">{errors.name}</p>
+                    <p className="text-red-400 mt-1" style={{ fontSize: '0.7rem' }}>{errors.name}</p>
                   )}
                 </div>
 
                 {/* Mobile Field */}
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-white mb-2">
+                <div className="mb-5">
+                  <label 
+                    className="block font-semibold text-white mb-1.5"
+                    style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
+                  >
                     Mobile Number *
                   </label>
                   <div className="relative">
-                    <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-yellow-400 text-sm" />
+                    <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-yellow-400" style={{ fontSize: '0.75rem' }} />
                     <input
                       type="tel"
                       name="mobile"
@@ -568,26 +589,33 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                       onChange={handleInputChange}
                       placeholder="Enter your 10-digit mobile number"
                       maxLength={10}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-gray-400 focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300 text-base"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-gray-400 focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300"
                       style={{
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                        fontSize: 'clamp(0.75rem, 2vw, 1rem)'
                       }}
                     />
                   </div>
                   {errors.mobile && (
-                    <p className="text-red-400 text-xs mt-1">{errors.mobile}</p>
+                    <p className="text-red-400 mt-1" style={{ fontSize: '0.7rem' }}>{errors.mobile}</p>
                   )}
                 </div>
 
                 {/* Guest Count Fields */}
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-yellow-300 mb-3" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+                <div className="mb-5">
+                  <label 
+                    className="block font-semibold text-yellow-300 mb-2" 
+                    style={{
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                      fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
+                    }}
+                  >
                     Guest Count *
                   </label>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-3">
                     {/* Men Count */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-300 mb-2">Men</label>
+                      <label className="block font-medium text-gray-300 mb-1.5" style={{ fontSize: '0.7rem' }}>Men</label>
                       <input
                         type="number"
                         name="men"
@@ -596,16 +624,17 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                         min="0"
                         max="20"
                         placeholder="0"
-                        className="w-full px-3 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white text-center focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300 text-base"
+                        className="w-full px-2 py-2 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white text-center focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300"
                         style={{
-                          textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                          textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                          fontSize: 'clamp(0.75rem, 2vw, 1rem)'
                         }}
                       />
                     </div>
 
                     {/* Women Count */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-300 mb-2">Women</label>
+                      <label className="block font-medium text-gray-300 mb-1.5" style={{ fontSize: '0.7rem' }}>Women</label>
                       <input
                         type="number"
                         name="women"
@@ -614,16 +643,17 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                         min="0"
                         max="20"
                         placeholder="0"
-                        className="w-full px-3 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white text-center focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300 text-base"
+                        className="w-full px-2 py-2 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white text-center focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300"
                         style={{
-                          textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                          textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                          fontSize: 'clamp(0.75rem, 2vw, 1rem)'
                         }}
                       />
                     </div>
 
                     {/* Couples Count */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-300 mb-2">Couples</label>
+                      <label className="block font-medium text-gray-300 mb-1.5" style={{ fontSize: '0.7rem' }}>Couples</label>
                       <input
                         type="number"
                         name="couples"
@@ -632,17 +662,21 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                         min="0"
                         max="10"
                         placeholder="0"
-                        className="w-full px-3 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white text-center focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300 text-base"
+                        className="w-full px-2 py-2 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white text-center focus:border-white/40 focus:bg-white/10 focus:outline-none transition-all duration-300"
                         style={{
-                          textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                          textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                          fontSize: 'clamp(0.75rem, 2vw, 1rem)'
                         }}
                       />
                     </div>
                   </div>
                   {errors.people && (
-                    <p className="text-red-400 text-xs mt-2">{errors.people}</p>
+                    <p className="text-red-400 mt-1.5" style={{ fontSize: '0.7rem' }}>{errors.people}</p>
                   )}
-                  <p className="text-gray-300 text-sm font-medium mt-3 text-center">
+                  <p 
+                    className="text-gray-300 font-medium mt-2 text-center"
+                    style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
+                  >
                     Total: {((parseInt(formData.men) || 0) + (parseInt(formData.women) || 0) + (parseInt(formData.couples) || 0) * 2)} people
                   </p>
                 </div>
@@ -652,13 +686,17 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Date Picker */}
                     <div data-dropdown className="relative">
-                      <label className="block text-sm font-semibold text-white mb-2">
+                      <label 
+                        className="block font-semibold text-white mb-1.5"
+                        style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
+                      >
                         Select Date *
                       </label>
                       <div className="relative">
                         <div
                           onClick={() => setShowCalendar(!showCalendar)}
-                          className="w-full p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white cursor-pointer transition-all duration-300 flex items-center justify-between hover:border-white/40 hover:bg-white/10 text-base"
+                          className="w-full p-2.5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white cursor-pointer transition-all duration-300 flex items-center justify-between hover:border-white/40 hover:bg-white/10"
+                          style={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
                         >
                           <span className={formData.date ? 'text-white' : 'text-gray-400'}>
                             {formData.date 
@@ -671,7 +709,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                               : 'Select Date'
                             }
                           </span>
-                          <FaCalendarAlt className="text-yellow-400 text-sm" />
+                          <FaCalendarAlt className="text-yellow-400" style={{ fontSize: '0.75rem' }} />
                         </div>
                         
                         {showCalendar && (
@@ -779,13 +817,17 @@ Please confirm my table reservation for this medieval dining experience. Thank y
 
                     {/* Time Picker */}
                     <div data-dropdown>
-                      <label className="block text-sm font-semibold text-white mb-2">
+                      <label 
+                        className="block font-semibold text-white mb-1.5"
+                        style={{ fontSize: 'clamp(0.75rem, 2vw, 0.875rem)' }}
+                      >
                         Select Time *
                       </label>
                       <div className="relative">
                         <div
                           onClick={() => setShowTimeDropdown(!showTimeDropdown)}
-                          className="w-full p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white cursor-pointer transition-all duration-300 flex items-center justify-between hover:border-white/40 hover:bg-white/10 text-base"
+                          className="w-full p-2.5 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white cursor-pointer transition-all duration-300 flex items-center justify-between hover:border-white/40 hover:bg-white/10"
+                          style={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
                         >
                           <span className={formData.time ? 'text-white' : 'text-gray-400'}>
                             {formData.time 
@@ -793,7 +835,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                               : 'Select Time'
                             }
                           </span>
-                          <FaClock className="text-yellow-400 text-sm" />
+                          <FaClock className="text-yellow-400" style={{ fontSize: '0.75rem' }} />
                         </div>
                         
                         {showTimeDropdown && (
@@ -826,7 +868,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                   type="button"
                   onClick={handleBookTable}
                   disabled={!isFormValid}
-                  className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
+                  className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                     isFormValid 
                       ? 'bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600' 
                       : 'bg-white/5 text-gray-400 cursor-not-allowed border border-white/10'
@@ -837,13 +879,81 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                   } : {}}
                   whileTap={isFormValid ? { scale: 0.98 } : {}}
                   style={{
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                    fontSize: 'clamp(0.75rem, 2vw, 1rem)'
                   }}
                 >
-                  <FaWhatsapp className="text-xl" />
+                  <FaWhatsapp style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }} />
                   {isFormValid ? 'Book Table via WhatsApp' : 'Fill all fields to book'}
                 </motion.button>
               </form>
+            </div>
+          </motion.div>
+
+          {/* Shortcuts Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 max-w-2xl mx-auto"
+          >
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <motion.button
+                onClick={() => window.location.href = '/menu'}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: '#ffffff',
+                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
+                }}
+              >
+                <FaUtensils style={{ fontSize: '0.875rem' }} />
+                View Menu
+              </motion.button>
+
+              <motion.button
+                onClick={() => {
+                  window.location.href = '/#gallery';
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: '#ffffff',
+                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
+                }}
+              >
+                <FaSearch style={{ fontSize: '0.875rem' }} />
+                Explore Gallery
+              </motion.button>
+
+              <motion.button
+                onClick={() => {
+                  try {
+                    localStorage.setItem('skipIntroOverlay', 'true');
+                  } catch (error) {
+                    console.warn('Unable to set skipIntroOverlay flag', error);
+                  }
+                  window.location.href = '/';
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: '#ffffff',
+                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
+                }}
+              >
+                <FaHome style={{ fontSize: '0.875rem' }} />
+                Go Back to Home
+              </motion.button>
             </div>
           </motion.div>
         </div>

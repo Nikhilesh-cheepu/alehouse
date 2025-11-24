@@ -9,6 +9,8 @@ import MenuSection from '@/components/MenuSection';
 import BookTableSection from '@/components/BookTableSection';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
+import LadiesDrinksPromo from '@/components/LadiesDrinksPromo';
+import GallerySection from '@/components/GallerySection';
 
 export default function Home() {
   const [isMuted, setIsMuted] = useState(false);
@@ -50,7 +52,22 @@ export default function Home() {
     }
   };
 
-  const [showOverlay, setShowOverlay] = useState(true);
+  // Check if we should skip overlay (from "Back to Home" links)
+  const [showOverlay, setShowOverlay] = useState(() => {
+    if (typeof window !== 'undefined') {
+      // Check URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('skipOverlay') === 'true') {
+        return false;
+      }
+      // Check localStorage
+      if (localStorage.getItem('skipIntroOverlay') === 'true') {
+        localStorage.removeItem('skipIntroOverlay');
+        return false;
+      }
+    }
+    return true;
+  });
 
   // Setup theme song but don't autoplay - wait for user interaction
   useEffect(() => {
@@ -85,11 +102,31 @@ export default function Home() {
     };
   }, []);
 
+  // Handle hash navigation (e.g., /#gallery)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      // Wait for page to load, then scroll to section
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const elementTop = rect.top + scrollTop - 100; // 100px offset for fixed nav
+          
+          window.scrollTo({
+            top: elementTop,
+            behavior: 'smooth'
+          });
+        }
+      }, 500);
+    }
+  }, []);
+
 
 
   return (
     <main className="bg-charcoal-900 m-0 p-0">
-      <Navigation onNavClick={handleNavClick} />
 
       <Hero 
         hasUserChosen={true}
@@ -99,10 +136,12 @@ export default function Home() {
         onNavClick={handleNavClick}
       />
 
+      <LadiesDrinksPromo />
       <CTASection />
       <BookTableSection />
       <AboutSection />
       <MenuSection />
+      <GallerySection />
 
       <AudioController
         isMuted={isMuted}
