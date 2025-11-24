@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import AudioController from '@/components/AudioController';
-import Navigation from '@/components/Navigation';
 import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
 import BookTableSection from '@/components/BookTableSection';

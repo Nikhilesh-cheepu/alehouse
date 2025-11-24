@@ -133,7 +133,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
 
       forcePlayHeroVoice();
     }
-  }, [exploreClicked]);
+  }, [exploreClicked, heroVoiceRef]);
 
   // Pause/Resume audio when switching tabs
   useEffect(() => {
@@ -156,7 +156,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [exploreClicked]);
+  }, [exploreClicked, heroVoiceRef]);
 
   // Start text animations only after user interaction
   useEffect(() => {
