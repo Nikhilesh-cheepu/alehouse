@@ -299,9 +299,10 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       <Navigation />
       
       <section 
-        className="relative w-full flex items-center justify-center overflow-hidden bg-black pt-24 md:pt-32 pb-16"
+        className="relative w-full flex items-center justify-center overflow-hidden bg-black pt-32 md:pt-40 pb-16"
         style={{
-          minHeight: '100vh'
+          minHeight: '100vh',
+          paddingTop: 'clamp(8rem, 15vw, 10rem)'
         }}
       >
         <div className="w-full max-w-5xl mx-auto px-4 md:px-8 relative z-10">
@@ -762,28 +763,6 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                 Explore Gallery
               </motion.button>
 
-              <motion.button
-                onClick={() => {
-                  try {
-                    localStorage.setItem('skipIntroOverlay', 'true');
-                  } catch (error) {
-                    console.warn('Unable to set skipIntroOverlay flag', error);
-                  }
-                  window.location.href = '/';
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: '#ffffff',
-                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
-                }}
-              >
-                <FaHome style={{ fontSize: '0.875rem' }} />
-                Go Back to Home
-              </motion.button>
             </div>
           </motion.div>
         </div>

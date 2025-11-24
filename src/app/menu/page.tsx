@@ -315,24 +315,6 @@ const MenuPage = () => {
           >
             View Gallery
           </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => {
-              localStorage.setItem('skipIntroOverlay', 'true');
-              window.location.href = '/';
-            }}
-            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: '#ffffff',
-              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
-              minWidth: 'fit-content'
-            }}
-          >
-            Back to Home
-          </motion.button>
         </motion.div>
 
           {/* Menu Image Buttons */}
