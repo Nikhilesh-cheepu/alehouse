@@ -36,6 +36,10 @@ const BookingPage = () => {
     window.location.href = '/';
   };
 
+  const handleInstagramView = () => {
+    window.open('https://www.instagram.com/alehouse.club?igsh=bW56NGR4YWRlZzNm&utm_source=qr', '_blank');
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -757,49 +761,32 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             </div>
           </motion.div>
 
-          {/* Explore Website Section */}
+          {/* Instagram Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45 }}
-            style={{ textAlign: 'center', marginTop: '2.5rem', marginBottom: '2rem' }}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '2.5rem',
+              marginBottom: '2rem'
+            }}
           >
-            <p style={{
-              fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
-              color: 'rgba(255, 255, 255, 0.7)',
-              marginBottom: '1rem',
-              fontStyle: 'italic'
-            }}>
-              Discover more about our medieval dining experience
-            </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                localStorage.setItem('skipIntroOverlay', 'true');
-                window.location.href = '/';
-              }}
-              className="relative px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 overflow-hidden"
+              whileTap={{ scale: 0.97 }}
+              onClick={handleInstagramView}
+              className="px-5 sm:px-6 py-3 rounded-full font-semibold tracking-[0.04em] transition-all duration-300"
               style={{
-                background: 'rgba(230, 200, 122, 0.08)',
-                border: '1px solid rgba(230, 200, 122, 0.5)',
-                color: '#e6c87a',
-                textShadow: '0 0 6px rgba(230, 200, 122, 0.4)',
-                boxShadow: '0 8px 25px rgba(230, 200, 122, 0.15)',
-                fontFamily: 'Game of Thrones, serif',
-                letterSpacing: '0.04em'
+                background: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                color: '#ffffff',
+                fontSize: 'clamp(0.85rem, 2vw, 1rem)',
+                letterSpacing: '0.05em'
               }}
             >
-              <span className="relative z-10">Explore Website</span>
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                animate={{ opacity: [0.35, 0.7, 0.35] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  background: 'radial-gradient(circle, rgba(230, 200, 122, 0.4) 0%, transparent 70%)',
-                  filter: 'blur(10px)'
-                }}
-              />
+              View our Instagram Profile
             </motion.button>
           </motion.div>
         </div>
