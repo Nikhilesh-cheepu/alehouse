@@ -320,10 +320,11 @@ Please confirm my table reservation for this medieval dining experience. Thank y
       <Navigation />
       
       <section 
-        className="relative w-full flex items-center justify-center overflow-hidden bg-black pt-32 md:pt-40 pb-16"
+        className="relative w-full flex items-center justify-center overflow-hidden bg-black pt-32 md:pt-40 pb-24"
         style={{
           minHeight: '100vh',
-          paddingTop: 'clamp(8rem, 15vw, 10rem)'
+          paddingTop: 'clamp(8rem, 15vw, 10rem)',
+          paddingBottom: 'clamp(3rem, 8vw, 5rem)'
         }}
       >
         <div className="w-full max-w-5xl mx-auto px-4 md:px-8 relative z-10">
@@ -783,18 +784,19 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             }}
           >
             <motion.button
-              whileHover={{ scale: 1.07, boxShadow: '0 12px 30px rgba(214, 41, 118, 0.45)' }}
+            whileHover={{ scale: 1.07, boxShadow: '0 12px 30px rgba(214, 41, 118, 0.45)' }}
               whileTap={{ scale: 0.96 }}
               onClick={handleInstagramView}
               className="px-6 sm:px-7 py-3.5 rounded-full font-semibold tracking-[0.05em] transition-all duration-300 uppercase"
               style={{
                 background: 'linear-gradient(120deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%)',
-                border: '1px solid rgba(255,255,255,0.25)',
+              border: 'none',
                 color: '#ffffff',
                 fontSize: 'clamp(0.85rem, 2vw, 1rem)',
                 letterSpacing: '0.08em',
-                boxShadow: '0 8px 20px rgba(214, 41, 118, 0.35)',
-                textShadow: '0 2px 6px rgba(0,0,0,0.35)'
+              boxShadow: '0 8px 22px rgba(214, 41, 118, 0.4)',
+              textShadow: '0 2px 6px rgba(0,0,0,0.35)',
+              outline: 'none'
               }}
             >
               Don&apos;t click here 😉

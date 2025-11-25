@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 interface NavigationProps {
   onNavClick?: () => void;
@@ -170,8 +171,8 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
   };
 
   // Determine current page to set correct hrefs
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-  const isHomePage = currentPath === '/' || currentPath === '';
+  const pathname = usePathname();
+  const isHomePage = pathname === '/' || pathname === '';
   
   const navLinks = [
     { name: 'Home', href: isHomePage ? '#home' : '/' },

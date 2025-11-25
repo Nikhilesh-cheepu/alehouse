@@ -224,12 +224,13 @@ const MenuPage = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="pb-16"
+        className="pb-24"
         style={{
           background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(184, 134, 11, 0.05) 50%, rgba(0, 0, 0, 0.95) 100%)',
           minHeight: '100vh',
           position: 'relative',
-          paddingTop: 'clamp(7rem, 12vw, 9rem)'
+          paddingTop: 'clamp(7rem, 12vw, 9rem)',
+          paddingBottom: 'clamp(4rem, 10vw, 6rem)'
         }}
       >
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
@@ -695,12 +696,13 @@ const MenuPage = () => {
             className="px-6 sm:px-7 py-3.5 rounded-full font-semibold tracking-[0.05em] transition-all duration-300 uppercase"
             style={{
               background: 'linear-gradient(120deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%)',
-              border: '1px solid rgba(255,255,255,0.25)',
+              border: 'none',
               color: '#ffffff',
               fontSize: 'clamp(0.85rem, 2vw, 1rem)',
               letterSpacing: '0.08em',
-              boxShadow: '0 8px 20px rgba(214, 41, 118, 0.35)',
-              textShadow: '0 2px 6px rgba(0,0,0,0.35)'
+              boxShadow: '0 8px 22px rgba(214, 41, 118, 0.4)',
+              textShadow: '0 2px 6px rgba(0,0,0,0.35)',
+              outline: 'none'
             }}
           >
             Don&apos;t click here 😉
