@@ -47,8 +47,8 @@ const LadiesDrinksPromo = () => {
         >
           <div className="flex flex-col items-center gap-4">
             <span className="uppercase tracking-[0.6em] text-xs md:text-sm text-white/70 font-semibold">Alehouse Signature Offer</span>
-            <motion.h2
-              style={{
+          <motion.h2
+            style={{
                 fontSize: 'clamp(3.5rem, 12vw, 6rem)',
                 color: '#ffffff',
                 fontFamily: '"Bebas Neue", "Arial Black", sans-serif',
@@ -227,7 +227,7 @@ const LadiesDrinksPromo = () => {
                       </motion.button>
                       <motion.button
                         className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all"
-                        style={{
+            style={{
                           background: 'rgba(255,255,255,0.08)',
                           border: `1px solid ${offer.accent}40`,
                           color: offer.accent
@@ -247,18 +247,29 @@ const LadiesDrinksPromo = () => {
             </div>
           </motion.div>
 
-          <div className="flex flex-col items-center gap-3 pt-6">
-            <p className="text-white/60 uppercase tracking-[0.4em] text-xs md:text-sm" style={{ fontFamily: '"Manrope", sans-serif' }}>
-              VIP Privileges • All Year Long
-            </p>
-            <div className="flex items-center gap-3 text-white/70 text-sm md:text-base" style={{ fontFamily: '"Manrope", sans-serif' }}>
-              <span className="text-white/40">No Passes</span>
-              <div className="w-6 h-px bg-white/20" />
-              <span className="text-white/40">No Vouchers</span>
-              <div className="w-6 h-px bg-white/20" />
-              <span className="text-white">Just tell them “ALEHOUSE EXPERIENCE”</span>
-            </div>
-          </div>
+          <motion.div
+            className="pt-6 flex justify-center"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.03, boxShadow: '0 10px 25px rgba(255, 20, 147, 0.35)' }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => { window.location.href = '/ladies-offers'; }}
+              className="rounded-full px-6 py-2 border border-pink-300/60 text-white tracking-widest uppercase font-bold"
+              style={{
+                fontFamily: '"Manrope", sans-serif',
+                fontSize: 'clamp(0.65rem, 2.5vw, 0.85rem)',
+                letterSpacing: '0.35em',
+                background: 'linear-gradient(120deg, rgba(255,105,180,0.25), rgba(255,20,147,0.15))',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Only click if you are a lady 💋
+            </motion.button>
+          </motion.div>
         </motion.div>
       </div>
     </section>

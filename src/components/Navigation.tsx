@@ -179,6 +179,7 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
     { name: 'About', href: isHomePage ? '#about' : '/#about' },
     { name: 'Menu', href: '/menu' },
     { name: 'Gallery', href: isHomePage ? '#gallery' : '/#gallery' },
+    { name: 'Only Ladies', href: '/ladies-offers' },
   ];
 
   return (
