@@ -129,65 +129,6 @@ const MenuPage = () => {
     setSelectedCategory('All');
   };
 
-  const handleHomeNavigation = () => {
-    try {
-      localStorage.setItem('skipIntroOverlay', 'true');
-    } catch (error) {
-      console.warn('Unable to set skipIntroOverlay flag', error);
-    }
-    window.location.href = '/';
-  };
-
-  const buttonThemes = {
-    gold: {
-      border: 'rgba(255, 215, 0, 0.65)',
-      text: '#FFE8A3',
-      shadow: 'rgba(255, 215, 0, 0.25)',
-      glow: 'rgba(255, 215, 0, 0.4)'
-    },
-    teal: {
-      border: 'rgba(0, 185, 255, 0.6)',
-      text: '#C7F1FF',
-      shadow: 'rgba(0, 185, 255, 0.2)',
-      glow: 'rgba(0, 185, 255, 0.35)'
-    },
-    ivory: {
-      border: 'rgba(230, 200, 122, 0.65)',
-      text: '#F0DDAD',
-      shadow: 'rgba(230, 200, 122, 0.25)',
-      glow: 'rgba(230, 200, 122, 0.4)'
-    },
-    lilac: {
-      border: 'rgba(186, 148, 255, 0.6)',
-      text: '#E5D8FF',
-      shadow: 'rgba(186, 148, 255, 0.22)',
-      glow: 'rgba(186, 148, 255, 0.35)'
-    },
-  };
-
-  const menuActions = [
-    {
-      label: 'Explore Book Table',
-      onClick: () => window.location.href = '/booking',
-      theme: 'gold'
-    },
-    {
-      label: 'View Gallery',
-      onClick: () => window.location.href = '/#gallery',
-      theme: 'teal'
-    },
-    {
-      label: 'Explore Website',
-      onClick: handleHomeNavigation,
-      theme: 'ivory'
-    },
-    {
-      label: 'Back to Home',
-      onClick: handleHomeNavigation,
-      theme: 'lilac'
-    }
-  ];
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -700,52 +641,6 @@ const MenuPage = () => {
             </motion.button>
           </motion.div>
 
-          {/* Bottom Action Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '0.85rem',
-              justifyContent: 'center',
-              marginBottom: '3rem'
-            }}
-          >
-            {menuActions.map((action) => {
-              const theme = buttonThemes[action.theme];
-              return (
-                <motion.button
-                  key={action.label}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={action.onClick}
-                  className="relative rounded-full font-semibold transition-all duration-300 overflow-hidden"
-                  style={{
-                    padding: '0.8rem 1.8rem',
-                    border: `1px solid ${theme.border}`,
-                    color: theme.text,
-                    background: 'rgba(0, 0, 0, 0.35)',
-                    boxShadow: `0 6px 18px ${theme.shadow}`,
-                    letterSpacing: '0.04em',
-                    fontSize: 'clamp(0.85rem, 2vw, 0.95rem)'
-                  }}
-                >
-                  <span className="relative z-10">{action.label}</span>
-                  <motion.div
-                    className="absolute inset-0 rounded-full"
-                    animate={{ opacity: [0.25, 0.6, 0.25] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{
-                      background: `radial-gradient(circle, ${theme.glow} 0%, transparent 70%)`,
-                      filter: 'blur(10px)'
-                    }}
-                  />
-                </motion.button>
-              );
-            })}
-          </motion.div>
         </div>
 
         {/* Menu Image Popup Modal */}
