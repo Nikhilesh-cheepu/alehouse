@@ -774,19 +774,21 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             }}
           >
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.07, boxShadow: '0 12px 30px rgba(214, 41, 118, 0.45)' }}
+              whileTap={{ scale: 0.96 }}
               onClick={handleInstagramView}
-              className="px-5 sm:px-6 py-3 rounded-full font-semibold tracking-[0.04em] transition-all duration-300"
+              className="px-6 sm:px-7 py-3.5 rounded-full font-semibold tracking-[0.05em] transition-all duration-300 uppercase"
               style={{
-                background: 'rgba(255,255,255,0.07)',
+                background: 'linear-gradient(120deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%)',
                 border: '1px solid rgba(255,255,255,0.25)',
                 color: '#ffffff',
                 fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-                letterSpacing: '0.05em'
+                letterSpacing: '0.08em',
+                boxShadow: '0 8px 20px rgba(214, 41, 118, 0.35)',
+                textShadow: '0 2px 6px rgba(0,0,0,0.35)'
               }}
             >
-              View our Instagram Profile
+              Don&apos;t click here 😉
             </motion.button>
           </motion.div>
         </div>

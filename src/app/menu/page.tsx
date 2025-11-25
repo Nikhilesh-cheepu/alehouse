@@ -138,6 +138,10 @@ const MenuPage = () => {
     window.location.href = '/';
   };
 
+  const handleInstagramView = () => {
+    window.open('https://www.instagram.com/alehouse.club?igsh=bW56NGR4YWRlZzNm&utm_source=qr', '_blank');
+  };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -664,6 +668,36 @@ const MenuPage = () => {
               Full Menu & Order
             </motion.button>
           </motion.div>
+
+        {/* Instagram Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '4rem'
+          }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.07, boxShadow: '0 12px 30px rgba(214, 41, 118, 0.45)' }}
+            whileTap={{ scale: 0.96 }}
+            onClick={handleInstagramView}
+            className="px-6 sm:px-7 py-3.5 rounded-full font-semibold tracking-[0.05em] transition-all duration-300 uppercase"
+            style={{
+              background: 'linear-gradient(120deg, #feda75 0%, #fa7e1e 20%, #d62976 45%, #962fbf 70%, #4f5bd5 100%)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              color: '#ffffff',
+              fontSize: 'clamp(0.85rem, 2vw, 1rem)',
+              letterSpacing: '0.08em',
+              boxShadow: '0 8px 20px rgba(214, 41, 118, 0.35)',
+              textShadow: '0 2px 6px rgba(0,0,0,0.35)'
+            }}
+          >
+            Don&apos;t click here 😉
+          </motion.button>
+        </motion.div>
 
         </div>
 
