@@ -36,6 +36,15 @@ const BookingPage = () => {
     window.location.href = '/';
   };
 
+  const handleGalleryNavigation = () => {
+    try {
+      localStorage.setItem('skipIntroOverlay', 'true');
+    } catch (error) {
+      console.warn('Unable to set skipIntroOverlay flag', error);
+    }
+    window.location.href = '/#gallery';
+  };
+
   const handleInstagramView = () => {
     window.open('https://www.instagram.com/alehouse.club?igsh=bW56NGR4YWRlZzNm&utm_source=qr', '_blank');
   };
@@ -366,7 +375,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => window.location.href = '/#gallery'}
+                onClick={handleGalleryNavigation}
                 className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
                 style={{
                   background: 'rgba(255,255,255,0.08)',
