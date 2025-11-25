@@ -107,6 +107,15 @@ const LadiesOffersPage = () => {
                 </span>
               ))}
             </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-white/70 text-xs md:text-sm uppercase tracking-[0.2em]"
+              style={{ fontFamily: '"Manrope", sans-serif', marginTop: '0.5rem' }}
+            >
+              Arrive before 10:30 PM to glide straight in; post 10:30 it&apos;s just ₹400 to keep the unlimited story going.
+            </motion.p>
           </motion.div>
 
           <div className="flex justify-center">
@@ -132,7 +141,7 @@ const LadiesOffersPage = () => {
                   {offer.title}
                 </h2>
                 <p className="text-white/75 text-base leading-relaxed">
-                  No passes, no awkward questions—just show up, own the night, and we&apos;ll keep your glass full all the way to close.
+                  No passes, no awkward questions—just show up before 10:30 PM and the night is fully on us. Running fashionably late? A simple ₹400 keeps the unlimited pours flowing.
                 </p>
                 <div className="pt-3 border-t border-white/10">
                   <span className="text-[0.65rem] uppercase tracking-[0.3em] text-white/50">Mood</span>

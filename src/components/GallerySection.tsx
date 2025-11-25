@@ -5,21 +5,77 @@ import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-// Gallery images - you can add more images here
 const galleryImages = [
   {
     id: 1,
-    src: '/About bg.jpeg',
-    alt: 'AleHouse Interior',
-    category: 'Interior'
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (1).jpeg',
+    alt: 'AleHouse night lights',
+    category: 'Nights',
+    gridClass: 'md:col-span-6 md:row-span-2 h-[320px]'
   },
   {
     id: 2,
-    src: '/logo/alehouse-logo.png',
-    alt: 'AleHouse Logo',
-    category: 'Brand'
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (2).jpeg',
+    alt: 'Pouring cocktails',
+    category: 'Craft Bar',
+    gridClass: 'md:col-span-3 h-[220px]'
   },
-  // Add more images as needed
+  {
+    id: 3,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (3).jpeg',
+    alt: 'Live band session',
+    category: 'Experience',
+    gridClass: 'md:col-span-3 h-[220px]'
+  },
+  {
+    id: 4,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (4).jpeg',
+    alt: 'Candle lit table',
+    category: 'Dining',
+    gridClass: 'md:col-span-4 md:row-span-2 h-[320px]'
+  },
+  {
+    id: 5,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (6).jpeg',
+    alt: 'DJ console',
+    category: 'Music',
+    gridClass: 'md:col-span-4 h-[220px]'
+  },
+  {
+    id: 6,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (7).jpeg',
+    alt: 'Signature shot line',
+    category: 'Bar',
+    gridClass: 'md:col-span-4 h-[220px]'
+  },
+  {
+    id: 7,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (9).jpeg',
+    alt: 'Happy guests',
+    category: 'People',
+    gridClass: 'md:col-span-6 md:row-span-2 h-[320px]'
+  },
+  {
+    id: 8,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (11).jpeg',
+    alt: 'AleHouse facade',
+    category: 'Exterior',
+    gridClass: 'md:col-span-3 h-[220px]'
+  },
+  {
+    id: 9,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (12).jpeg',
+    alt: 'Dance floor energy',
+    category: 'Nights',
+    gridClass: 'md:col-span-3 h-[220px]'
+  },
+  {
+    id: 10,
+    src: '/gallery/WhatsApp Image 2025-08-23 at 00.27.41 (14).jpeg',
+    alt: 'Intimate booth',
+    category: 'Lounge',
+    gridClass: 'md:col-span-4 md:row-span-2 h-[320px]'
+  }
 ];
 
 const GallerySection = () => {
@@ -71,7 +127,16 @@ const GallerySection = () => {
       id="gallery"
       className="relative w-full py-16 md:py-24 overflow-hidden bg-black"
     >
-      <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-70"
+        style={{
+          background: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 65%), radial-gradient(circle at 80% 0%, rgba(255,215,0,0.08), transparent 60%)'
+        }}
+      />
+      <div className="absolute top-0 bottom-0 left-0 w-20 bg-gradient-to-r from-black via-black/90 to-transparent pointer-events-none hidden lg:block" />
+      <div className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-black via-black/90 to-transparent pointer-events-none hidden lg:block" />
+
+      <div className="relative w-full max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -110,35 +175,33 @@ const GallerySection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          className="rounded-[32px] overflow-hidden border border-white/10 backdrop-blur-xl shadow-[0_25px_60px_rgba(0,0,0,0.35)]"
         >
-          {galleryImages.map((image, index) => (
-            <motion.div
-              key={image.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.05 }}
-              onClick={() => setSelectedImage(index)}
-              className="relative aspect-square rounded-xl overflow-hidden cursor-pointer group"
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)'
-              }}
-            >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-110"
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">View</span>
-              </div>
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[200px] gap-0">
+            {galleryImages.map((image, index) => (
+              <motion.div
+                key={image.id}
+                initial={{ opacity: 0, scale: 0.92 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                viewport={{ once: true }}
+                onClick={() => setSelectedImage(index)}
+                className={`relative overflow-hidden cursor-pointer group ${image.gridClass || 'md:col-span-3'} h-full`}
+                style={{
+                  background: 'rgba(0,0,0,0.35)'
+                }}
+              >
+                <Image
+                  src={encodeURI(image.src)}
+                  alt={image.alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Image Modal */}
@@ -198,7 +261,7 @@ const GallerySection = () => {
                   </div>
                 )}
                 <Image
-                  src={galleryImages[selectedImage].src}
+                  src={encodeURI(galleryImages[selectedImage].src)}
                   alt={galleryImages[selectedImage].alt}
                   fill
                   className="object-contain"

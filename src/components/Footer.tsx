@@ -91,6 +91,24 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
+
+            {/* Ladies Night Courtesy */}
+            <div className="bg-white/5 backdrop-blur-sm border border-yellow-500/20 rounded-lg p-4 md:p-6">
+              <h3 className="text-lg md:text-xl font-bold text-yellow-300 mb-3 flex items-center gap-2">
+                <span className="text-2xl">💃</span>
+                <span>5. Ladies Night Courtesy</span>
+              </h3>
+              <ul className="space-y-2 text-gray-300 text-sm md:text-base">
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-500 mt-1">•</span>
+                  <span>We encourage our queens to arrive before 10:30 PM to enjoy complimentary entry and unlimited drinks without any waiting.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-500 mt-1">•</span>
+                  <span>Walking in after 10:30 PM? No worries—there&apos;s a simple ₹400 cover that still unlocks unlimited free drinks for the night.</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </motion.div>
 
