@@ -27,6 +27,15 @@ const BookingPage = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
 
+  const handleHomeNavigation = () => {
+    try {
+      localStorage.setItem('skipIntroOverlay', 'true');
+    } catch (error) {
+      console.warn('Unable to set skipIntroOverlay flag', error);
+    }
+    window.location.href = '/';
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -333,7 +342,55 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             >
               Reserve your seat for an unforgettable medieval dining experience at AleHouse
             </p>
-            
+
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap max-w-2xl mx-auto mb-6">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => window.location.href = '/menu'}
+                className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255, 215, 0, 0.6)',
+                  color: '#ffffff',
+                  fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+                  minWidth: 'fit-content'
+                }}
+              >
+                View Menu
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => window.location.href = '/#gallery'}
+                className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+                style={{
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(64, 224, 208, 0.6)',
+                  color: '#ffffff',
+                  fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+                  minWidth: 'fit-content'
+                }}
+              >
+                Explore Gallery
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleHomeNavigation}
+                className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(186, 148, 255, 0.6)',
+                  color: '#ffffff',
+                  fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
+                  minWidth: 'fit-content'
+                }}
+              >
+                Back to Home
+              </motion.button>
+            </div>
+
           </motion.div>
 
           {/* Booking Form */}
