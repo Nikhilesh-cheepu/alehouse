@@ -721,30 +721,55 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             </div>
           </motion.div>
 
-          {/* Shortcuts Section */}
+          {/* View Menu Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 max-w-2xl mx-auto"
+            style={{ textAlign: 'center', marginTop: '2rem', marginBottom: '2rem' }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.location.href = '/menu'}
+              className="relative px-8 sm:px-12 py-4 sm:py-5 rounded-full font-bold text-lg sm:text-xl transition-all duration-300 overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%)',
+                border: '2px solid rgba(255, 215, 0, 0.5)',
+                color: '#FFD700',
+                textShadow: '0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3)',
+                boxShadow: '0 0 20px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1)',
+                fontFamily: 'Manrope, sans-serif',
+                letterSpacing: '0.05em'
+              }}
+            >
+              <span className="relative z-10">View Menu</span>
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                animate={{
+                  opacity: [0.4, 0.8, 0.4],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut'
+                }}
+                style={{
+                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%)',
+                  filter: 'blur(12px)',
+                }}
+              />
+            </motion.button>
+          </motion.div>
+
+          {/* Shortcuts Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="mt-4 max-w-2xl mx-auto"
           >
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <motion.button
-                onClick={() => window.location.href = '/menu'}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: '#ffffff',
-                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
-                }}
-              >
-                <FaUtensils style={{ fontSize: '0.875rem' }} />
-                View Menu
-              </motion.button>
-
               <motion.button
                 onClick={() => {
                   window.location.href = '/#gallery';
@@ -762,8 +787,59 @@ Please confirm my table reservation for this medieval dining experience. Thank y
                 <FaSearch style={{ fontSize: '0.875rem' }} />
                 Explore Gallery
               </motion.button>
-
             </div>
+          </motion.div>
+
+          {/* Explore Website Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            style={{ textAlign: 'center', marginTop: '3rem', marginBottom: '2rem' }}
+          >
+            <p style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+              color: 'rgba(255, 255, 255, 0.7)',
+              marginBottom: '1rem',
+              fontStyle: 'italic'
+            }}>
+              Discover more about our medieval dining experience
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                localStorage.setItem('skipIntroOverlay', 'true');
+                window.location.href = '/';
+              }}
+              className="relative px-8 sm:px-12 py-4 sm:py-5 rounded-full font-bold text-lg sm:text-xl transition-all duration-300 overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, rgba(230, 200, 122, 0.2) 0%, rgba(212, 175, 55, 0.2) 100%)',
+                border: '2px solid rgba(230, 200, 122, 0.5)',
+                color: '#e6c87a',
+                textShadow: '0 0 10px rgba(230, 200, 122, 0.5), 0 0 20px rgba(230, 200, 122, 0.3)',
+                boxShadow: '0 0 20px rgba(230, 200, 122, 0.3), inset 0 0 20px rgba(230, 200, 122, 0.1)',
+                fontFamily: 'Game of Thrones, serif',
+                letterSpacing: '0.05em'
+              }}
+            >
+              <span className="relative z-10">Explore Website</span>
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                animate={{
+                  opacity: [0.4, 0.8, 0.4],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut'
+                }}
+                style={{
+                  background: 'radial-gradient(circle, rgba(230, 200, 122, 0.4) 0%, transparent 70%)',
+                  filter: 'blur(12px)',
+                }}
+              />
+            </motion.button>
           </motion.div>
         </div>
       </section>
