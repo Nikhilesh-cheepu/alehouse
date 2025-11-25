@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp, FaHome, FaSearch, FaUtensils } from 'react-icons/fa';
+import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp, FaSearch, FaUtensils } from 'react-icons/fa';
 import { track } from '@vercel/analytics';
 import { trackConversion } from '@/lib/gtag';
-import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 
 interface TimeOption {
@@ -27,6 +26,65 @@ const BookingPage = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showTimeDropdown, setShowTimeDropdown] = useState(false);
+
+  const handleHomeNavigation = () => {
+    try {
+      localStorage.setItem('skipIntroOverlay', 'true');
+    } catch (error) {
+      console.warn('Unable to set skipIntroOverlay flag', error);
+    }
+    window.location.href = '/';
+  };
+
+  const buttonThemes = {
+    gold: {
+      border: 'rgba(255, 215, 0, 0.65)',
+      text: '#FFE8A3',
+      shadow: 'rgba(255, 215, 0, 0.25)',
+      glow: 'rgba(255, 215, 0, 0.4)'
+    },
+    teal: {
+      border: 'rgba(0, 185, 255, 0.6)',
+      text: '#C7F1FF',
+      shadow: 'rgba(0, 185, 255, 0.2)',
+      glow: 'rgba(0, 185, 255, 0.35)'
+    },
+    ivory: {
+      border: 'rgba(230, 200, 122, 0.65)',
+      text: '#F0DDAD',
+      shadow: 'rgba(230, 200, 122, 0.25)',
+      glow: 'rgba(230, 200, 122, 0.4)'
+    },
+    lilac: {
+      border: 'rgba(186, 148, 255, 0.6)',
+      text: '#E5D8FF',
+      shadow: 'rgba(186, 148, 255, 0.22)',
+      glow: 'rgba(186, 148, 255, 0.35)'
+    },
+  };
+
+  const bookingActions = [
+    {
+      label: 'View Menu',
+      onClick: () => window.location.href = '/menu',
+      theme: 'gold'
+    },
+    {
+      label: 'Explore Gallery',
+      onClick: () => window.location.href = '/#gallery',
+      theme: 'teal'
+    },
+    {
+      label: 'Explore Website',
+      onClick: handleHomeNavigation,
+      theme: 'ivory'
+    },
+    {
+      label: 'Back to Home',
+      onClick: handleHomeNavigation,
+      theme: 'lilac'
+    }
+  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -335,26 +393,6 @@ Please confirm my table reservation for this medieval dining experience. Thank y
               Reserve your seat for an unforgettable medieval dining experience at AleHouse
             </p>
             
-            {/* Back to Home Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Link 
-                href="/"
-                onClick={() => {
-                  localStorage.setItem('skipIntroOverlay', 'true');
-                }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-yellow-400 hover:text-yellow-300 transition-colors duration-300 font-medium"
-                style={{
-                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
-                }}
-              >
-                <FaHome className="text-xs" />
-                Back to Home
-              </Link>
-            </motion.div>
           </motion.div>
 
           {/* Booking Form */}
@@ -721,67 +759,52 @@ Please confirm my table reservation for this medieval dining experience. Thank y
             </div>
           </motion.div>
 
-          {/* Shortcuts Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-4 max-w-2xl mx-auto"
-          >
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <motion.button
-                onClick={() => {
-                  window.location.href = '/#gallery';
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: '#ffffff',
-                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)'
-                }}
-              >
-                <FaSearch style={{ fontSize: '0.875rem' }} />
-                Explore Gallery
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* View Menu Button */}
+          {/* Bottom Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            style={{ textAlign: 'center', marginTop: '2rem', marginBottom: '1.5rem' }}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.85rem',
+              justifyContent: 'center',
+              marginTop: '2rem',
+              marginBottom: '2.5rem'
+            }}
           >
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => window.location.href = '/menu'}
-              className="relative px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 overflow-hidden"
-              style={{
-                background: 'rgba(255, 215, 0, 0.08)',
-                border: '1px solid rgba(255, 215, 0, 0.5)',
-                color: '#FFD700',
-                textShadow: '0 0 6px rgba(255, 215, 0, 0.4)',
-                boxShadow: '0 8px 25px rgba(255, 215, 0, 0.15)',
-                fontFamily: 'Manrope, sans-serif',
-                letterSpacing: '0.04em'
-              }}
-            >
-              <span className="relative z-10">View Menu</span>
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                animate={{ opacity: [0.35, 0.7, 0.35] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%)',
-                  filter: 'blur(10px)'
-                }}
-              />
-            </motion.button>
+            {bookingActions.map((action) => {
+              const theme = buttonThemes[action.theme];
+              return (
+                <motion.button
+                  key={action.label}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={action.onClick}
+                  className="relative rounded-full font-semibold transition-all duration-300 overflow-hidden"
+                  style={{
+                    padding: '0.8rem 1.8rem',
+                    border: `1px solid ${theme.border}`,
+                    color: theme.text,
+                    background: 'rgba(0, 0, 0, 0.35)',
+                    boxShadow: `0 6px 18px ${theme.shadow}`,
+                    letterSpacing: '0.04em',
+                    fontSize: 'clamp(0.85rem, 2vw, 0.95rem)'
+                  }}
+                >
+                  <span className="relative z-10">{action.label}</span>
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    animate={{ opacity: [0.25, 0.6, 0.25] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{
+                      background: `radial-gradient(circle, ${theme.glow} 0%, transparent 70%)`,
+                      filter: 'blur(10px)'
+                    }}
+                  />
+                </motion.button>
+              );
+            })}
           </motion.div>
 
           {/* Explore Website Section */}

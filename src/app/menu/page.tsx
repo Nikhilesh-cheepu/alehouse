@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes, FaPlus, FaHome } from 'react-icons/fa';
+import { FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
 import { menuData, MenuItem } from '@/data/menuData';
 import Image from 'next/image';
-import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 
 interface CartItem extends MenuItem {
@@ -129,6 +128,65 @@ const MenuPage = () => {
     setSearchTerm('');
     setSelectedCategory('All');
   };
+
+  const handleHomeNavigation = () => {
+    try {
+      localStorage.setItem('skipIntroOverlay', 'true');
+    } catch (error) {
+      console.warn('Unable to set skipIntroOverlay flag', error);
+    }
+    window.location.href = '/';
+  };
+
+  const buttonThemes = {
+    gold: {
+      border: 'rgba(255, 215, 0, 0.65)',
+      text: '#FFE8A3',
+      shadow: 'rgba(255, 215, 0, 0.25)',
+      glow: 'rgba(255, 215, 0, 0.4)'
+    },
+    teal: {
+      border: 'rgba(0, 185, 255, 0.6)',
+      text: '#C7F1FF',
+      shadow: 'rgba(0, 185, 255, 0.2)',
+      glow: 'rgba(0, 185, 255, 0.35)'
+    },
+    ivory: {
+      border: 'rgba(230, 200, 122, 0.65)',
+      text: '#F0DDAD',
+      shadow: 'rgba(230, 200, 122, 0.25)',
+      glow: 'rgba(230, 200, 122, 0.4)'
+    },
+    lilac: {
+      border: 'rgba(186, 148, 255, 0.6)',
+      text: '#E5D8FF',
+      shadow: 'rgba(186, 148, 255, 0.22)',
+      glow: 'rgba(186, 148, 255, 0.35)'
+    },
+  };
+
+  const menuActions = [
+    {
+      label: 'Explore Book Table',
+      onClick: () => window.location.href = '/booking',
+      theme: 'gold'
+    },
+    {
+      label: 'View Gallery',
+      onClick: () => window.location.href = '/#gallery',
+      theme: 'teal'
+    },
+    {
+      label: 'Explore Website',
+      onClick: handleHomeNavigation,
+      theme: 'ivory'
+    },
+    {
+      label: 'Back to Home',
+      onClick: handleHomeNavigation,
+      theme: 'lilac'
+    }
+  ];
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -277,23 +335,6 @@ const MenuPage = () => {
               About the errors in food section menu and we are working on it to resolve it as soon as possible.
             </motion.p>
             
-            {/* Back to Home Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <Link 
-                href="/"
-                onClick={() => {
-                  localStorage.setItem('skipIntroOverlay', 'true');
-                }}
-                className="inline-flex items-center gap-2 px-4 py-2 text-yellow-400 hover:text-yellow-300 transition-colors duration-300 text-sm font-medium"
-              >
-                <FaHome />
-                Back to Home
-              </Link>
-            </motion.div>
           </motion.div>
 
         {/* Menu Shortcuts */}
@@ -659,78 +700,51 @@ const MenuPage = () => {
             </motion.button>
           </motion.div>
 
-          {/* Explore Buttons (Bottom) */}
+          {/* Bottom Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            style={{ textAlign: 'center', marginBottom: '3rem' }}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.85rem',
+              justifyContent: 'center',
+              marginBottom: '3rem'
+            }}
           >
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => window.location.href = '/booking'}
-              className="relative px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 overflow-hidden mb-3"
-              style={{
-                background: 'rgba(255, 215, 0, 0.08)',
-                border: '1px solid rgba(255, 215, 0, 0.5)',
-                color: '#FFD700',
-                textShadow: '0 0 6px rgba(255, 215, 0, 0.4)',
-                boxShadow: '0 8px 25px rgba(255, 215, 0, 0.15)',
-                fontFamily: 'Manrope, sans-serif',
-                letterSpacing: '0.04em'
-              }}
-            >
-              <span className="relative z-10">Explore Book Table</span>
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                animate={{ opacity: [0.35, 0.7, 0.35] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  background: 'radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%)',
-                  filter: 'blur(10px)'
-                }}
-              />
-            </motion.button>
-
-            <p style={{
-              fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
-              color: 'rgba(255,255,255,0.7)',
-              marginBottom: '0.75rem',
-              fontStyle: 'italic'
-            }}>
-              Discover more about our medieval dining experience
-            </p>
-
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => {
-                localStorage.setItem('skipIntroOverlay', 'true');
-                window.location.href = '/';
-              }}
-              className="relative px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 overflow-hidden"
-              style={{
-                background: 'rgba(230, 200, 122, 0.08)',
-                border: '1px solid rgba(230, 200, 122, 0.5)',
-                color: '#e6c87a',
-                textShadow: '0 0 6px rgba(230, 200, 122, 0.4)',
-                boxShadow: '0 8px 25px rgba(230, 200, 122, 0.15)',
-                fontFamily: 'Game of Thrones, serif',
-                letterSpacing: '0.04em'
-              }}
-            >
-              <span className="relative z-10">Explore Website</span>
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                animate={{ opacity: [0.35, 0.7, 0.35] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  background: 'radial-gradient(circle, rgba(230, 200, 122, 0.4) 0%, transparent 70%)',
-                  filter: 'blur(10px)'
-                }}
-              />
-            </motion.button>
+            {menuActions.map((action) => {
+              const theme = buttonThemes[action.theme];
+              return (
+                <motion.button
+                  key={action.label}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={action.onClick}
+                  className="relative rounded-full font-semibold transition-all duration-300 overflow-hidden"
+                  style={{
+                    padding: '0.8rem 1.8rem',
+                    border: `1px solid ${theme.border}`,
+                    color: theme.text,
+                    background: 'rgba(0, 0, 0, 0.35)',
+                    boxShadow: `0 6px 18px ${theme.shadow}`,
+                    letterSpacing: '0.04em',
+                    fontSize: 'clamp(0.85rem, 2vw, 0.95rem)'
+                  }}
+                >
+                  <span className="relative z-10">{action.label}</span>
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    animate={{ opacity: [0.25, 0.6, 0.25] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{
+                      background: `radial-gradient(circle, ${theme.glow} 0%, transparent 70%)`,
+                      filter: 'blur(10px)'
+                    }}
+                  />
+                </motion.button>
+              );
+            })}
           </motion.div>
         </div>
 
