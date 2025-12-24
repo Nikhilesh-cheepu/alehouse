@@ -30,8 +30,7 @@ export default function Home() {
   };
 
   const handleNavClick = () => {
-    // Dismiss overlay and start audio when navigation is clicked
-    setShowOverlay(false);
+    // Start audio when navigation is clicked
     if (themeSongRef.current) {
       themeSongRef.current.play().catch(() => {});
     }
@@ -41,8 +40,7 @@ export default function Home() {
   };
 
   const handleExploreClick = () => {
-    // Dismiss overlay and start audio when explore button is clicked
-    setShowOverlay(false);
+    // Start audio when explore button is clicked
     if (themeSongRef.current) {
       themeSongRef.current.play().catch(() => {});
     }
@@ -51,22 +49,8 @@ export default function Home() {
     }
   };
 
-  // Check if we should skip overlay (from "Back to Home" links)
-  const [showOverlay, setShowOverlay] = useState(() => {
-    if (typeof window !== 'undefined') {
-      // Check URL parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('skipOverlay') === 'true') {
-        return false;
-      }
-      // Check localStorage
-      if (localStorage.getItem('skipIntroOverlay') === 'true') {
-        localStorage.removeItem('skipIntroOverlay');
-        return false;
-      }
-    }
-    return true;
-  });
+  // No overlay - videos play directly
+  const [showOverlay] = useState(false);
 
   // Setup theme song but don't autoplay - wait for user interaction
   useEffect(() => {

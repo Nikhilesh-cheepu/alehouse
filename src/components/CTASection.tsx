@@ -3,6 +3,52 @@
 import { motion } from 'framer-motion';
 import { FaPhone, FaWhatsapp, FaMapMarkerAlt } from 'react-icons/fa';
 
+interface Beer {
+  id: number;
+  name: string;
+  type: string;
+  video: string;
+}
+
+const beers: Beer[] = [
+  {
+    id: 1,
+    name: 'Witbier',
+    type: 'Craft Beer',
+    video: '/6 BEERS/WITBIER.mp4',
+  },
+  {
+    id: 2,
+    name: 'Indian Pale Lager',
+    type: 'Bottle Beer',
+    video: '/6 BEERS/INDIAN PALE LAGER.mp4',
+  },
+  {
+    id: 3,
+    name: 'Hefeweizen',
+    type: 'Craft Beer',
+    video: '/6 BEERS/Hefeweizen.mp4',
+  },
+  {
+    id: 4,
+    name: 'Dunkel Weissbier',
+    type: 'Craft Beer',
+    video: '/6 BEERS/DUNKEL WEISSBIER.mp4',
+  },
+  {
+    id: 5,
+    name: 'Blonde Ale',
+    type: 'Craft Beer',
+    video: '/6 BEERS/BLONDE ALE.mp4',
+  },
+  {
+    id: 6,
+    name: 'American Adjutant Lager',
+    type: 'Bottle Beer',
+    video: '/6 BEERS/AMERICAN ADJUTANT LAGER.mp4',
+  },
+];
+
 const CTASection = () => {
   const handleCall = () => {
     window.open('tel:+918096060606', '_self');
@@ -65,6 +111,72 @@ const CTASection = () => {
               >
                 BOTTLE BEERS
               </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Beer Showcase */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="mb-8 md:mb-12"
+        >
+          {/* Desktop: Grid Layout */}
+          <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+            {beers.map((beer, index) => (
+              <motion.div
+                key={beer.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                viewport={{ once: true }}
+                className="flex items-center justify-center rounded-lg overflow-hidden border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300 group"
+              >
+                <div className="relative w-full aspect-square rounded-lg overflow-hidden">
+                  <video
+                    src={beer.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Mobile: Horizontal Scroll */}
+          <div className="md:hidden overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+            <div className="flex gap-3 px-4" style={{ width: 'max-content' }}>
+              {beers.map((beer, index) => (
+                <motion.div
+                  key={beer.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-center justify-center rounded-lg overflow-hidden border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300 group flex-shrink-0"
+                  style={{ 
+                    width: 'calc((100vw - 2rem - 0.75rem) / 2)',
+                    maxWidth: '160px',
+                    aspectRatio: '1'
+                  }}
+                >
+                  <div className="relative w-full h-full rounded-lg overflow-hidden">
+                    <video
+                      src={beer.video}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </motion.div>

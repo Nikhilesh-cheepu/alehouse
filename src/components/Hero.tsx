@@ -12,9 +12,9 @@ interface HeroProps {
 }
 
 const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavClick }: HeroProps) => {
-  const [textAnimationStarted, setTextAnimationStarted] = useState(false);
+  const [textAnimationStarted, setTextAnimationStarted] = useState(true);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [exploreClicked, setExploreClicked] = useState(false);
+  const [exploreClicked, setExploreClicked] = useState(true);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -24,102 +24,70 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Start videos immediately when component mounts - FORCE DEPLOYMENT
+  // Start videos immediately when component mounts with optimized loading
   useEffect(() => {
     const startVideos = () => {
       // Start mobile video if it exists
       if (mobileVideoRef.current) {
-        mobileVideoRef.current.muted = true; // Ensure muted for autoplay
-        // Ensure best autoplay compatibility on iOS/Instagram
-        mobileVideoRef.current.setAttribute('playsinline', 'true');
-        (mobileVideoRef.current as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
-        mobileVideoRef.current.controls = false;
-        mobileVideoRef.current.load(); // Ensure video is loaded
-        mobileVideoRef.current.play().catch((error) => {
-          console.log('Mobile video play failed:', error);
-        });
+        const video = mobileVideoRef.current;
+        video.muted = true;
+        video.setAttribute('playsinline', 'true');
+        (video as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
+        video.controls = false;
+        
+        // Load and play with error handling
+        video.load();
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log('Mobile video play failed:', error);
+            // Retry once
+            setTimeout(() => {
+              video.play().catch(() => {});
+            }, 200);
+          });
+        }
       }
       
       // Start desktop video if it exists
       if (desktopVideoRef.current) {
-        desktopVideoRef.current.muted = true; // Ensure muted for autoplay
-        desktopVideoRef.current.setAttribute('playsinline', 'true');
-        (desktopVideoRef.current as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
-        desktopVideoRef.current.controls = false;
-        desktopVideoRef.current.load(); // Ensure video is loaded
-        desktopVideoRef.current.play().catch((error) => {
-          console.log('Desktop video play failed:', error);
-        });
+        const video = desktopVideoRef.current;
+        video.muted = true;
+        video.setAttribute('playsinline', 'true');
+        (video as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
+        video.controls = false;
+        
+        // Load and play with error handling
+        video.load();
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log('Desktop video play failed:', error);
+            // Retry once
+            setTimeout(() => {
+              video.play().catch(() => {});
+            }, 200);
+          });
+        }
       }
     };
 
     // Start videos immediately
     startVideos();
     
-    // Also try again after a short delay to ensure DOM is ready
-    const timeoutId = setTimeout(startVideos, 100);
-    
-    // Try one more time after a longer delay
-    const timeoutId2 = setTimeout(startVideos, 500);
-    
     return () => {
-      clearTimeout(timeoutId);
-      clearTimeout(timeoutId2);
+      // Cleanup
     };
   }, []);
 
-  // After first user interaction, force-start videos with retries (for Instagram webview)
+  // Start hero voice immediately
   useEffect(() => {
-    if (!exploreClicked) return;
-
-    let cancelled = false;
-
-    const forceStartVideos = () => {
-      if (cancelled) return;
-      const tryPlay = (video?: HTMLVideoElement | null) => {
-        if (!video) return;
-        video.muted = true;
-        video.setAttribute('playsinline', 'true');
-        (video as unknown as HTMLVideoElement & { setAttribute: (k: string, v: string) => void }).setAttribute('webkit-playsinline', 'true');
-        video.controls = false;
-        video.play().catch(() => {
-          // schedule a quick retry
-          setTimeout(() => {
-            if (!cancelled) {
-              video.play().catch(() => {});
-            }
-          }, 100);
-        });
-      };
-
-      tryPlay(mobileVideoRef.current);
-      tryPlay(desktopVideoRef.current);
-    };
-
-    // immediate attempt
-    forceStartVideos();
-    // short retry window
-    const t1 = setTimeout(forceStartVideos, 150);
-    const t2 = setTimeout(forceStartVideos, 400);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [exploreClicked]);
-
-  // Start hero voice only after user interaction
-  useEffect(() => {
-    if (exploreClicked && heroVoiceRef.current) {
+    if (heroVoiceRef.current) {
       const forcePlayHeroVoice = () => {
         if (heroVoiceRef.current) {
-          // Set properties
           heroVoiceRef.current.volume = 0.7;
           heroVoiceRef.current.muted = false;
           heroVoiceRef.current.loop = false;
-
-          // Try to play
           heroVoiceRef.current.play()
             .then(() => {
               console.log('Hero voice started successfully');
@@ -130,10 +98,10 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             });
         }
       };
-
       forcePlayHeroVoice();
     }
-  }, [exploreClicked, heroVoiceRef]);
+  }, [heroVoiceRef]);
+
 
   // Pause/Resume audio when switching tabs
   useEffect(() => {
@@ -158,16 +126,11 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
     };
   }, [exploreClicked, heroVoiceRef]);
 
-  // Start text animations only after user interaction
-  useEffect(() => {
-    if (exploreClicked) {
-      setTextAnimationStarted(true);
-    }
-  }, [exploreClicked]);
+  // Text animations start immediately
 
-  // Handle text animation sequence - START AFTER USER INTERACTION
+  // Handle text animation sequence
   useEffect(() => {
-    if (!textAnimationStarted || !exploreClicked) {
+    if (!textAnimationStarted) {
       return;
     }
 
@@ -190,7 +153,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
       }, end * 1000);
     });
 
-  }, [textAnimationStarted, exploreClicked]);
+  }, [textAnimationStarted]);
 
 
   const textLines = [
@@ -251,11 +214,6 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
         className="absolute inset-0 m-0 p-0" 
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
       >
-        {/* Fallback black background when videos are not playing */}
-        {!hasUserChosen && (
-          <div className="absolute inset-0 bg-black" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }} />
-        )}
-        
         {/* Mobile Background (Portrait) - Video */}
         <div className="block md:hidden" style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}>
           <video
@@ -266,19 +224,9 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             muted
             loop
             playsInline
-            poster="/hero-assets/hero-bg-mobile.png"
             preload="auto"
             onError={(e) => {
-              console.log('Mobile video failed to load, showing fallback image');
-              // Fallback to image if video fails to load
-              e.currentTarget.style.display = 'none';
-              const fallbackImg = document.createElement('img');
-              fallbackImg.src = '/hero-assets/hero-bg-mobile.png';
-              fallbackImg.className = 'w-full h-full object-cover';
-              fallbackImg.style.height = '100vh';
-              fallbackImg.style.minHeight = '100vh';
-              fallbackImg.style.maxHeight = '100vh';
-              e.currentTarget.parentElement!.appendChild(fallbackImg);
+              console.error('Mobile video failed to load');
             }}
           />
         </div>
@@ -293,19 +241,9 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             muted
             loop
             playsInline
-            poster="/hero-assets/hero-bg-desktop.png"
             preload="auto"
             onError={(e) => {
-              console.log('Desktop video failed to load, showing fallback image');
-              // Fallback to image if video fails to load
-              e.currentTarget.style.display = 'none';
-              const fallbackImg = document.createElement('img');
-              fallbackImg.src = '/hero-assets/hero-bg-desktop.png';
-              fallbackImg.className = 'w-full h-full object-cover';
-              fallbackImg.style.height = '100vh';
-              fallbackImg.style.minHeight = '100vh';
-              fallbackImg.style.maxHeight = '100vh';
-              e.currentTarget.parentElement!.appendChild(fallbackImg);
+              console.error('Desktop video failed to load');
             }}
           />
         </div>
@@ -316,93 +254,11 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
 
 
 
-      {/* Full Screen Overlay */}
-      {showOverlay && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
-          onClick={(e) => {
-            // Any tap dismisses overlay and starts experience
-            e.stopPropagation();
-            setExploreClicked(true);
-            if (onNavClick) {
-              onNavClick();
-            }
-          }}
-        >
-          <div className="text-center max-w-4xl mx-auto px-8">
-            {/* Main Heading */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="text-2xl md:text-3xl font-bold text-[#e6c87a] mb-8 leading-relaxed"
-              style={{
-                fontFamily: 'GameOfThrones, serif',
-                textShadow: '0 4px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(230, 200, 122, 0.3)',
-                filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))'
-              }}
-            >
-              A Game of Thrones–inspired nightclub and bar.
-            </motion.h1>
-
-            {/* Explore Button */}
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              onClick={(e) => {
-                // Explore behaves like any overlay tap
-                e.stopPropagation();
-                setExploreClicked(true);
-                if (onExploreClick) {
-                  onExploreClick();
-                }
-                if (onNavClick) {
-                  onNavClick();
-                }
-              }}
-              className="group relative px-12 py-4 bg-transparent border-2 border-[#e6c87a] text-[#e6c87a] font-bold text-lg rounded-full shadow-2xl transition-all duration-300 hover:bg-gradient-to-r hover:from-[#e6c87a] hover:to-[#d4af37] hover:text-black hover:shadow-[0_0_30px_rgba(230,200,122,0.6)] active:scale-95"
-              style={{
-                fontFamily: 'GameOfThrones, serif',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)',
-                boxShadow: '0 8px 25px rgba(230, 200, 122, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-              }}
-            >
-              <span className="relative z-10">EXPLORE ALEHOUSE</span>
-              
-              {/* Glow effect */}
-              <div 
-                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: 'radial-gradient(circle, rgba(230,200,122,0.3) 0%, transparent 70%)',
-                  filter: 'blur(10px)',
-                  transform: 'scale(1.2)'
-                }}
-              />
-            </motion.button>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="text-sm text-gray-400 mt-6"
-            >
-              Click to begin your journey into the realm
-            </motion.p>
-          </div>
-        </div>
-      )}
 
       {/* Cinematic Text Content */}
       <div 
         className="relative z-20 flex items-center justify-center px-4" 
         style={{ height: '100vh', minHeight: '100vh', maxHeight: '100vh' }}
-        onClick={(e) => {
-          if (showOverlay) {
-            e.stopPropagation();
-          }
-        }}
       >
         <div className="text-center max-w-4xl mx-auto">
           {/* Text Lines with AnimatePresence */}
