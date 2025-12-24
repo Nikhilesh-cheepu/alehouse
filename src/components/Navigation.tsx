@@ -180,6 +180,7 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
     { name: 'Menu', href: '/menu' },
     { name: 'Gallery', href: isHomePage ? '#gallery' : '/#gallery' },
     { name: 'Only Ladies', href: '/ladies-offers' },
+    { name: 'Tickets', href: '/events/new-year' },
   ];
 
   return (
