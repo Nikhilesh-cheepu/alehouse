@@ -29,28 +29,6 @@ export default function Home() {
     }
   };
 
-  const handleNavClick = () => {
-    // Start audio when navigation is clicked
-    if (themeSongRef.current) {
-      themeSongRef.current.play().catch(() => {});
-    }
-    if (heroVoiceRef.current) {
-      heroVoiceRef.current.play().catch(() => {});
-    }
-  };
-
-  const handleExploreClick = () => {
-    // Start audio when explore button is clicked
-    if (themeSongRef.current) {
-      themeSongRef.current.play().catch(() => {});
-    }
-    if (heroVoiceRef.current) {
-      heroVoiceRef.current.play().catch(() => {});
-    }
-  };
-
-  // No overlay - videos play directly
-  const [showOverlay] = useState(false);
 
   // Setup theme song but don't autoplay - wait for user interaction
   useEffect(() => {
@@ -114,9 +92,6 @@ export default function Home() {
       <Hero 
         hasUserChosen={true}
         heroVoiceRef={heroVoiceRef}
-        showOverlay={showOverlay}
-        onExploreClick={handleExploreClick}
-        onNavClick={handleNavClick}
       />
 
       <LadiesDrinksPromo />

@@ -6,15 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface HeroProps {
   hasUserChosen: boolean;
   heroVoiceRef: React.RefObject<HTMLAudioElement | null>;
-  showOverlay?: boolean;
-  onExploreClick?: () => void;
-  onNavClick?: () => void; // New prop for navigation clicks
 }
 
-const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavClick }: HeroProps) => {
-  const [textAnimationStarted, setTextAnimationStarted] = useState(true);
+const Hero = ({ hasUserChosen, heroVoiceRef }: HeroProps) => {
+  const [textAnimationStarted] = useState(true);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [exploreClicked, setExploreClicked] = useState(true);
+  const [exploreClicked] = useState(true);
   
   // Easter egg state for secret redirect
   const [clickCount, setClickCount] = useState(0);
@@ -225,7 +222,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             loop
             playsInline
             preload="auto"
-            onError={(e) => {
+            onError={() => {
               console.error('Mobile video failed to load');
             }}
           />
@@ -242,7 +239,7 @@ const Hero = ({ hasUserChosen, heroVoiceRef, showOverlay, onExploreClick, onNavC
             loop
             playsInline
             preload="auto"
-            onError={(e) => {
+            onError={() => {
               console.error('Desktop video failed to load');
             }}
           />

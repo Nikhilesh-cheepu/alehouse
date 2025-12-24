@@ -90,7 +90,7 @@ const LadiesOffersPage = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex flex-wrap items-center justify-center gap-3 pt-4"
             >
-              {['Free entry for queens', 'Unlimited drinks all night', '365 days • No blackout dates'].map((badge, index) => (
+              {['Free entry for queens', 'Unlimited drinks all night', '365 days • No blackout dates'].map((badge) => (
                 <span
                   key={badge}
                   className="px-5 py-1.5 rounded-full text-xs tracking-[0.25em] uppercase text-white"

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp, FaSearch, FaUtensils } from 'react-icons/fa';
+import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
 import { track } from '@vercel/analytics';
 import { trackConversion } from '@/lib/gtag';
 import Navigation from '@/components/Navigation';

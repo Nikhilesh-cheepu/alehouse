@@ -118,7 +118,7 @@ const GallerySection = () => {
       );
       setImageLoading(true);
     }
-  }, [selectedImage]);
+  }, [selectedImage, galleryImages.length]);
 
   const prevImage = useCallback(() => {
     if (selectedImage !== null) {
@@ -127,7 +127,7 @@ const GallerySection = () => {
       );
       setImageLoading(true);
     }
-  }, [selectedImage]);
+  }, [selectedImage, galleryImages.length]);
 
   const closeModal = useCallback(() => {
     setSelectedImage(null);
@@ -143,10 +143,17 @@ const GallerySection = () => {
 
         if (data.success && data.data && data.data.length > 0) {
           // Transform Instagram posts to gallery format
+          interface InstagramPost {
+            id: string;
+            media_type: string;
+            media_url: string;
+            caption?: string;
+            permalink: string;
+          }
           const instagramPosts: GalleryImage[] = data.data
-            .filter((post: any) => post.media_type === 'IMAGE' || post.media_type === 'CAROUSEL_ALBUM')
+            .filter((post: InstagramPost) => post.media_type === 'IMAGE' || post.media_type === 'CAROUSEL_ALBUM')
             .slice(0, 12) // Limit to 12 posts
-            .map((post: any, index: number) => ({
+            .map((post: InstagramPost, index: number) => ({
               id: `instagram-${post.id}`,
               src: post.media_url,
               alt: post.caption ? post.caption.substring(0, 100) : 'Instagram post',
