@@ -1,7 +1,7 @@
 'use client';
 
 const HERO_VIDEO_SRC =
-  'https://zvnpoq8yksvcawvt.public.blob.vercel-storage.com/ALEHOUSE%20AMBIENCE%20REEL_V2.mp4';
+  'https://zvnpoq8yksvcawvt.public.blob.vercel-storage.com/ALEHOUSE%20FEB%20REEL%205%20.mov';
 
 const Hero = () => {
   return (
@@ -13,6 +13,7 @@ const Hero = () => {
         className="w-full h-full object-cover"
         src={HERO_VIDEO_SRC}
         autoPlay
+        muted
         loop
         playsInline
         preload="metadata"
