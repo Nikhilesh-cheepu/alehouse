@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
-import { FaPhone, FaWhatsapp, FaMapMarkerAlt } from 'react-icons/fa';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { beers } from '@/data/beers';
 
@@ -69,13 +68,6 @@ const CTASection = () => {
       if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
     };
   }, [emblaApi, pauseAutoplay]);
-
-  const handleCall = () => window.open('tel:+918096060606', '_self');
-  const handleWhatsApp = () => {
-    const message = encodeURIComponent('Hi! I would like to know more about AleHouse. Can you help me?');
-    window.open(`https://wa.me/918096060606?text=${message}`, '_blank');
-  };
-  const handleLocate = () => window.open('https://maps.app.goo.gl/6KSJoKUwggs1zzoM8?g_st=ic', '_blank');
 
   return (
     <section
@@ -186,51 +178,6 @@ const CTASection = () => {
           </button>
         </div>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-10"
-        >
-          <motion.button
-            onClick={handleCall}
-            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 min-w-[100px] md:min-w-[120px] justify-center bg-black/80 border border-blue-400/50 text-white"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <FaPhone className="text-sm" />
-            <span>Call Us</span>
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/20">
-              +91 809 6060606
-            </div>
-          </motion.button>
-          <motion.button
-            onClick={handleWhatsApp}
-            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 min-w-[100px] md:min-w-[120px] justify-center bg-black/80 border border-green-400/50 text-white"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <FaWhatsapp className="text-sm" />
-            <span>WhatsApp</span>
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/20">
-              +91 809 6060606
-            </div>
-          </motion.button>
-          <motion.button
-            onClick={handleLocate}
-            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 min-w-[100px] md:min-w-[120px] justify-center bg-black/80 border border-amber-500/50 text-white"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <FaMapMarkerAlt className="text-sm" />
-            <span>Locate</span>
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/20">
-              Find us on Google Maps
-            </div>
-          </motion.button>
-        </motion.div>
       </div>
     </section>
   );

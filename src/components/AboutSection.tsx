@@ -15,46 +15,31 @@ const AboutSection = () => {
       <div className="w-full max-w-5xl mx-auto px-4 md:px-8">
         
 
-        {/* Opening Hours */}
+        {/* Opening Hours - minimal */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.4 }}
           viewport={{ once: true }}
-          className="mb-4"
+          className="mb-4 flex justify-center"
         >
-          <div className="bg-black/80 backdrop-blur-sm border border-yellow-500/50 rounded-lg p-2 md:p-4 shadow-lg relative" style={{
-            background: 'linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(20,20,20,0.8) 50%, rgba(0,0,0,0.9) 100%)',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)'
-          }}>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center shadow-md">
-                  <span className="text-lg">🕐</span>
-                </div>
-                <h3 
-                  className="text-lg md:text-xl font-bold text-yellow-400"
-                  style={{ 
-                    fontFamily: 'Game of Thrones, serif',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.9)'
-                  }}
-                >
-                  Opening Hours
-                </h3>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row items-center gap-4 text-center">
-                <div>
-                  <p className="text-yellow-300 text-sm font-semibold mb-1" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>Sun - Thu</p>
-                  <p className="text-white font-bold text-base" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>12:00 PM - 11:30 PM</p>
-                </div>
-                <div className="hidden sm:block w-px h-8 bg-yellow-500/60"></div>
-                <div>
-                  <p className="text-yellow-300 text-sm font-semibold mb-1" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>Fri - Sat</p>
-                  <p className="text-white font-bold text-base" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>12:00 PM - 12:30 AM</p>
-                </div>
-              </div>
-            </div>
+          <div
+            className="inline-block rounded-lg border px-4 py-3 text-center backdrop-blur-md max-w-sm"
+            style={{
+              background: 'rgba(0,0,0,0.5)',
+              borderColor: 'rgba(212, 175, 55, 0.2)',
+              boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
+            }}
+          >
+            <p className="text-amber-400/90 text-xs font-medium uppercase tracking-wider mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>
+              Opening Hours
+            </p>
+            <p className="text-white/95 text-sm leading-relaxed" style={{ fontFamily: 'Manrope, sans-serif' }}>
+              Sun–Thu · 12:00 PM – 11:30 PM
+            </p>
+            <p className="text-white/95 text-sm leading-relaxed" style={{ fontFamily: 'Manrope, sans-serif' }}>
+              Fri–Sat · 12:00 PM – 12:30 AM
+            </p>
           </div>
         </motion.div>
 
