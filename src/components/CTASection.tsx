@@ -1,171 +1,130 @@
 'use client';
 
+import { useCallback, useEffect, useRef, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
 import { FaPhone, FaWhatsapp, FaMapMarkerAlt } from 'react-icons/fa';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { beers } from '@/data/beers';
 
-interface Beer {
-  id: number;
-  name: string;
-  type: string;
-  video: string;
-}
-
-const beers: Beer[] = [
-  {
-    id: 1,
-    name: 'Witbier',
-    type: 'Craft Beer',
-    video: '/6 BEERS/WITBIER.mp4',
-  },
-  {
-    id: 2,
-    name: 'Indian Pale Lager',
-    type: 'Bottle Beer',
-    video: '/6 BEERS/INDIAN PALE LAGER.mp4',
-  },
-  {
-    id: 3,
-    name: 'Hefeweizen',
-    type: 'Craft Beer',
-    video: '/6 BEERS/Hefeweizen.mp4',
-  },
-  {
-    id: 4,
-    name: 'Dunkel Weissbier',
-    type: 'Craft Beer',
-    video: '/6 BEERS/DUNKEL WEISSBIER.mp4',
-  },
-  {
-    id: 5,
-    name: 'Blonde Ale',
-    type: 'Craft Beer',
-    video: '/6 BEERS/BLONDE ALE.mp4',
-  },
-  {
-    id: 6,
-    name: 'American Adjutant Lager',
-    type: 'Bottle Beer',
-    video: '/6 BEERS/AMERICAN ADJUTANT LAGER.mp4',
-  },
-];
+const AUTOPLAY_INTERVAL = 4000;
 
 const CTASection = () => {
-  const handleCall = () => {
-    window.open('tel:+918096060606', '_self');
-  };
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'center',
+    loop: true,
+    skipSnaps: false,
+    dragFree: false,
+  });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const scrollPrev = useCallback(() => {
+    emblaApi?.scrollPrev();
+  }, [emblaApi]);
+  const scrollNext = useCallback(() => {
+    emblaApi?.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  // Autoplay
+  useEffect(() => {
+    if (!emblaApi || autoplayPaused) return;
+    const timer = setInterval(() => {
+      emblaApi.scrollNext();
+    }, AUTOPLAY_INTERVAL);
+    return () => clearInterval(timer);
+  }, [emblaApi, autoplayPaused]);
+
+  const pauseAutoplay = useCallback(() => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+    setAutoplayPaused(true);
+  }, []);
+  const resumeAutoplay = useCallback(() => {
+    resumeTimeoutRef.current = setTimeout(() => setAutoplayPaused(false), 600);
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on('pointerDown', pauseAutoplay);
+    return () => {
+      emblaApi.off('pointerDown', pauseAutoplay);
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    };
+  }, [emblaApi, pauseAutoplay]);
+
+  const handleCall = () => window.open('tel:+918096060606', '_self');
   const handleWhatsApp = () => {
     const message = encodeURIComponent('Hi! I would like to know more about AleHouse. Can you help me?');
     window.open(`https://wa.me/918096060606?text=${message}`, '_blank');
   };
-
-  const handleLocate = () => {
-    window.open('https://maps.app.goo.gl/6KSJoKUwggs1zzoM8?g_st=ic', '_blank');
-  };
+  const handleLocate = () => window.open('https://maps.app.goo.gl/6KSJoKUwggs1zzoM8?g_st=ic', '_blank');
 
   return (
-    <section 
-      className="relative w-full py-12 md:py-20 flex items-center justify-center overflow-hidden bg-black my-24 md:my-16"
+    <section
+      className="relative w-full py-12 md:py-16 overflow-hidden"
+      onPointerEnter={pauseAutoplay}
+      onPointerLeave={resumeAutoplay}
     >
-      
-      <div className="w-full max-w-6xl mx-auto px-4 md:px-8 relative z-10 mt-12 md:mt-16 mb-4 md:mb-6">
-        {/* Craft Beer Text */}
+      {/* Dark matte + subtle crimson ambient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(10,0,2,0.98) 0%, rgba(20,0,5,0.97) 50%, rgba(10,0,2,0.98) 100%)',
+          boxShadow: 'inset 0 0 80px rgba(139, 0, 50, 0.06)',
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-8 md:mb-12"
+          className="text-center mb-8"
         >
-          <div 
-            className="text-white text-sm md:text-xl font-medium"
-            style={{ 
-              textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-              letterSpacing: '0.05em'
-            }}
+          <h2
+            className="text-white text-xl md:text-2xl font-medium tracking-wide"
+            style={{ fontFamily: '"Manrope", sans-serif' }}
           >
-            <div className="mb-2 text-base md:text-2xl">
-              EXPERIENCE THE WORLD&apos;S BEST
-            </div>
-            <div className="text-sm md:text-xl">
-              <span 
-                className="px-2 py-1"
-                style={{ 
-                  fontFamily: 'Game of Thrones, serif', 
-                  fontSize: 'calc(0.875rem - 1px)',
-                  background: 'transparent',
-                  borderBottom: '3px solid #fbbf24',
-                  color: '#fbbf24'
-                }}
-              >
-                CRAFT BEERS
-              </span> AND <span 
-                className="px-2 py-1"
-                style={{ 
-                  fontFamily: 'Game of Thrones, serif', 
-                  fontSize: 'calc(0.875rem - 1px)',
-                  background: 'transparent',
-                  borderBottom: '3px solid #fbbf24',
-                  color: '#fbbf24'
-                }}
-              >
-                BOTTLE BEERS
-              </span>
-            </div>
-          </div>
+            Craft Beers & Bottle Beers
+          </h2>
         </motion.div>
 
-        {/* Beer Showcase */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mb-8 md:mb-12"
-        >
-          {/* Desktop: Grid Layout */}
-          <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-            {beers.map((beer, index) => (
-              <motion.div
+        {/* Carousel */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex touch-pan-y gap-4 md:gap-6" style={{ marginLeft: '-0.5rem' }}>
+            {beers.map((beer) => (
+              <div
                 key={beer.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-center justify-center rounded-lg overflow-hidden border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300 group"
+                className="flex-[0_0_72%] md:flex-[0_0_52%] min-w-0 pl-2"
               >
-                <div className="relative w-full aspect-square rounded-lg overflow-hidden">
-                  <video
-                    src={beer.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Mobile: Horizontal Scroll */}
-          <div className="md:hidden overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-            <div className="flex gap-3 px-4" style={{ width: 'max-content' }}>
-              {beers.map((beer, index) => (
-                <motion.div
-                  key={beer.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex items-center justify-center rounded-lg overflow-hidden border border-yellow-500/20 hover:border-yellow-500/50 transition-all duration-300 group flex-shrink-0"
-                  style={{ 
-                    width: 'calc((100vw - 2rem - 0.75rem) / 2)',
-                    maxWidth: '160px',
-                    aspectRatio: '1'
+                <div
+                  className="rounded-xl overflow-hidden border bg-black/40 transition-shadow"
+                  style={{
+                    borderColor: 'rgba(212, 175, 55, 0.25)',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
                   }}
                 >
-                  <div className="relative w-full h-full rounded-lg overflow-hidden">
+                  <div className="relative aspect-[4/5] md:aspect-[3/4]">
                     <video
                       src={beer.video}
                       autoPlay
@@ -175,92 +134,100 @@ const CTASection = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                  <div
+                    className="py-3 px-3 text-center"
+                    style={{ fontFamily: '"Manrope", sans-serif' }}
+                  >
+                    <p className="text-white font-medium text-sm md:text-base">
+                      {beer.name}
+                    </p>
+                    <p className="text-white/55 text-xs mt-0.5">{beer.descriptor}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </motion.div>
+        </div>
+
+        {/* Dots */}
+        <div className="flex justify-center gap-2 mt-5">
+          {beers.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => emblaApi?.scrollTo(i)}
+              className="w-2 h-2 rounded-full transition-all duration-200"
+              style={{
+                background: i === selectedIndex ? 'rgba(212, 175, 55, 0.9)' : 'rgba(255,255,255,0.25)',
+                transform: i === selectedIndex ? 'scale(1.2)' : 'scale(1)',
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Arrows - desktop only */}
+        <div className="hidden md:flex absolute top-[38%] left-2 right-2 -translate-y-1/2 pointer-events-none justify-between">
+          <button
+            type="button"
+            aria-label="Previous"
+            onClick={scrollPrev}
+            className="pointer-events-auto p-2 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-amber-500/40 transition-colors"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button
+            type="button"
+            aria-label="Next"
+            onClick={scrollNext}
+            className="pointer-events-auto p-2 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-amber-500/40 transition-colors"
+          >
+            <ChevronRight size={24} />
+          </button>
+        </div>
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="flex flex-row items-center justify-center gap-2 md:gap-4"
+          className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-10"
         >
-          {/* Call Button */}
           <motion.button
             onClick={handleCall}
-            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 w-auto min-w-[110px] md:min-w-[130px] justify-center"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: '0 20px 40px rgba(59, 130, 246, 0.3)'
-            }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              background: '#000000',
-              border: '1px solid rgba(59, 130, 246, 0.5)',
-              color: '#ffffff',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
-            }}
+            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 min-w-[100px] md:min-w-[120px] justify-center bg-black/80 border border-blue-400/50 text-white"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
           >
-            <FaPhone className="text-sm md:text-base" />
+            <FaPhone className="text-sm" />
             <span>Call Us</span>
-            
-            {/* Phone number tooltip */}
-            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-black/90 text-white text-sm px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap backdrop-blur-sm border border-white/20 z-50">
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/20">
               +91 809 6060606
             </div>
           </motion.button>
-
-          {/* WhatsApp Button */}
           <motion.button
             onClick={handleWhatsApp}
-            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 w-auto min-w-[110px] md:min-w-[130px] justify-center"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: '0 20px 40px rgba(37, 211, 102, 0.3)'
-            }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              background: '#000000',
-              border: '1px solid rgba(37, 211, 102, 0.5)',
-              color: '#ffffff',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
-            }}
+            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 min-w-[100px] md:min-w-[120px] justify-center bg-black/80 border border-green-400/50 text-white"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
           >
-            <FaWhatsapp className="text-sm md:text-base" />
+            <FaWhatsapp className="text-sm" />
             <span>WhatsApp</span>
-            
-            {/* WhatsApp number tooltip */}
-            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-black/90 text-white text-sm px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap backdrop-blur-sm border border-white/20 z-50">
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/20">
               +91 809 6060606
             </div>
           </motion.button>
-
-          {/* Locate Button */}
           <motion.button
             onClick={handleLocate}
-            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 w-auto min-w-[110px] md:min-w-[130px] justify-center"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: '0 20px 40px rgba(255, 193, 7, 0.3)'
-            }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              background: '#000000',
-              border: '1px solid rgba(255, 193, 7, 0.5)',
-              color: '#ffffff',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
-            }}
+            className="group relative px-3 py-2 md:px-4 md:py-3 rounded-full font-semibold text-xs md:text-sm transition-all duration-300 flex items-center gap-1 md:gap-2 min-w-[100px] md:min-w-[120px] justify-center bg-black/80 border border-amber-500/50 text-white"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
           >
-            <FaMapMarkerAlt className="text-sm md:text-base" />
+            <FaMapMarkerAlt className="text-sm" />
             <span>Locate</span>
-            
-            {/* Location tooltip */}
-            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-black/90 text-white text-sm px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap backdrop-blur-sm border border-white/20 z-50">
-              Find Us on Google Maps
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-2 py-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-white/20">
+              Find us on Google Maps
             </div>
           </motion.button>
         </motion.div>

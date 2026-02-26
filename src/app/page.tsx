@@ -2,10 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Hero from '@/components/Hero';
-import AudioController from '@/components/AudioController';
+import FloatingCTA from '@/components/FloatingCTA';
 import AboutSection from '@/components/AboutSection';
 import MenuSection from '@/components/MenuSection';
-import BookTableSection from '@/components/BookTableSection';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 import LadiesDrinksPromo from '@/components/LadiesDrinksPromo';
@@ -82,18 +81,20 @@ export default function Home() {
 
 
   return (
-    <main className="bg-charcoal-900 m-0 p-0">
+    <main
+        className="bg-charcoal-900 m-0 p-0"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 72px)' }}
+      >
 
       <Hero />
 
       <LadiesDrinksPromo />
       <CTASection />
-      <BookTableSection />
       <AboutSection />
       <MenuSection />
       <GallerySection />
 
-      <AudioController
+      <FloatingCTA
         isMuted={isMuted}
         onMuteToggle={handleMuteToggle}
       />

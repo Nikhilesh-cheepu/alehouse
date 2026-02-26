@@ -2,274 +2,172 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 const offers = [
   {
-    label: '8 PM – Closing',
+    meta: '8 PM — Closing',
     title: 'Unlimited Free Drinks for Ladies',
-    vibe: 'Nightfall Royale',
-    accent: '#f5d171',
+    inside: 'Available every night. Terms apply.',
   },
   {
-    label: '12PM – 7PM',
-    title: 'Eat & Drink Anything @127',
-    vibe: 'Golden Hour Feast',
-    accent: '#ffefc3',
+    meta: '12 PM — 7 PM',
+    title: 'Eat & Drink @ ₹127',
+    inside: '₹127 menu available during offer hours.',
   },
 ];
 
 const LadiesDrinksPromo = () => {
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  const toggleCard = (index: number) => {
-    setExpandedCard(expandedCard === index ? null : index);
+  const toggle = (index: number) => {
+    setExpandedIndex((i) => (i === index ? null : index));
   };
+
   return (
-    <section 
-      className="relative w-full py-16 md:py-28 overflow-hidden bg-black"
-    >
-      <div 
-        aria-hidden 
-        className="absolute inset-0 opacity-40"
+    <section className="relative w-full py-12 md:py-16 overflow-hidden">
+      {/* Dark gradient + soft vignette */}
+      <div
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 45%), radial-gradient(circle at 80% 10%, rgba(255,215,0,0.08), transparent 50%), radial-gradient(circle at 50% 80%, rgba(255,255,255,0.05), transparent 45%)'
-        }} 
+          background:
+            'linear-gradient(180deg, rgba(0,0,0,0.97) 0%, rgba(20,0,5,0.98) 50%, rgba(0,0,0,0.97) 100%)',
+        }}
       />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.95) 100%)' }} />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(0,0,0,0.4) 100%)',
+        }}
+      />
 
-      <div className="w-full max-w-6xl mx-auto px-6 md:px-10 relative z-10">
+      <div className="relative z-10 w-full max-w-2xl mx-auto px-5 md:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center space-y-8"
+          className="text-center space-y-5"
         >
-          <div className="flex flex-col items-center gap-4">
-            <span className="uppercase tracking-[0.6em] text-xs md:text-sm text-white/70 font-semibold">Alehouse Signature Offer</span>
-          <motion.h2
-            style={{
-                fontSize: 'clamp(3.5rem, 12vw, 6rem)',
-                color: '#ffffff',
-                fontFamily: '"Bebas Neue", "Arial Black", sans-serif',
-                fontWeight: 800,
-                letterSpacing: '0.04em',
-                lineHeight: '1.05',
-                textTransform: 'uppercase'
-              }}
-            >
-              365 Days
-            </motion.h2>
-            <div className="w-24 h-1 rounded-full bg-gradient-to-r from-white/20 via-white to-white/20" />
-            <p className="max-w-2xl text-white/70 font-light tracking-wide text-sm md:text-base" style={{ fontFamily: '"Manrope", sans-serif' }}>
-              Your daily pass to royal indulgence. Two elite offers, crafted to keep the energy high from mid-day until close.
-            </p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            viewport={{ once: true }}
+          <p
+            className="text-white/60 text-xs md:text-sm tracking-wide"
+            style={{ fontFamily: '"Manrope", sans-serif' }}
           >
-            {/* Mobile expandable cards */}
-            <div className="md:hidden space-y-4">
-              {offers.map((offer, index) => {
-                const isExpanded = expandedCard === index;
-                return (
-                  <motion.div
-                    key={`mobile-${offer.label}`}
-                    initial={false}
-                    animate={{ height: isExpanded ? 'auto' : 'auto' }}
-                    className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-lg shadow-[0_15px_35px_rgba(0,0,0,0.35)] cursor-pointer"
-                    style={{ fontFamily: '"Manrope", sans-serif' }}
-                    onClick={() => toggleCard(index)}
-                  >
-                    {/* Compact header - always visible */}
-                    <div className="p-4 flex items-center justify-between">
-                      <div className="flex-1">
-                        <span className="text-[0.7rem] tracking-[0.3em] uppercase text-white/70 font-semibold block mb-1">
-                          {offer.label}
-                        </span>
-                        <h3
-                          className="text-white uppercase"
-                          style={{
-                            fontFamily: '"Bebas Neue", "Arial Black", sans-serif',
-                            fontSize: '1.5rem',
-                            letterSpacing: '0.05em',
-                            lineHeight: 1.1
-                          }}
-                        >
-                          {offer.title}
-                        </h3>
-                      </div>
-                      <motion.div
-                        animate={{ rotate: isExpanded ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="ml-4 text-white/70 text-2xl"
-                      >
-                        ▼
-                      </motion.div>
-                    </div>
-
-                    {/* Expandable content */}
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-4">
-                            <div className="flex items-center gap-3">
-                              <span className="text-[0.65rem] uppercase tracking-[0.3em] text-white/60">Mood</span>
-                              <div className="h-px flex-1 bg-white/10" />
-                            </div>
-                            <p className="text-white/90 text-base font-semibold tracking-wide">
-                              {offer.vibe}
-                            </p>
-                            <div className="pt-2 space-y-2">
-                              <span className="text-[0.65rem] uppercase tracking-[0.3em] text-white/40 block">Daily Access</span>
-                              <div className="flex gap-3">
-                                <motion.button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.location.href = '/booking';
-                                  }}
-                                  className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all"
-                                  style={{
-                                    background: 'rgba(255,255,255,0.1)',
-                                    border: '1px solid rgba(255,255,255,0.2)',
-                                    color: '#ffffff'
-                                  }}
-                                  whileHover={{ 
-                                    background: 'rgba(255,255,255,0.15)',
-                                    scale: 1.02
-                                  }}
-                                  whileTap={{ scale: 0.98 }}
-                                >
-                                  Reserve
-                                </motion.button>
-                                <motion.button
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all"
-                                  style={{
-                                    background: 'rgba(255,255,255,0.08)',
-                                    border: `1px solid ${offer.accent}40`,
-                                    color: offer.accent
-                                  }}
-                                  whileHover={{ 
-                                    background: 'rgba(255,255,255,0.12)',
-                                    scale: 1.02
-                                  }}
-                                  whileTap={{ scale: 0.98 }}
-                                >
-                                  Walk In
-                                </motion.button>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* Desktop grid */}
-            <div className="hidden md:grid grid-cols-2 gap-6 md:gap-8">
-              {offers.map((offer) => (
-                <div
-                  key={offer.label}
-                  className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg p-8 text-left flex flex-col gap-4 shadow-[0_20px_45px_rgba(0,0,0,0.35)]"
-                  style={{ fontFamily: '"Manrope", sans-serif' }}
-                >
-                  <span className="text-sm tracking-[0.4em] uppercase text-white/70 font-semibold">{offer.label}</span>
-                  <h3
-                    className="text-white uppercase"
-                    style={{
-                      fontFamily: '"Bebas Neue", "Arial Black", sans-serif',
-                      fontSize: 'clamp(2.2rem, 3vw, 3rem)',
-                      letterSpacing: '0.05em',
-                      lineHeight: 1.1
-                    }}
-                  >
-                    {offer.title}
-                  </h3>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs uppercase tracking-[0.3em] text-white/60">Mood</span>
-                    <div className="h-px flex-1 bg-white/10" />
-                  </div>
-                  <p className="text-white/90 text-xl font-semibold tracking-wide">
-                    {offer.vibe}
-                  </p>
-                  <div className="mt-auto pt-4 border-t border-white/10 space-y-3">
-                    <span className="text-xs uppercase tracking-[0.3em] text-white/40 block">Daily Access</span>
-                    <div className="flex gap-3">
-                      <motion.button
-                        onClick={() => window.location.href = '/booking'}
-                        className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all"
-                        style={{
-                          background: 'rgba(255,255,255,0.1)',
-                          border: '1px solid rgba(255,255,255,0.2)',
-                          color: '#ffffff'
-                        }}
-                        whileHover={{ 
-                          background: 'rgba(255,255,255,0.15)',
-                          scale: 1.02
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Reserve
-                      </motion.button>
-                      <motion.button
-                        className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all"
+            Alehouse Signature Offer
+          </p>
+          <h2
+            className="text-white text-4xl md:text-5xl font-semibold tracking-tight"
             style={{
-                          background: 'rgba(255,255,255,0.08)',
-                          border: `1px solid ${offer.accent}40`,
-                          color: offer.accent
-                        }}
-                        whileHover={{ 
-                          background: 'rgba(255,255,255,0.12)',
-                          scale: 1.02
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Walk In
-                      </motion.button>
-                    </div>
+              fontFamily: '"Bebas Neue", "Arial Black", sans-serif',
+              letterSpacing: '0.02em',
+            }}
+          >
+            365 DAYS
+          </h2>
+          <p
+            className="text-white/70 text-sm md:text-base max-w-md mx-auto leading-relaxed"
+            style={{ fontFamily: '"Manrope", sans-serif' }}
+          >
+            Two daily offers crafted to keep the realm alive from mid-day till close.
+          </p>
+        </motion.div>
+
+        {/* Compact accordion rows */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="mt-6 space-y-3"
+        >
+          {offers.map((offer, index) => {
+            const isOpen = expandedIndex === index;
+            return (
+              <div
+                key={index}
+                role="button"
+                tabIndex={0}
+                onClick={() => toggle(index)}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggle(index)}
+                className="rounded-2xl border transition-all duration-200 cursor-pointer select-none overflow-hidden"
+                style={{
+                  fontFamily: '"Manrope", sans-serif',
+                  background: 'rgba(0,0,0,0.4)',
+                  borderColor: 'rgba(212, 175, 55, 0.18)',
+                  boxShadow: isOpen ? '0 0 0 1px rgba(212, 175, 55, 0.25)' : undefined,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0,0,0,0.5)';
+                  e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.35)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isOpen) {
+                    e.currentTarget.style.background = 'rgba(0,0,0,0.4)';
+                    e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.18)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+              >
+                <div className="py-3.5 px-4 flex items-center justify-between gap-3">
+                  <div className="flex-1 min-w-0 text-left">
+                    <p className="text-white/55 text-xs mb-0.5">{offer.meta}</p>
+                    <p className="text-white font-medium text-sm md:text-base">
+                      {offer.title}
+                    </p>
                   </div>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex-shrink-0 text-white/60"
+                  >
+                    <ChevronDown size={20} />
+                  </motion.span>
                 </div>
-              ))}
-            </div>
-          </motion.div>
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden border-t border-white/5"
+                    >
+                      <p className="py-3 px-4 text-white/70 text-sm">
+                        {offer.inside}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </motion.div>
 
-          <motion.div
-            className="pt-6 flex justify-center"
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+        {/* CTA */}
+        <motion.div
+          className="pt-6 flex justify-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          viewport={{ once: true }}
+        >
+          <motion.button
+            whileHover={{
+              boxShadow: '0 0 24px rgba(139, 0, 50, 0.4), 0 0 40px rgba(88, 28, 135, 0.2)',
+            }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => window.location.href = '/ladies-offers'}
+            className="rounded-full px-5 py-2.5 text-white text-sm font-medium transition-shadow"
+            style={{
+              fontFamily: '"Manrope", sans-serif',
+              background: 'linear-gradient(135deg, #8b0032 0%, #4a154b 100%)',
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}
           >
-            <motion.button
-              whileHover={{ scale: 1.03, boxShadow: '0 10px 25px rgba(255, 20, 147, 0.35)' }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => { window.location.href = '/ladies-offers'; }}
-              className="rounded-full px-6 py-2 border border-pink-300/60 text-white tracking-widest uppercase font-bold"
-              style={{
-                fontFamily: '"Manrope", sans-serif',
-                fontSize: 'clamp(0.65rem, 2.5vw, 0.85rem)',
-                letterSpacing: '0.35em',
-                background: 'linear-gradient(120deg, rgba(255,105,180,0.25), rgba(255,20,147,0.15))',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              Only click if you are a lady 💋
-            </motion.button>
-          </motion.div>
+            Only click if you are a lady 💋
+          </motion.button>
         </motion.div>
       </div>
     </section>
@@ -277,6 +175,3 @@ const LadiesDrinksPromo = () => {
 };
 
 export default LadiesDrinksPromo;
-
-
-
