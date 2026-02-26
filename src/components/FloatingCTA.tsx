@@ -3,8 +3,8 @@
 import { Phone, MessageCircle, Calendar, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const WHATSAPP_URL = 'https://wa.me/9274696969?text=Hi%20Alehouse%2C%20I%20want%20to%20book%20a%20table.';
-const CALL_URL = 'tel:9274696969';
+const WHATSAPP_URL = 'https://wa.me/918096060606?text=Hi%20Alehouse%2C%20I%20want%20to%20book%20a%20table.';
+const CALL_URL = 'tel:+918096060606';
 
 const barStyle = {
   background: 'rgba(0,0,0,0.78)',
