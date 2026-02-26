@@ -14,18 +14,12 @@ import GallerySection from '@/components/GallerySection';
 export default function Home() {
   const [isMuted, setIsMuted] = useState(true); // Audio off by default
   const themeSongRef = useRef<HTMLAudioElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
 
   const handleMuteToggle = () => {
     const newMutedState = !isMuted;
     setIsMuted(newMutedState);
 
-    // Mute/unmute hero video
-    if (heroVideoRef.current) {
-      heroVideoRef.current.muted = newMutedState;
-    }
-
-    // Mute/unmute theme song
+    // Mute/unmute theme song only
     if (themeSongRef.current) {
       themeSongRef.current.muted = newMutedState;
       if (!newMutedState) {
@@ -90,7 +84,7 @@ export default function Home() {
   return (
     <main className="bg-charcoal-900 m-0 p-0">
 
-      <Hero videoRef={heroVideoRef} muted={isMuted} />
+      <Hero />
 
       <LadiesDrinksPromo />
       <CTASection />
