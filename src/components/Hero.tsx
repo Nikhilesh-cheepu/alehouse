@@ -13,7 +13,6 @@ const Hero = () => {
         className="w-full h-full object-cover"
         src={HERO_VIDEO_SRC}
         autoPlay
-        muted
         loop
         playsInline
         preload="metadata"
