@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronLeft } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 interface NavigationProps {
@@ -173,6 +173,7 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
   // Determine current page to set correct hrefs
   const pathname = usePathname();
   const isHomePage = pathname === '/' || pathname === '';
+  const isBookingPage = pathname === '/booking';
   
   const navLinks = [
     { name: 'Home', href: isHomePage ? '#home' : '/' },
@@ -197,24 +198,35 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
       >
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Left Side - Alehouse Logo */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative group cursor-pointer"
-              onClick={handleLogoSecretClick}
-              title="The crown holds secrets... 👑"
-            >
-              <Image
-                src="/logo/alehouse-logo.png"
-                alt="Alehouse Logo"
-                width={96}
-                height={96}
-                className="w-20 md:w-24 h-auto transition-all duration-500 group-hover:scale-110"
-                priority
-              />
-            </motion.div>
+            {/* Left Side - Back (on booking) + Logo */}
+            <div className="flex items-center gap-2">
+              {isBookingPage && (
+                <a
+                  href="/"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg text-[#f4f4f4] hover:text-[#FFD700] hover:bg-white/10 transition-colors"
+                  aria-label="Back to home"
+                >
+                  <ChevronLeft size={24} />
+                </a>
+              )}
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative group cursor-pointer"
+                onClick={handleLogoSecretClick}
+                title="The crown holds secrets... 👑"
+              >
+                <Image
+                  src="/logo/alehouse-logo.png"
+                  alt="Alehouse Logo"
+                  width={96}
+                  height={96}
+                  className="w-20 md:w-24 h-auto transition-all duration-500 group-hover:scale-110"
+                  priority
+                />
+              </motion.div>
+            </div>
 
             {/* Right Side - Navigation Links */}
             <div className="hidden md:flex items-center space-x-2">
