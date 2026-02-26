@@ -13,6 +13,8 @@
 }
 
 :root {
+  /* Fixed nav: top-4 + content ~100px = ~7.5rem; use 8rem for safe clearance */
+  --nav-height: 8rem;
   /* Minimal Goth Luxe Color Palette */
   --color-base: #0E0F11;
   --color-crimson-glow: #B80F1B;

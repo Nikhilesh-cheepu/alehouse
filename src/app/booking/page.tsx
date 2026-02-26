@@ -205,20 +205,29 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-black">
       <Navigation />
-      <section className="relative w-full bg-black pt-36 md:pt-40 pb-20 px-4 md:px-6">
-        <div className="w-full max-w-2xl mx-auto">
-          <h1
-            className="text-xl md:text-2xl font-bold text-white text-center mb-1"
-            style={{ fontFamily: 'Game of Thrones, serif' }}
-          >
-            Book Your Table
-          </h1>
-          <p className="text-gray-400 text-center text-xs mb-4">
-            Reserve your seat at Alehouse
-          </p>
+      <main
+        id="booking-main"
+        className="relative w-full bg-black min-h-screen"
+        style={{
+          paddingTop: 'var(--nav-height, 8rem)',
+          paddingBottom: 'calc(16px + env(safe-area-inset-bottom))',
+        }}
+      >
+        <div className="w-full max-w-lg mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div className="scroll-mt-[var(--nav-height,8rem)]" id="book-your-table">
+              <h1
+                className="text-xl md:text-2xl font-bold text-white text-center mb-1"
+                style={{ fontFamily: 'Game of Thrones, serif' }}
+              >
+                Book Your Table
+              </h1>
+              <p className="text-gray-400 text-center text-xs">
+                Reserve your seat at Alehouse
+              </p>
+            </div>
 
-          {/* 15-day date strip - render only after client mount to avoid hydration mismatch */}
-          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide mb-4">
+            {/* 15-day date strip - render only after client mount to avoid hydration mismatch */}
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             {days.length === 0 ? (
               <div className="flex gap-1.5 flex-shrink-0">
                 {[1, 2, 3].map((i) => (
@@ -252,7 +261,7 @@ export default function BookingPage() {
           </div>
 
           {/* Lunch / Dinner tabs */}
-          <div className="flex gap-1.5 mb-3">
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={() => handleSwitchTab('lunch')}
@@ -274,7 +283,7 @@ export default function BookingPage() {
           </div>
 
           {/* Time slots grid */}
-          <div className="grid grid-cols-4 gap-1.5 mb-4">
+          <div className="grid grid-cols-4 gap-2 sm:gap-3">
             {visibleSlots.map((time24) => {
               const isSelected = selectedTime === time24;
               const [h, m] = time24.split(':').map(Number);
@@ -306,7 +315,6 @@ export default function BookingPage() {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="mb-4"
             >
               <p className="text-amber-400/90 text-xs font-medium mb-2 flex items-center gap-1">
                 <span>✨</span> Available for {formatTime12(selectedTime)}
@@ -351,7 +359,7 @@ export default function BookingPage() {
           )}
 
           {/* Guests */}
-          <div className="mb-3">
+          <div>
             <label className="block text-white font-medium text-xs mb-1">
               Guests *
             </label>
@@ -380,7 +388,7 @@ export default function BookingPage() {
           </div>
 
           {/* Full name */}
-          <div className="mb-3">
+          <div>
             <label className="block text-white font-medium text-xs mb-1">
               Full name *
             </label>
@@ -397,7 +405,7 @@ export default function BookingPage() {
           </div>
 
           {/* Mobile */}
-          <div className="mb-3">
+          <div>
             <label className="block text-white font-medium text-xs mb-1">
               10-digit mobile *
             </label>
@@ -415,7 +423,7 @@ export default function BookingPage() {
           </div>
 
           {/* Notes */}
-          <div className="mb-4">
+          <div>
             <label className="block text-white font-medium text-xs mb-1">
               Notes (optional)
             </label>
@@ -446,7 +454,7 @@ export default function BookingPage() {
             <p className="text-red-400 text-center text-sm mt-1">{errors.time}</p>
           )}
         </div>
-      </section>
+      </main>
     </div>
   );
 }
