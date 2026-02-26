@@ -71,7 +71,7 @@ const CTASection = () => {
 
   return (
     <section
-      className="relative w-full py-12 md:py-16 overflow-hidden"
+      className="relative w-full pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden"
       onPointerEnter={pauseAutoplay}
       onPointerLeave={resumeAutoplay}
     >
@@ -94,10 +94,10 @@ const CTASection = () => {
           className="text-center mb-8"
         >
           <h2
-            className="text-white text-xl md:text-2xl font-medium tracking-wide"
+            className="text-white text-lg md:text-xl font-medium tracking-wide"
             style={{ fontFamily: '"Manrope", sans-serif' }}
           >
-            Craft Beers & Bottle Beers
+            World&apos;s Best Craft Beers & Bottle Beers
           </h2>
         </motion.div>
 

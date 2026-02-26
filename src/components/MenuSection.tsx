@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaUtensils, FaWineGlassAlt, FaShoppingCart, FaTimes, FaPlus } from 'react-icons/fa';
+import { FaUtensils, FaWineGlassAlt, FaShoppingCart, FaTimes, FaPlus, FaInfoCircle } from 'react-icons/fa';
+import { ChevronRight } from 'lucide-react';
 import { menuData, MenuItem } from '@/data/menuData';
 import Image from 'next/image';
 
@@ -191,11 +192,9 @@ const MenuSection = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       viewport={{ once: true }}
-      className="my-24 md:my-16"
+      className="pt-16 md:pt-16 pb-16"
       style={{
-        padding: '6rem 0 4rem 0',
-        background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(184, 134, 11, 0.05) 50%, rgba(0, 0, 0, 0.95) 100%)',
-        minHeight: '100vh',
+        background: 'linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(10,0,2,0.97) 100%)',
         position: 'relative'
       }}
     >
@@ -205,137 +204,95 @@ const MenuSection = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          style={{ textAlign: 'center', marginBottom: '3rem' }}
+          className="text-center mb-10"
         >
-          <h2 style={{
-            fontSize: 'clamp(2.5rem, 6vw, 3.5rem)',
-            color: '#ffffff',
-            fontFamily: 'Game of Thrones, serif',
-            marginBottom: '1rem',
-            fontWeight: '400'
-          }}>
+          <h2
+            className="text-white text-3xl md:text-4xl font-normal mb-6"
+            style={{ fontFamily: 'Game of Thrones, serif' }}
+          >
             Our Menu
           </h2>
-          <h3 style={{
-            fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
-            color: '#999999',
-            marginBottom: '1.5rem',
-            fontWeight: '400'
-          }}>
-            Browse over 100+ irresistible dishes & handcrafted drinks
-          </h3>
-          <p style={{
-            fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
-            color: '#999999',
-            maxWidth: '700px',
-            margin: '0 auto',
-            lineHeight: '1.6',
-            marginBottom: '1rem'
-          }}>
-            From sizzling starters and gourmet mains to signature cocktails and mocktails, discover why ALEHOUSE is the perfect destination for exceptional food, drinks, and unforgettable experiences.
+          <p
+            className="text-white/70 text-sm md:text-base max-w-lg mx-auto mb-6"
+            style={{ fontFamily: 'Manrope, sans-serif' }}
+          >
+            Browse 100+ dishes &amp; handcrafted drinks.
           </p>
-          <p style={{
-            fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
-            color: '#e6c87a',
-            maxWidth: '700px',
-            margin: '0 auto',
-            lineHeight: '1.6',
-            fontWeight: '600',
-            marginTop: '1rem'
-          }}>
-            Eat and drink anything @127 from 12PM - 7PM
-          </p>
-          <motion.p
+          {/* ₹127 badge */}
+          <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            viewport={{ once: true }}
+            className="inline-block rounded-full px-4 py-2 text-sm font-semibold text-amber-300 border"
             style={{
-              fontSize: 'clamp(0.85rem, 2vw, 0.95rem)',
-              color: '#ffa500',
-              maxWidth: '700px',
-              margin: '1rem auto 0',
-              lineHeight: '1.5',
-              fontStyle: 'italic',
-              padding: '0.75rem 1rem',
-              background: 'rgba(255, 165, 0, 0.1)',
-              border: '1px solid rgba(255, 165, 0, 0.3)',
-              borderRadius: '8px'
+              fontFamily: 'Manrope, sans-serif',
+              background: 'rgba(0,0,0,0.4)',
+              borderColor: 'rgba(212, 175, 55, 0.4)',
+              boxShadow: '0 0 12px rgba(212, 175, 55, 0.15)',
             }}
           >
-            About the errors in food section menu and we are working on it to resolve it as soon as possible.
-          </motion.p>
+            ₹127 Menu • 12 PM – 7 PM
+          </motion.span>
+          {/* Menu update note */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex items-start gap-3 max-w-xl mx-auto mt-6 px-4 py-3 rounded-lg border text-left backdrop-blur-md"
+            style={{
+              fontFamily: 'Manrope, sans-serif',
+              background: 'rgba(0,0,0,0.45)',
+              borderColor: 'rgba(212, 175, 55, 0.2)',
+            }}
+          >
+            <FaInfoCircle className="flex-shrink-0 text-amber-400/80 mt-0.5" size={18} />
+            <p className="text-white/80 text-xs md:text-sm leading-relaxed">
+              Menu update in progress. Some Food items may display incorrectly. For today&apos;s full menu, please Call or WhatsApp us—we&apos;ll help right away.
+            </p>
+          </motion.div>
         </motion.div>
 
-        {/* Menu Shortcuts */}
+        {/* CTAs - View Full Menu + Reserve Table only */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.12 }}
           viewport={{ once: true }}
-          className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-10 flex-wrap max-w-2xl mx-auto"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12 max-w-md mx-auto"
         >
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => window.location.href = '/booking'}
-            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+          <motion.a
+            href="/menu"
+            whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(212, 175, 55, 0.25)' }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto px-6 py-3 rounded-full font-semibold text-sm text-white text-center"
             style={{
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255, 215, 0, 0.6)',
-              color: '#ffffff',
-              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
-              minWidth: 'fit-content'
+              fontFamily: 'Manrope, sans-serif',
+              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.15))',
+              border: '1px solid rgba(212, 175, 55, 0.5)',
             }}
+          >
+            View Full Menu
+          </motion.a>
+          <motion.a
+            href="/booking"
+            whileHover={{ scale: 1.02, boxShadow: '0 0 16px rgba(255,255,255,0.1)' }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto px-6 py-3 rounded-full font-semibold text-sm text-white text-center border border-white/30 bg-white/5"
+            style={{ fontFamily: 'Manrope, sans-serif' }}
           >
             Reserve Table
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => window.location.href = '/#gallery'}
-            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
-            style={{
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(64, 224, 208, 0.6)',
-              color: '#ffffff',
-              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
-              minWidth: 'fit-content'
-            }}
-          >
-            View Gallery
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => {
-              localStorage.setItem('skipIntroOverlay', 'true');
-              window.location.href = '/';
-            }}
-            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(186, 148, 255, 0.6)',
-              color: '#ffffff',
-              fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)',
-              minWidth: 'fit-content'
-            }}
-          >
-            Back to Home
-          </motion.button>
+          </motion.a>
         </motion.div>
 
-        {/* Menu Image Buttons */}
+        {/* Menu Image Buttons - Category Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 'clamp(0.5rem, 2vw, 1.5rem)',
-            marginBottom: '3rem',
-            flexWrap: 'wrap'
-          }}
+          viewport={{ once: true }}
+          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto mb-12"
         >
           {/* Food Menu Button */}
           <motion.button
@@ -356,69 +313,31 @@ const MenuSection = () => {
               setImageLoading(true);
               setIsMenuImageModalOpen(true);
             }}
-            style={{
-              position: 'relative',
-              width: 'clamp(180px, 28vw, 240px)',
-              height: 'clamp(120px, 20vw, 160px)',
-              borderRadius: '20px',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
-              backdropFilter: 'blur(15px)',
-              cursor: 'pointer',
-              overflow: 'hidden',
-              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-            }}
             whileHover={{
-              scale: 1.05,
-              border: '2px solid rgba(255, 255, 255, 0.4)',
-              boxShadow: '0 12px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-              transform: 'translateY(-5px)'
+              scale: 1.03,
+              y: -4,
+              boxShadow: '0 12px 28px rgba(0,0,0,0.4), 0 0 16px rgba(212, 175, 55, 0.2)',
+              borderColor: 'rgba(212, 175, 55, 0.4)',
             }}
             whileTap={{ scale: 0.98 }}
+            className="relative w-full aspect-[4/3] rounded-xl border overflow-hidden group flex flex-col items-center justify-center text-center"
+            style={{
+              borderColor: 'rgba(212, 175, 55, 0.22)',
+              background: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            }}
           >
-            {/* Background Gradient */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(0, 0, 0, 0.8))',
-              transition: 'opacity 0.3s ease'
-            }} />
-            
-            {/* Overlay */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(0, 0, 0, 0.6))',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              textAlign: 'center',
-              padding: 'clamp(0.5rem, 2vw, 1rem)'
-            }}>
-              <span style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>🍽️</span>
-              <h3 style={{
-                fontFamily: 'Bebas Neue, Arial Black, sans-serif',
-                fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-                fontWeight: '400',
-                margin: '0',
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase'
-              }}>
-                Food
-              </h3>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <span className="relative z-10 text-2xl mb-1">🍽️</span>
+            <h3 className="relative z-10 font-semibold text-white uppercase tracking-wide text-base md:text-lg" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+              Food
+            </h3>
+            <p className="relative z-10 text-white/60 text-xs mt-0.5" style={{ fontFamily: 'Manrope, sans-serif' }}>Starters to mains</p>
+            <ChevronRight className="absolute bottom-3 right-3 w-5 h-5 text-amber-400/80 opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.button>
 
-          {/* Liquor Menu Button */}
+          {/* Beverage Menu Button */}
           <motion.button
             onClick={() => {
               const beverageImages = [
@@ -435,69 +354,31 @@ const MenuSection = () => {
               setImageLoading(true);
               setIsMenuImageModalOpen(true);
             }}
-            style={{
-              position: 'relative',
-              width: 'clamp(180px, 28vw, 240px)',
-              height: 'clamp(120px, 20vw, 160px)',
-              borderRadius: '20px',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
-              backdropFilter: 'blur(15px)',
-              cursor: 'pointer',
-              overflow: 'hidden',
-              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-            }}
             whileHover={{
-              scale: 1.05,
-              border: '2px solid rgba(255, 255, 255, 0.4)',
-              boxShadow: '0 12px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-              transform: 'translateY(-5px)'
+              scale: 1.03,
+              y: -4,
+              boxShadow: '0 12px 28px rgba(0,0,0,0.4), 0 0 16px rgba(212, 175, 55, 0.2)',
+              borderColor: 'rgba(212, 175, 55, 0.4)',
             }}
             whileTap={{ scale: 0.98 }}
+            className="relative w-full aspect-[4/3] rounded-xl border overflow-hidden group flex flex-col items-center justify-center text-center"
+            style={{
+              borderColor: 'rgba(212, 175, 55, 0.22)',
+              background: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            }}
           >
-            {/* Background Gradient */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(0, 0, 0, 0.8))',
-              transition: 'opacity 0.3s ease'
-            }} />
-            
-            {/* Overlay */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(0, 0, 0, 0.6))',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              textAlign: 'center',
-              padding: 'clamp(0.5rem, 2vw, 1rem)'
-            }}>
-              <span style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>🍸</span>
-              <h3 style={{
-                fontFamily: 'Bebas Neue, Arial Black, sans-serif',
-                fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-                fontWeight: '400',
-                margin: '0',
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase'
-              }}>
-                Beverage
-              </h3>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <span className="relative z-10 text-2xl mb-1">🍸</span>
+            <h3 className="relative z-10 font-semibold text-white uppercase tracking-wide text-base md:text-lg" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+              Beverage
+            </h3>
+            <p className="relative z-10 text-white/60 text-xs mt-0.5" style={{ fontFamily: 'Manrope, sans-serif' }}>Cocktails &amp; craft beers</p>
+            <ChevronRight className="absolute bottom-3 right-3 w-5 h-5 text-amber-400/80 opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.button>
 
-          {/* Happy Hour Menu Button */}
+          {/* Happy Hour Menu Button - spans 2 cols on 2-col grid */}
           <motion.button
             onClick={() => {
               const happyHourImages = [
@@ -510,66 +391,28 @@ const MenuSection = () => {
               setImageLoading(true);
               setIsMenuImageModalOpen(true);
             }}
-            style={{
-              position: 'relative',
-              width: 'clamp(180px, 28vw, 240px)',
-              height: 'clamp(120px, 20vw, 160px)',
-              borderRadius: '20px',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
-              backdropFilter: 'blur(15px)',
-              cursor: 'pointer',
-              overflow: 'hidden',
-              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-            }}
             whileHover={{
-              scale: 1.05,
-              border: '2px solid rgba(255, 255, 255, 0.4)',
-              boxShadow: '0 12px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-              transform: 'translateY(-5px)'
+              scale: 1.03,
+              y: -4,
+              boxShadow: '0 12px 28px rgba(0,0,0,0.4), 0 0 16px rgba(212, 175, 55, 0.2)',
+              borderColor: 'rgba(212, 175, 55, 0.4)',
             }}
             whileTap={{ scale: 0.98 }}
+            className="relative w-full aspect-[4/3] md:aspect-auto md:min-h-[120px] rounded-xl border overflow-hidden group flex flex-col items-center justify-center text-center col-span-2 md:col-span-1"
+            style={{
+              borderColor: 'rgba(212, 175, 55, 0.22)',
+              background: 'rgba(0,0,0,0.5)',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            }}
           >
-            {/* Background Gradient */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.2), rgba(0, 0, 0, 0.8))',
-              transition: 'opacity 0.3s ease'
-            }} />
-            
-            {/* Overlay */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(0, 0, 0, 0.6))',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              textAlign: 'center',
-              padding: 'clamp(0.5rem, 2vw, 1rem)'
-            }}>
-              <span style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>🍷</span>
-              <h3 style={{
-                fontFamily: 'Bebas Neue, Arial Black, sans-serif',
-                fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-                fontWeight: '400',
-                margin: '0',
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase'
-              }}>
-                Happy Hours
-              </h3>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <span className="relative z-10 text-2xl mb-1">🍷</span>
+            <h3 className="relative z-10 font-semibold text-white uppercase tracking-wide text-base md:text-lg" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+              Happy Hours
+            </h3>
+            <p className="relative z-10 text-white/60 text-xs mt-0.5" style={{ fontFamily: 'Manrope, sans-serif' }}>Deals &amp; combos</p>
+            <ChevronRight className="absolute bottom-3 right-3 w-5 h-5 text-amber-400/80 opacity-0 group-hover:opacity-100 transition-opacity" />
           </motion.button>
         </motion.div>
 
