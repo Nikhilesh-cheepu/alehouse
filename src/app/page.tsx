@@ -12,26 +12,35 @@ import LadiesDrinksPromo from '@/components/LadiesDrinksPromo';
 import GallerySection from '@/components/GallerySection';
 
 export default function Home() {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Audio off by default
   const themeSongRef = useRef<HTMLAudioElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
 
   const handleMuteToggle = () => {
     const newMutedState = !isMuted;
     setIsMuted(newMutedState);
 
+    // Mute/unmute hero video
+    if (heroVideoRef.current) {
+      heroVideoRef.current.muted = newMutedState;
+    }
+
     // Mute/unmute theme song
     if (themeSongRef.current) {
       themeSongRef.current.muted = newMutedState;
+      if (!newMutedState) {
+        themeSongRef.current.play().catch(() => {});
+      } else {
+        themeSongRef.current.pause();
+      }
     }
   };
 
-
-  // Setup theme song but don't autoplay - wait for user interaction
+  // Setup theme song (muted by default, play on first unmute)
   useEffect(() => {
     if (themeSongRef.current) {
-      // Set properties but don't play yet
       themeSongRef.current.volume = 0.4;
-      themeSongRef.current.muted = false;
+      themeSongRef.current.muted = true;
       themeSongRef.current.loop = true;
     }
   }, []);
@@ -41,11 +50,10 @@ export default function Home() {
     const handleVisibilityChange = () => {
       if (themeSongRef.current) {
         if (document.hidden) {
-          // Tab is hidden, pause audio
           themeSongRef.current.pause();
         } else {
-          // Tab is visible again, resume audio if it was playing
-          if (themeSongRef.current.currentTime > 0) {
+          // Resume theme song only if user had unmuted
+          if (!themeSongRef.current.muted) {
             themeSongRef.current.play().catch(() => {});
           }
         }
@@ -53,10 +61,7 @@ export default function Home() {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   // Handle hash navigation (e.g., /#gallery)
@@ -85,7 +90,7 @@ export default function Home() {
   return (
     <main className="bg-charcoal-900 m-0 p-0">
 
-      <Hero />
+      <Hero videoRef={heroVideoRef} muted={isMuted} />
 
       <LadiesDrinksPromo />
       <CTASection />
