@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Menu, X, ChevronLeft } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 interface NavigationProps {
   onNavClick?: () => void;
@@ -161,11 +162,12 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
 
   // New Book Table button handler
   const handleBookTableClick = () => {
+    if (BOOKING_DISABLED) return;
     // Start audio when navigation is clicked
     if (onNavClick) {
       onNavClick();
     }
-    
+
     // Navigate to booking page
     window.location.href = '/booking';
   };
@@ -264,13 +266,16 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
+                type="button"
                 onClick={handleBookTableClick}
-                className="relative group px-6 py-3 rounded-lg font-bold text-lg transition-all duration-300 text-[#FFD700] bg-gradient-to-r from-[#FFD700]/20 to-[#FFA500]/20 border border-[#FFD700]/50 shadow-lg hover:shadow-xl hover:scale-105"
+                disabled={BOOKING_DISABLED}
+                title={BOOKING_DISABLED ? BOOKING_DISABLED_MESSAGE : undefined}
+                className="relative group px-6 py-3 rounded-lg font-bold text-lg transition-all duration-300 text-[#FFD700] bg-gradient-to-r from-[#FFD700]/20 to-[#FFA500]/20 border border-[#FFD700]/50 shadow-lg hover:shadow-xl hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-lg"
                 style={{
                   fontFamily: 'Manrope, sans-serif',
                   textTransform: 'none',
                   textShadow: '0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3)',
-                  animation: 'pulse 2s infinite'
+                  animation: BOOKING_DISABLED ? undefined : 'pulse 2s infinite'
                 }}
               >
                 <span className="relative z-10">Book Table</span>
@@ -381,17 +386,20 @@ const Navigation = ({ onNavClick }: NavigationProps) => {
                   className="w-full"
                 >
                   <button
+                    type="button"
+                    disabled={BOOKING_DISABLED}
+                    title={BOOKING_DISABLED ? BOOKING_DISABLED_MESSAGE : undefined}
                     onClick={() => {
                       handleBookTableClick();
                       setIsMenuOpen(false);
                       document.body.style.overflow = 'unset';
                     }}
-                    className="flex items-center justify-center w-full py-6 px-8 font-bold text-3xl transition-all duration-300 text-center rounded-2xl relative group text-[#FFD700] bg-gradient-to-r from-[#FFD700]/20 to-[#FFA500]/20 border-2 border-[#FFD700]/50 shadow-2xl"
+                    className="flex items-center justify-center w-full py-6 px-8 font-bold text-3xl transition-all duration-300 text-center rounded-2xl relative group text-[#FFD700] bg-gradient-to-r from-[#FFD700]/20 to-[#FFA500]/20 border-2 border-[#FFD700]/50 shadow-2xl disabled:cursor-not-allowed disabled:opacity-50"
                     style={{
                       fontFamily: 'Manrope, sans-serif',
                       textTransform: 'none',
                       textShadow: '0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4)',
-                      animation: 'pulse 2s infinite'
+                      animation: BOOKING_DISABLED ? undefined : 'pulse 2s infinite'
                     }}
                   >
                     {/* Glow effect */}

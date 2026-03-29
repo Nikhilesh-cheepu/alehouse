@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { FaUser, FaPhone, FaCalendarAlt, FaClock, FaWhatsapp } from 'react-icons/fa';
 import { track } from '@vercel/analytics';
 import { trackConversion } from '@/lib/gtag';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 interface TimeOption {
   value: string;
@@ -120,6 +121,7 @@ Please confirm my table reservation for this medieval dining experience. Thank y
   };
 
   const handleBookTable = async () => {
+    if (BOOKING_DISABLED) return;
     console.log('Book button clicked, form data:', formData);
     console.log('Form validation result:', validateForm());
     if (validateForm()) {
@@ -643,23 +645,34 @@ Please confirm my table reservation for this medieval dining experience. Thank y
               <motion.button
                 type="button"
                 onClick={handleBookTable}
-                disabled={!isFormValid}
+                disabled={BOOKING_DISABLED || !isFormValid}
+                title={BOOKING_DISABLED ? BOOKING_DISABLED_MESSAGE : undefined}
                 className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
-                  isFormValid 
-                    ? 'bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600' 
+                  BOOKING_DISABLED
+                    ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/10'
+                    : isFormValid
+                    ? 'bg-green-500 hover:bg-green-600 text-white border border-green-500 hover:border-green-600'
                     : 'bg-white/5 text-gray-400 cursor-not-allowed border border-white/10'
                 }`}
-                whileHover={isFormValid ? {
-                  scale: 1.02,
-                  boxShadow: '0 10px 25px rgba(34, 197, 94, 0.4)'
-                } : {}}
-                whileTap={isFormValid ? { scale: 0.98 } : {}}
+                whileHover={
+                  !BOOKING_DISABLED && isFormValid
+                    ? {
+                        scale: 1.02,
+                        boxShadow: '0 10px 25px rgba(34, 197, 94, 0.4)',
+                      }
+                    : {}
+                }
+                whileTap={!BOOKING_DISABLED && isFormValid ? { scale: 0.98 } : {}}
                 style={{
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
                 <FaWhatsapp className="text-xl" />
-                {isFormValid ? 'Book Table via WhatsApp' : 'Fill all fields to book'}
+                {BOOKING_DISABLED
+                  ? 'Bookings temporarily closed'
+                  : isFormValid
+                    ? 'Book Table via WhatsApp'
+                    : 'Fill all fields to book'}
               </motion.button>
             </form>
           </div>

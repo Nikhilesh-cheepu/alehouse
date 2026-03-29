@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 export async function POST(request: NextRequest) {
+  if (BOOKING_DISABLED) {
+    return NextResponse.json(
+      { success: false, message: BOOKING_DISABLED_MESSAGE },
+      { status: 403 }
+    );
+  }
   try {
     const bookingData = await request.json();
     

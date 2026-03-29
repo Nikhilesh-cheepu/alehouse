@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 const offers = [
   {
@@ -149,10 +150,15 @@ const LadiesOffersPage = () => {
                 </div>
                 <div className="flex gap-3 pt-2">
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => window.location.href = '/booking'}
-                    className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm"
+                    whileHover={BOOKING_DISABLED ? undefined : { scale: 1.02 }}
+                    whileTap={BOOKING_DISABLED ? undefined : { scale: 0.97 }}
+                    onClick={() => {
+                      if (BOOKING_DISABLED) return;
+                      window.location.href = '/booking';
+                    }}
+                    disabled={BOOKING_DISABLED}
+                    title={BOOKING_DISABLED ? BOOKING_DISABLED_MESSAGE : undefined}
+                    className="flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm disabled:cursor-not-allowed disabled:opacity-50"
                     style={{
                       background: 'rgba(255,255,255,0.08)',
                       border: '1px solid rgba(255,255,255,0.2)',

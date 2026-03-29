@@ -4,6 +4,7 @@ import { FaUtensils, FaWineGlassAlt, FaShoppingCart, FaTimes, FaPlus, FaInfoCirc
 import { ChevronRight } from 'lucide-react';
 import { menuData, MenuItem } from '@/data/menuData';
 import Image from 'next/image';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 interface CartItem extends MenuItem {
   quantity: number;
@@ -275,22 +276,36 @@ const MenuSection = () => {
           >
             View Full Menu
           </motion.a>
-          <motion.button
-            whileHover={{ scale: 1.02, boxShadow: '0 0 16px rgba(255,255,255,0.1)' }}
-            whileTap={{ scale: 0.98 }}
-            disabled
-            className="w-full sm:w-auto px-6 py-3 rounded-full font-semibold text-sm text-white/60 text-center border border-white/20 bg-white/5 cursor-not-allowed"
+          {BOOKING_DISABLED ? (
+            <motion.button
+              type="button"
+              disabled
+              title={BOOKING_DISABLED_MESSAGE}
+              className="w-full sm:w-auto px-6 py-3 rounded-full font-semibold text-sm text-white/60 text-center border border-white/20 bg-white/5 cursor-not-allowed"
+              style={{ fontFamily: 'Manrope, sans-serif' }}
+            >
+              Reserve Table
+            </motion.button>
+          ) : (
+            <motion.a
+              href="/booking"
+              whileHover={{ scale: 1.02, boxShadow: '0 0 16px rgba(255,255,255,0.1)' }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full sm:w-auto px-6 py-3 rounded-full font-semibold text-sm text-white text-center border border-white/30 bg-white/5"
+              style={{ fontFamily: 'Manrope, sans-serif' }}
+            >
+              Reserve Table
+            </motion.a>
+          )}
+        </motion.div>
+        {BOOKING_DISABLED && (
+          <p
+            className="text-center text-xs text-white/65 -mt-8 mb-12"
             style={{ fontFamily: 'Manrope, sans-serif' }}
           >
-            Reserve Table
-          </motion.button>
-        </motion.div>
-        <p
-          className="text-center text-xs text-white/65 -mt-8 mb-12"
-          style={{ fontFamily: 'Manrope, sans-serif' }}
-        >
-          We are temporarily not taking any bookings.
-        </p>
+            {BOOKING_DISABLED_MESSAGE}
+          </p>
+        )}
 
         {/* Menu Image Buttons - Category Cards */}
         <motion.div

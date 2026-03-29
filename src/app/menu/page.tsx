@@ -6,6 +6,7 @@ import { FaSearch, FaUtensils, FaWineGlassAlt, FaFilter, FaShoppingCart, FaTimes
 import { menuData, MenuItem } from '@/data/menuData';
 import Image from 'next/image';
 import Navigation from '@/components/Navigation';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 interface CartItem extends MenuItem {
   quantity: number;
@@ -309,10 +310,15 @@ const MenuPage = () => {
           className="flex flex-row items-center justify-center gap-2 sm:gap-3 mb-10 flex-wrap max-w-2xl mx-auto"
         >
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => window.location.href = '/booking'}
-            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap"
+            whileHover={BOOKING_DISABLED ? undefined : { scale: 1.03 }}
+            whileTap={BOOKING_DISABLED ? undefined : { scale: 0.97 }}
+            disabled={BOOKING_DISABLED}
+            title={BOOKING_DISABLED ? BOOKING_DISABLED_MESSAGE : undefined}
+            onClick={() => {
+              if (BOOKING_DISABLED) return;
+              window.location.href = '/booking';
+            }}
+            className="px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-full font-semibold uppercase tracking-[0.05em] sm:tracking-[0.08em] transition-all duration-300 whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
             style={{
               background: 'rgba(255,255,255,0.1)',
               border: '1px solid rgba(255, 215, 0, 0.6)',

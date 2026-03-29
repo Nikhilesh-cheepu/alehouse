@@ -2,6 +2,7 @@
 
 import { Phone, MessageCircle, Calendar, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 const WHATSAPP_URL = 'https://wa.me/918096060606?text=Hi%20Alehouse%2C%20I%20want%20to%20book%20a%20table.';
 const CALL_URL = 'tel:+918096060606';
@@ -24,6 +25,7 @@ interface FloatingCTAProps {
 
 export default function FloatingCTA({ isMuted = true, onMuteToggle }: FloatingCTAProps) {
   const handleBook = () => {
+    if (BOOKING_DISABLED) return;
     window.location.href = '/booking';
   };
 
@@ -75,13 +77,16 @@ export default function FloatingCTA({ isMuted = true, onMuteToggle }: FloatingCT
         <motion.button
           type="button"
           onClick={handleBook}
-          className="relative flex flex-[1.2] min-w-0 items-center justify-center gap-1 rounded-full h-9 px-2 sm:px-3 text-white text-[12px] sm:text-xs font-medium transition-colors shrink-0"
+          disabled={BOOKING_DISABLED}
+          title={BOOKING_DISABLED ? BOOKING_DISABLED_MESSAGE : undefined}
+          aria-disabled={BOOKING_DISABLED}
+          className="relative flex flex-[1.2] min-w-0 items-center justify-center gap-1 rounded-full h-9 px-2 sm:px-3 text-white text-[12px] sm:text-xs font-medium transition-colors shrink-0 disabled:cursor-not-allowed disabled:opacity-45"
           style={{
             background: 'rgba(255,255,255,0.1)',
             border: '1px solid rgba(212, 175, 55, 0.38)',
           }}
-          whileHover={pillHover}
-          whileTap={{ scale: 0.98 }}
+          whileHover={BOOKING_DISABLED ? undefined : pillHover}
+          whileTap={BOOKING_DISABLED ? undefined : { scale: 0.98 }}
         >
           <span
             className="absolute -top-0.5 right-0 text-[9px] font-semibold px-1 py-0 rounded border leading-tight"

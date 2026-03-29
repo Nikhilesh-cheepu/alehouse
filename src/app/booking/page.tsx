@@ -4,6 +4,7 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import { BOOKING_OFFERS } from '@/data/bookingOffers';
+import { BOOKING_DISABLED, BOOKING_DISABLED_MESSAGE } from '@/config/booking';
 
 const OUTLET_NAME = 'Alehouse';
 const WHATSAPP_NUMBER = '918096060606';
@@ -190,6 +191,7 @@ export default function BookingPage() {
   ]);
 
   const handleConfirm = useCallback(() => {
+    if (BOOKING_DISABLED) return;
     if (!validate()) return;
     const url = buildWhatsAppUrl();
     window.location.href = url;
@@ -226,6 +228,19 @@ export default function BookingPage() {
               </p>
             </div>
 
+            {BOOKING_DISABLED && (
+              <div
+                className="rounded-lg border border-amber-500/35 bg-amber-500/10 px-3 py-2.5 text-center text-xs text-amber-100/95"
+                role="status"
+              >
+                {BOOKING_DISABLED_MESSAGE}
+              </div>
+            )}
+
+            <fieldset
+              disabled={BOOKING_DISABLED}
+              className="border-0 p-0 m-0 min-w-0 space-y-6 disabled:pointer-events-none disabled:opacity-55"
+            >
             {/* 15-day date strip - render only after client mount to avoid hydration mismatch */}
             <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             {days.length === 0 ? (
@@ -453,6 +468,7 @@ export default function BookingPage() {
           {errors.time && (
             <p className="text-red-400 text-center text-sm mt-1">{errors.time}</p>
           )}
+            </fieldset>
         </div>
       </main>
     </div>
